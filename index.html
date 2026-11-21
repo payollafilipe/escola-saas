@@ -218,6 +218,10 @@
 
     <div class="layout">
       <div class="col">
+        <section class="panel" data-s>
+          <div class="panel-head"><h2>Subsistemas da Escola</h2><p>Módulos internos de gestão e acompanhamento</p></div>
+          <div class="grid" id="modulos"></div>
+        </section>
         <section class="panel">
           <div class="panel-head"><h2>Datas importantes</h2></div>
           <ol class="timeline" id="chipsProximas"></ol>
@@ -278,7 +282,13 @@ const ICONES = {
   tendencia: '<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',
   bussola: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
   escola: '<path d="M3 10l9-6 9 6M5 10v10h14V10M10 20v-5h4v5"/>',
-  boia: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/>'
+  boia: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/>',
+  relogio: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  faltas: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 8l5 5M22 8l-5 5"/>',
+  alerta: '<path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+  saida: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+  troca: '<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  calendario: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'
 };
 
 let perfilLogado = null;
@@ -293,7 +303,7 @@ function alternarTela(nome) {
 const login = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
 const logout = async () => { await sb.auth.signOut(); location.reload(); };
 
-$("btnEntrar").onclick = login;
+if ($("btnEntrar")) $("btnEntrar").onclick = login;
 $("btnSair").onclick = logout;
 $("btnSair2").onclick = logout;
 
@@ -358,13 +368,33 @@ function abrirModalMaterial() {
   $("dlgMaterial").showModal();
 }
 
+const SUBSISTEMAS = [
+  { titulo: "Avisos e Comunicados", url: "/avisos/", icone: "sino", papeis: ["direcao", "professor", "portaria", "secretaria", "almoxarifado"] },
+  { titulo: "Controle de Faltas", url: "/faltas/", icone: "faltas", papeis: ["direcao", "professor"] },
+  { titulo: "Checagem de Tarefas", url: "/tarefas/", icone: "prova", papeis: ["direcao", "professor"] },
+  { titulo: "Ocorrências", url: "/ocorrencias/", icone: "alerta", papeis: ["direcao", "professor", "portaria", "secretaria", "almoxarifado"] },
+  { titulo: "Pedido de Materiais", url: "/pedidos/", icone: "pacote", papeis: ["direcao", "professor", "portaria", "secretaria", "almoxarifado"] },
+  { titulo: "Saídas Antecipadas", url: "/saida/", icone: "saida", papeis: ["direcao", "professor", "portaria", "secretaria"] },
+  { titulo: "Montagem de Horário", url: "/horarios/", icone: "relogio", papeis: ["direcao"] },
+  { titulo: "Substituições", url: "/substituicoes/", icone: "troca", papeis: ["direcao"] },
+  { titulo: "Calendário de Provas", url: "/provas/", icone: "calendario", papeis: ["direcao"] },
+  { titulo: "Relatório de Pendências", url: "/cobranca/", icone: "grafico", papeis: ["direcao"] },
+  { titulo: "Gestão Escolar e Equipe", url: "/gestao/", icone: "escola", destaque: true, papeis: ["direcao"] }
+];
+
 function renderizarLinks(todosLinks) {
-  const categorias = ["drive", "formularios", "dashboards", "sistemas"];
+  const papelAtual = perfilLogado ? perfilLogado.papel : "";
+  const categorias = ["modulos", "drive", "formularios", "dashboards", "sistemas"];
   
   categorias.forEach(cat => {
     let itens = todosLinks.filter(l => l.categoria === cat);
-    if (cat === "sistemas" && perfilLogado && perfilLogado.papel === "direcao" && !itens.some(x => (x.url || "").includes("/gestao"))) {
-      itens = [{ titulo: "Cadastros e Equipe", url: "/gestao/", icone: "escola", destaque: true }, ...itens];
+    if (cat === "modulos") {
+      const permitidos = SUBSISTEMAS.filter(s => !s.papeis || s.papeis.includes(papelAtual));
+      const urlsExistentes = new Set(itens.map(x => (x.url || "").replace(/\/+$/, "")));
+      itens = [
+        ...permitidos.filter(s => !urlsExistentes.has(s.url.replace(/\/+$/, ""))),
+        ...itens
+      ];
     }
     $(cat).innerHTML = itens.map(d => {
       const cls = "tile" + (d.destaque ? " destaque" : "");
@@ -374,9 +404,9 @@ function renderizarLinks(todosLinks) {
         if (d.acao === "modal_material") return `<button class="${cls}" onclick="abrirModalMaterial()">${inner}</button>`;
         return `<button class="${cls}" onclick="abrirRecursoLogado('${esc(d.acao)}')">${inner}</button>`;
       }
-     const target = d.url && (d.url.startsWith("http://") || d.url.startsWith("https://")) ? "_blank" : "_self";
-return `<a class="${cls}" href="${esc(d.url)}" target="${target}">${inner}</a>`;
-    }).join("");
+      const target = d.url && (d.url.startsWith("http://") || d.url.startsWith("https://")) ? "_blank" : "_self";
+      return `<a class="${cls}" href="${esc(d.url)}" target="${target}">${inner}</a>`;
+    }).join("") || '<p class="vazio" style="grid-column:1/-1;font-size:.88rem">Nenhum item cadastrado nesta seção.</p>';
   });
 }
 

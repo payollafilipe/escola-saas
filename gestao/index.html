@@ -451,8 +451,15 @@ window.togglePf = async (email, ativo) => {
 
 /* Alunos */
 async function carregarAlunos() {
-  const { data } = await sb.from("alunos").select("id,nome,serie,turma,contatos(id,responsavel,whatsapp)").order("turma").order("nome").limit(5000);
-  alunosEsc = data || [];
+  let res = await sb.from("alunos").select("id,nome,serie,turma,contatos(id,responsavel,whatsapp)").order("turma").order("nome").limit(5000);
+  if (res.error) {
+    console.warn("Fallback consulta alunos sem contatos:", res.error.message);
+    res = await sb.from("alunos").select("id,nome,serie,turma").order("turma").order("nome").limit(5000);
+  }
+  if (res.error) {
+    msg("msgAl", "Erro ao listar alunos: " + res.error.message);
+  }
+  alunosEsc = res.data || [];
   $("totAl").textContent = alunosEsc.length;
   renderAlunos();
 }
@@ -512,7 +519,7 @@ window.excluirAl = async id => {
 
 $("btnAbrirLote").onclick = () => { $("txtLote").value = ""; msg("msgLote", ""); $("dlgLote").showModal(); };
 $("btnExecLote").onclick = async () => {
-const linhas = $("txtLote").value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const linhas = $("txtLote").value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   if (!linhas.length) return msg("msgLote", "Cole ao menos uma linha.");
   let ok = 0;
   for (const l of linhas) {

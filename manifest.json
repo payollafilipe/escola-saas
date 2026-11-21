@@ -1,0 +1,19 @@
+{
+  "name": "Intranet JMA",
+  "short_name": "NomeCurto",
+  "icons": [
+    {
+      "src": "/jma-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/jma-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

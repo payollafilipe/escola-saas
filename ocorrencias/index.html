@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ocorrências JMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>OCORRÊNCIAS<small>Queixas e encaminhamentos</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden>
+    <h2 style="justify-content:center">Acesso restrito</h2>
+    <p>Entre com seu e-mail institucional para registrar ou acompanhar ocorrências.</p>
+    <button class="btn btn-primary" id="entrar">Entrar com Google</button>
+  </section>
+  <section class="panel center" id="telaNegado" hidden>
+    <h2 style="justify-content:center">E-mail não autorizado</h2>
+    <p><b id="emailNegado"></b> não está na lista de usuários desta escola. Peça à direção para liberar seu acesso.</p>
+    <button class="btn btn-ghost" id="sair2">Sair</button>
+  </section>
+
+  <section class="panel" id="novaQueixa" hidden>
+    <div class="head"><div><h2>Nova queixa</h2><p class="sub">Preencha os dados do aluno e da ocorrência</p></div></div>
+    <div class="form">
+      <label class="f full">Professor(a)<input class="in" id="fProf" readonly></label>
+      <div class="grp full" role="radiogroup" aria-label="Série e turma">Série e turma<div class="chips" id="fTurma"></div></div>
+      <div class="grp full" role="radiogroup" aria-label="Aluno">Aluno<div class="chips grade" id="fAluno"><p class="vazio">Escolha a turma primeiro</p></div></div>
+      <label class="f full" style="max-width:260px">Data da ocorrência<input class="in" type="date" id="fData"></label>
+      <div class="grp full" role="radiogroup" aria-label="Motivo">Motivo<div class="chips" id="fMotivos"></div>
+        <input class="in" id="fMotivo" placeholder="Outro motivo (escreva aqui)" autocomplete="off" style="margin-top:4px"></div>
+      <label class="f full">Descrição da queixa<textarea class="in" id="fDesc" placeholder="Descreva o que aconteceu"></textarea></label>
+      <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="enviar">Enviar queixa</button><p class="msg" id="msgForm" role="alert"></p></div>
+    </div>
+  </section>
+
+  <section class="panel" id="painelLista" hidden>
+    <div class="head"><div><h2 id="tituloLista">Minhas queixas</h2><p class="sub" id="subLista"></p></div>
+      <select class="in" id="filtro" style="width:auto" hidden aria-label="Filtrar por situação"><option value="enviada">Aguardando direção</option><option value="concluida">Concluídas</option><option value="">Todas</option></select></div>
+    <ul class="list" id="lista"></ul>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <div class="d-head"><h3 id="dTitulo">Queixa</h3><button class="x" id="dFechar" aria-label="Fechar janela">&times;</button></div>
+  <div class="d-body" id="dCorpo"></div>
+  <div class="d-foot"><p class="msg" id="msgDlg" role="alert" style="margin-right:auto"></p><button class="btn btn-ghost" id="dImprimir">Imprimir / salvar PDF</button><button class="btn btn-primary" id="dSalvar" hidden>Salvar encaminhamento</button></div>
+</dialog>
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+/* ===== CONFIGURE AQUI (Supabase > Project Settings > API) ===== */
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";   // é pública por desenho; a proteção está nas regras do banco
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+/* ================================================================ */
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = d => d ? d.split("-").reverse().join("/") : "—";
+const hoje = () => new Date().toLocaleDateString("sv");
+const MES = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+let perfil, alunos = [], opcoes = [], queixas = [], atual = null;
+
+function tela(nome) {
+  ["Carregando","Login","Negado"].forEach(n => $("tela"+n).hidden = n !== nome);
+  const logado = nome === "App";
+  $("sessao").hidden = !(logado || nome === "Negado") ; 
+  ["novaQueixa","painelLista"].forEach(id => $(id).hidden = !logado);
+  $("novaQueixa").hidden = !logado;
+}
+const login = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = login; $("sair").onclick = logout; $("sair2").onclick = logout;
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+  const email = session.user.email.toLowerCase();
+  const { data: p } = await sb.from("perfis").select("*").eq("email", email).maybeSingle();
+  if (!p || !p.ativo) { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+  perfil = p;
+  $("olaNome").textContent = "Olá, " + p.nome.split(" ")[0] + "!"; $("avatar").textContent = p.nome[0].toUpperCase();
+  const [a, m, o] = await Promise.all([
+    sb.from("alunos").select("*").order("nome").limit(5000),
+    sb.from("motivos").select("nome").order("nome"),
+    sb.from("opcoes_encaminhamento").select("nome").order("ordem")]);
+  alunos = a.data || []; opcoes = (o.data || []).map(x => x.nome);
+  $("fMotivos").innerHTML = (m.data || []).map(x => `<label class="chip"><input type="radio" name="motivo" value="${esc(x.nome)}">${esc(x.nome)}</label>`).join("");
+  const turmas = [...new Set(alunos.map(x => x.serie + " " + x.turma))].sort((x, y) => x.localeCompare(y, "pt", { numeric: true }));
+  $("fTurma").innerHTML = turmas.map(t => `<label class="chip"><input type="radio" name="turma" value="${esc(t)}">${esc(t)}</label>`).join("");
+  $("fProf").value = p.nome; $("fData").value = hoje(); $("fData").max = hoje();
+  const dir = p.papel === "direcao";
+  $("filtro").hidden = !dir; $("filtro").value = "enviada";
+  $("tituloLista").textContent = dir ? "Queixas recebidas" : "Minhas queixas";
+  tela("App"); $("sessao").hidden = false;
+  carregar();
+}
+
+$("fTurma").onchange = () => {
+  const t = document.querySelector('input[name="turma"]:checked')?.value;
+  $("fAluno").innerHTML = alunos.filter(x => x.serie + " " + x.turma === t).map(x => `<label class="chip"><input type="radio" name="aluno" value="${x.id}">${esc(x.nome)}</label>`).join("") || '<p class="vazio">Escolha a turma primeiro</p>';
+};
+$("fMotivos").onchange = () => { $("fMotivo").value = ""; };
+$("fMotivo").oninput = () => document.querySelectorAll('input[name="motivo"]').forEach(r => r.checked = false);
+function aviso(el, txt, ok) { el.textContent = txt; el.className = "msg" + (ok ? " ok" : ""); }
+
+$("enviar").onclick = async () => {
+  const marc = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+  const r = { aluno_id: +marc("aluno"), data_ocorrencia: $("fData").value, motivo: $("fMotivo").value.trim() || marc("motivo"), descricao: $("fDesc").value.trim() };
+  if (!r.aluno_id || !r.data_ocorrencia || !r.motivo || !r.descricao) return aviso($("msgForm"), "Preencha turma, aluno, data, motivo e descrição.");
+  $("enviar").disabled = true;
+  const { error } = await sb.from("queixas").insert(r);
+  $("enviar").disabled = false;
+  if (error) return aviso($("msgForm"), "Não foi possível enviar. Tente novamente.");
+  aviso($("msgForm"), "Queixa enviada à direção.", true);
+  $("fDesc").value = ""; $("fMotivo").value = "";
+  document.querySelectorAll('input[name="aluno"],input[name="motivo"]').forEach(r => r.checked = false);
+  carregar();
+};
+
+async function carregar() {
+  const { data, error } = await sb.from("queixas").select("*, alunos(nome,serie,turma)").order("criada_em", { ascending: false }).limit(500);
+  if (error) return;
+  queixas = data; desenharLista();
+}
+function desenharLista() {
+  const f = $("filtro").value, dir = perfil.papel === "direcao";
+  const itens = queixas.filter(q => !dir || !f || q.status === f);
+  $("subLista").textContent = itens.length + (itens.length === 1 ? " queixa" : " queixas");
+  $("lista").innerHTML = itens.length ? itens.map(q => {
+    const [y, m, d] = q.data_ocorrencia.split("-");
+    return `<li><button class="q" data-id="${q.id}"><span class="q-d">${d}<small>${MES[+m - 1]}</small></span>
+      <span class="q-t"><b>${esc(q.alunos.nome)}</b><span>${esc(q.alunos.serie)} ${esc(q.alunos.turma)} · ${esc(q.motivo)}${dir ? " · " + esc(q.professor_nome) : ""}</span></span>
+      <span class="tag ${q.status}">${q.status === "concluida" ? "Concluída" : "Aguardando direção"}</span></button></li>`;
+  }).join("") : '<li class="vazio">Nenhuma queixa por aqui.</li>';
+}
+$("filtro").onchange = desenharLista;
+$("lista").onclick = e => { const b = e.target.closest(".q"); if (b) abrir(+b.dataset.id); };
+
+function abrir(id) {
+  atual = queixas.find(q => q.id === id); const q = atual, dir = perfil.papel === "direcao";
+  $("dTitulo").textContent = "Queixa · " + q.alunos.nome; aviso($("msgDlg"), "");
+  const enc = dir
+    ? `<div><h4>Encaminhamentos</h4><div class="chips">${opcoes.map(o => `<label class="chip"><input type="checkbox" name="enc" value="${esc(o)}" ${q.encaminhamentos.includes(o) ? "checked" : ""}>${esc(o)}</label>`).join("")}</div></div>
+       <label class="f">Detalhes do encaminhamento<textarea class="in" id="eDet">${esc(q.enc_detalhes)}</textarea></label>
+       <label class="f" style="max-width:240px">Data do encaminhamento<input class="in" type="date" id="eData" value="${q.enc_data || hoje()}"></label>`
+    : q.status === "concluida"
+      ? `<div><h4>Encaminhamentos da direção</h4><div class="bloco">${esc(q.encaminhamentos.join(", ") || "—")}\n${esc(q.enc_detalhes)}\n\nData: ${fmt(q.enc_data)} · ${esc(q.direcao_nome)}</div></div>`
+      : `<p class="vazio">Aguardando a direção.</p>`;
+  $("dCorpo").innerHTML = `<dl><div><dt>Professor(a)</dt><dd>${esc(q.professor_nome)}</dd></div><div><dt>Data da ocorrência</dt><dd>${fmt(q.data_ocorrencia)}</dd></div>
+    <div><dt>Aluno</dt><dd>${esc(q.alunos.nome)}</dd></div><div><dt>Série e turma</dt><dd>${esc(q.alunos.serie)} ${esc(q.alunos.turma)}</dd></div>
+    <div style="grid-column:1/-1"><dt>Motivo</dt><dd>${esc(q.motivo)}</dd></div></dl><div><h4>Descrição</h4><div class="bloco">${esc(q.descricao)}</div></div>${enc}`;
+  $("dSalvar").hidden = !dir; $("dlg").showModal();
+}
+$("dFechar").onclick = () => $("dlg").close();
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
+
+$("dSalvar").onclick = async () => {
+  const encs = [...document.querySelectorAll('input[name="enc"]:checked')].map(c => c.value), data = $("eData").value, det = $("eDet").value.trim();
+  if (!encs.length || !data) return aviso($("msgDlg"), "Marque ao menos um encaminhamento e informe a data.");
+  $("dSalvar").disabled = true;
+  const { data: r, error } = await sb.from("queixas").update({ encaminhamentos: encs, enc_detalhes: det, enc_data: data, status: "concluida" }).eq("id", atual.id).select("*, alunos(nome,serie,turma)").single();
+  $("dSalvar").disabled = false;
+  if (error) return aviso($("msgDlg"), "Não foi possível salvar. Tente novamente.");
+  queixas = queixas.map(q => q.id === r.id ? r : q); atual = r; desenharLista(); aviso($("msgDlg"), "Salvo. Já pode imprimir.", true);
+};
+
+$("dImprimir").onclick = () => {
+  const q = atual, marcados = q.encaminhamentos || [];
+  const gestor = perfil.papel === "direcao" ? perfil.nome : (q.direcao_nome || "");
+  const todas = [...new Set([...opcoes, ...marcados])];
+  $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>Ficha de ocorrência</h2>
+    <table><tr><td class="k">Professor(a)</td><td>${esc(q.professor_nome)}</td><td class="k">Data</td><td>${fmt(q.data_ocorrencia)}</td></tr>
+    <tr><td class="k">Aluno</td><td>${esc(q.alunos.nome)}</td><td class="k">Série/Turma</td><td>${esc(q.alunos.serie)} ${esc(q.alunos.turma)}</td></tr>
+    <tr><td class="k">Motivo</td><td colspan="3">${esc(q.motivo)}</td></tr></table>
+    <h3>Descrição da queixa</h3><div class="txt">${esc(q.descricao)}</div>
+    <h3>Encaminhamentos da direção</h3><ul>${todas.map(o => `<li>${marcados.includes(o) ? "☒" : "☐"} ${esc(o)}</li>`).join("")}</ul>
+    <div class="txt" style="margin-top:8px">${esc(q.enc_detalhes)}</div>
+    <p>Data do encaminhamento: ${fmt(q.enc_data)}${gestor ? " · Registrado por " + esc(gestor) : ""}</p>
+    <div class="assin"><div><b>${esc(q.professor_nome)}</b><br>Professor(a)</div><div><b>${esc(gestor) || "&nbsp;"}</b><br>Direção / Vice-direção</div><div><b>${esc(q.alunos.nome)}</b><br>Estudante (ou responsável)</div></div>`;
+  window.print();
+};
+
+iniciar();
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Avisos JMA</title>
+<link rel="manifest" href="/site.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.q.novo{border-color:var(--blue);background:var(--card)}
+.q.novo b::after{content:"";display:inline-block;width:8px;height:8px;margin-left:8px;border-radius:50%;background:var(--blue)}
+.abas{display:flex;gap:8px}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+details summary{cursor:pointer;font-weight:600;color:var(--muted);margin-bottom:8px}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>AVISOS<small>Comunicados da equipe</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden>
+    <h2 style="justify-content:center">Acesso restrito</h2>
+    <p>Entre com seu e-mail institucional para ver os avisos da escola.</p>
+    <button class="btn btn-primary" id="entrar">Entrar com Google</button>
+  </section>
+  <section class="panel center" id="telaNegado" hidden>
+    <h2 style="justify-content:center">E-mail não autorizado</h2>
+    <p><b id="emailNegado"></b> não está na lista de usuários desta escola. Peça à direção para liberar seu acesso.</p>
+    <button class="btn btn-ghost" id="sair2">Sair</button>
+  </section>
+
+  <section class="panel" id="cardPush" hidden>
+    <div class="head" style="margin:0"><div><h2>Notificações</h2><p class="sub" id="pushTxt"></p></div><button class="btn btn-primary" id="pushBtn" hidden>Ativar notificações</button></div>
+  </section>
+
+  <section class="panel" id="novo" hidden>
+    <div class="head"><div><h2>Novo aviso</h2><p class="sub">Escolha para quem enviar</p></div></div>
+    <div class="form">
+      <div class="grp full">Para quem?<div class="chips" id="cDest"></div></div>
+      <details class="full"><summary>Ou escolha pessoas</summary><div class="chips grade" id="cPessoas"></div></details>
+      <label class="f full">Título<input class="in" id="fTit" maxlength="120" autocomplete="off"></label>
+      <label class="f full">Mensagem<textarea class="in" id="fTxt" maxlength="3000"></textarea></label>
+      <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="enviar">Enviar aviso</button><p class="msg" id="msgForm" role="alert"></p></div>
+    </div>
+  </section>
+
+  <section class="panel" id="caixa" hidden>
+    <div class="head"><div><h2>Avisos</h2><p class="sub" id="subLista"></p></div>
+      <div class="abas" id="abas" hidden><button class="btn btn-ghost" data-aba="rec" aria-pressed="true">Recebidos</button><button class="btn btn-ghost" data-aba="env" aria-pressed="false">Enviados</button></div></div>
+    <ul class="list" id="lista"></ul>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <div class="d-head"><h3 id="dTitulo">Aviso</h3><button class="x" id="dFechar" aria-label="Fechar janela">&times;</button></div>
+  <div class="d-body" id="dCorpo"></div>
+  <div class="d-foot"><button class="btn btn-primary" id="dOk">Fechar</button></div>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+/* ===== CONFIGURE AQUI ===== */
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+const VAPID_PUBLIC = "BCOUVcePEvjTS9EIxT5t8uKEpOj-n8ZdARuLb6mmr3Jkmz1P2diWoeVXxtfE2WLZ0SdpGCrl5sqT2d3SDxkipec";
+/* ========================== */
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const quando = iso => new Date(iso).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+const MES = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+let perfil, dir = false, aba = "rec", recebidos = [], enviados = [], pessoas = [];
+
+function tela(nome) {
+  ["Carregando","Login","Negado"].forEach(n => $("tela"+n).hidden = n !== nome);
+  $("sessao").hidden = !(nome === "App" || nome === "Negado");
+  ["cardPush","caixa"].forEach(id => $(id).hidden = nome !== "App");
+}
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout; $("sair2").onclick = logout;
+function aviso(txt, ok) { $("msgForm").textContent = txt; $("msgForm").className = "msg" + (ok ? " ok" : ""); }
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+  const email = session.user.email.toLowerCase();
+  const { data: p } = await sb.from("perfis").select("*").eq("email", email).maybeSingle();
+  if (!p || !p.ativo) { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+  perfil = p; dir = p.papel === "direcao";
+  $("olaNome").textContent = "Olá, " + p.nome.split(" ")[0] + "!"; $("avatar").textContent = p.nome[0].toUpperCase();
+  if (dir) {
+    const [g, pp] = await Promise.all([sb.from("grupos").select("id,nome").order("nome"), sb.from("perfis").select("email,nome").eq("ativo", true).order("nome")]);
+    pessoas = pp.data || [];
+    const chip = (n, v, t) => `<label class="chip"><input type="checkbox" name="${n}" value="${esc(v)}">${esc(t)}</label>`;
+    $("cDest").innerHTML = chip("papel","todos","Toda a equipe") + chip("papel","professor","Professores") + chip("papel","direcao","Direção") + (g.data || []).map(x => chip("grupo", x.id, x.nome)).join("");
+    $("cPessoas").innerHTML = pessoas.map(x => chip("pes", x.email, x.nome)).join("");
+  }
+  tela("App"); $("novo").hidden = !dir; $("abas").hidden = !dir;
+  iniciarPush(); carregar();
+}
+
+async function carregar() {
+  const r = await sb.from("aviso_destinos").select("aviso_id,lido_em,avisos(id,criado_em,autor_nome,titulo,texto)").eq("email", perfil.email);
+  recebidos = (r.data || []).filter(x => x.avisos).sort((a, b) => b.avisos.criado_em.localeCompare(a.avisos.criado_em));
+  if (dir) {
+    const e = await sb.from("avisos").select("id,criado_em,titulo,texto,aviso_destinos(email,lido_em)").eq("autor_email", perfil.email).order("criado_em", { ascending: false }).limit(100);
+    enviados = e.data || [];
+  }
+  desenhar();
+}
+function linha(id, iso, titulo, sub, tag, novo) {
+  const d = new Date(iso);
+  return `<li><button class="q${novo ? " novo" : ""}" data-id="${id}"><span class="q-d">${String(d.getDate()).padStart(2,"0")}<small>${MES[d.getMonth()]}</small></span>
+    <span class="q-t"><b>${esc(titulo)}</b><span>${esc(sub)}</span></span>${tag}</button></li>`;
+}
+function desenhar() {
+  document.querySelectorAll("#abas .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === aba));
+  const itens = aba === "rec"
+    ? recebidos.map(x => linha(x.aviso_id, x.avisos.criado_em, x.avisos.titulo, x.avisos.autor_nome, x.lido_em ? "" : '<span class="tag enviada">Novo</span>', !x.lido_em))
+    : enviados.map(x => { const l = x.aviso_destinos.filter(d => d.lido_em).length; return linha(x.id, x.criado_em, x.titulo, "Para " + x.aviso_destinos.length + " pessoa(s)", `<span class="tag ${l === x.aviso_destinos.length ? "concluida" : "enviada"}">${l}/${x.aviso_destinos.length} leram</span>`, false); });
+  $("subLista").textContent = itens.length + (itens.length === 1 ? " aviso" : " avisos");
+  $("lista").innerHTML = itens.join("") || '<li class="vazio">Nenhum aviso por aqui.</li>';
+}
+document.querySelectorAll("#abas .btn").forEach(b => b.onclick = () => { aba = b.dataset.aba; desenhar(); });
+$("lista").onclick = e => { const b = e.target.closest(".q"); if (b) abrir(+b.dataset.id); };
+
+async function abrir(id) {
+  let corpo, titulo;
+  if (aba === "rec") {
+    const x = recebidos.find(r => r.aviso_id === id), a = x.avisos; titulo = a.titulo;
+    corpo = `<dl><div><dt>De</dt><dd>${esc(a.autor_nome)}</dd></div><div><dt>Enviado em</dt><dd>${quando(a.criado_em)}</dd></div></dl><div class="bloco">${esc(a.texto)}</div>`;
+    if (!x.lido_em) {
+      x.lido_em = new Date().toISOString();
+      sb.from("aviso_destinos").update({ lido_em: x.lido_em }).eq("aviso_id", id).eq("email", perfil.email).then(() => {});
+      desenhar();
+    }
+  } else {
+    const a = enviados.find(r => r.id === id); titulo = a.titulo;
+    const nome = em => (pessoas.find(p => p.email === em) || {}).nome || em;
+    const falta = a.aviso_destinos.filter(d => !d.lido_em).map(d => nome(d.email));
+    corpo = `<dl><div><dt>Enviado em</dt><dd>${quando(a.criado_em)}</dd></div><div><dt>Leitura</dt><dd>${a.aviso_destinos.length - falta.length} de ${a.aviso_destinos.length}</dd></div></dl>
+      <div class="bloco">${esc(a.texto)}</div><div><h4>Ainda não leram</h4><div class="bloco">${esc(falta.join(", ") || "Todos já leram.")}</div></div>`;
+  }
+  $("dTitulo").textContent = titulo; $("dCorpo").innerHTML = corpo; $("dlg").showModal();
+}
+$("dFechar").onclick = $("dOk").onclick = () => $("dlg").close();
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
+
+$("enviar").onclick = async () => {
+  const sel = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(c => c.value);
+  const papeis = sel("papel"), grupos = sel("grupo").map(Number), emails = sel("pes");
+  const titulo = $("fTit").value.trim(), texto = $("fTxt").value.trim();
+  if (!titulo || !texto || !(papeis.length + grupos.length + emails.length)) return aviso("Escolha os destinatários e preencha título e mensagem.");
+  $("enviar").disabled = true;
+  const { data: id, error } = await sb.rpc("enviar_aviso", { p_titulo: titulo, p_texto: texto, p_papeis: papeis, p_grupos: grupos, p_emails: emails });
+  if (error) { $("enviar").disabled = false; return aviso("Não foi possível enviar o aviso."); }
+  const { data: r, error: e2 } = await sb.functions.invoke("enviar-push", { body: { aviso_id: id } });
+  $("enviar").disabled = false;
+  aviso(e2 ? "Aviso enviado. O alerta push não pôde ser disparado agora." : `Aviso enviado. ${r?.enviados ?? 0} alerta(s) push disparado(s).`, true);
+  $("fTit").value = ""; $("fTxt").value = "";
+  document.querySelectorAll('#novo input[type="checkbox"]').forEach(c => c.checked = false);
+  carregar();
+};
+
+/* ---------- Push ---------- */
+const pushOk = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+const b64 = s => { const r = atob((s + "=".repeat((4 - s.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from([...r].map(c => c.charCodeAt(0))); };
+async function assinar() {
+  try {
+    const reg = await navigator.serviceWorker.register("push-sw.js"); await navigator.serviceWorker.ready;
+    const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(VAPID_PUBLIC) });
+    const j = sub.toJSON();
+    const { error } = await sb.from("push_inscricoes").upsert({ endpoint: j.endpoint, email: perfil.email, p256dh: j.keys.p256dh, auth: j.keys.auth });
+    return !error;
+  } catch (_) { return false; }
+}
+async function iniciarPush() {
+  const t = $("pushTxt"); $("pushBtn").hidden = true;
+  if (!pushOk) { t.textContent = /iphone|ipad/i.test(navigator.userAgent) ? "No iPhone: toque em Compartilhar, depois em “Adicionar à Tela de Início”, abra o site por esse ícone e ative aqui." : "Este navegador não suporta notificações."; return; }
+  if (Notification.permission === "denied") { t.textContent = "Bloqueadas neste navegador. Libere nas configurações do site para receber alertas."; return; }
+  if (Notification.permission === "granted") { t.textContent = (await assinar()) ? "Ativadas neste aparelho ✓" : "Não foi possível registrar este aparelho. Tente recarregar."; return; }
+  t.textContent = "Receba um alerta quando chegar um aviso novo."; $("pushBtn").hidden = false;
+}
+$("pushBtn").onclick = async () => { await Notification.requestPermission(); iniciarPush(); };
+
+iniciar();
+</script>
+</body>
+</html>

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendário de provas · JMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1280px}
+.abas{display:flex;gap:8px;flex-wrap:wrap}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+.btn.sm{padding:7px 14px;font-size:.84rem}.hint{margin:0;font-size:.84rem;color:var(--muted)}.acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gl{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;align-items:start}
+.sem{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:6px;margin-bottom:6px;overflow-x:auto}
+.sem-h{text-align:center;font:700 .82rem var(--display);color:var(--muted)}
+.dcel{min-height:92px;padding:5px;border:1px dashed var(--bb);border-radius:12px;background:var(--card);display:grid;gap:4px;align-content:start}
+.dcel.fora{background:transparent;border-style:solid;border-color:var(--line);opacity:.45}.dcel.sobre{border-color:var(--blue);background:var(--light)}
+.dcel .dn{font-size:.7rem;font-weight:700;color:var(--muted)}
+.prova{--bg:#d1d5db;display:grid;gap:1px;padding:5px 8px;border-radius:10px;border:1px solid rgba(0,0,0,.2);border-left:4px solid rgba(0,0,0,.4);background:var(--bg);color:#111827;cursor:grab;font-size:.76rem;line-height:1.25;position:relative;user-select:none}
+.prova b{font-size:.78rem;padding-right:16px}.prova span{opacity:.85;font-size:.7rem}.prova.sel{outline:3px solid var(--blue)}
+.prova .tv{position:absolute;top:2px;right:3px;border:0;background:none;cursor:pointer;font-size:.8rem;opacity:.5}.prova .tv.on{opacity:1}
+.pool{display:grid;gap:6px;padding:10px;border:1px dashed var(--bb);border-radius:14px;min-height:60px}.pool.sobre{background:var(--light);border-color:var(--blue)}
+.lat{display:grid;gap:12px}.lat h3{margin:0;font:700 .95rem var(--display)}
+.prob{margin:0;padding-left:16px;font-size:.78rem;color:var(--danger)}.prob.av{color:var(--warn)}
+.tab{width:100%;border-collapse:collapse;font-size:.85rem}.tab th,.tab td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.tab th{color:var(--muted);font-weight:600}
+.tab td:not(:first-child),.tab th:not(:first-child){text-align:center}
+.in.mini{width:68px;padding:6px 8px;text-align:center}.in.sel2{padding:6px 8px;width:auto}
+details.cfg{border:1px solid var(--line);border-radius:16px;padding:12px 16px;background:var(--card)}details.cfg summary{cursor:pointer;font:700 1rem var(--display)}
+.alerta{padding:12px 14px;border-radius:14px;background:var(--warnbg);color:var(--warn);font-size:.88rem}
+@media(max-width:900px){.gl{grid-template-columns:1fr}}
+@media print{#ficha .tab td,#ficha .tab th{text-align:left;vertical-align:top;font-size:9pt}#ficha th{border:1px solid #000;padding:4px 6px;background:#eee}#ficha td{padding:4px 6px}.quebra{page-break-after:always}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>PROVAS<small>Calendário de avaliações</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden><h2 style="justify-content:center">Acesso restrito</h2><p>Entre com seu e-mail institucional.</p><button class="btn btn-primary" id="entrar">Entrar com Google</button></section>
+  <section class="panel center" id="telaNegado" hidden><h2 style="justify-content:center">Acesso restrito à direção</h2><p><b id="emailNegado"></b> não tem permissão para esta página.</p><button class="btn btn-ghost" id="sair2">Sair</button></section>
+  <section class="panel center" id="telaErro" hidden><h2 style="justify-content:center">Não foi possível carregar</h2><p id="erroGeral" role="alert">Verifique sua conexão e tente novamente.</p><button class="btn btn-primary" id="tentarNovamente">Tentar novamente</button></section>
+
+  <div id="app" hidden style="display:contents">
+    <div class="abas" id="abas"><button class="btn btn-ghost" data-aba="cal">Calendário</button><button class="btn btn-ghost" data-aba="conf">Configurar</button></div>
+
+    <section class="panel" id="s-cal">
+      <div class="head"><div><h2>Calendário de provas</h2><p class="sub">Arraste uma prova para outro dia (ou toque na prova e depois no dia). O sistema escolhe a aula do professor</p></div>
+        <div class="acoes"><select class="in sel2" id="vSel" aria-label="Versões salvas"></select><input class="in sel2" id="vNome" placeholder="Nome da versão" style="width:170px"><button class="btn btn-primary sm" id="salvar">Salvar</button><button class="btn btn-ghost sm" id="salvarNova">Salvar como nova</button><span class="hint" id="sujo"></span></div></div>
+      <div class="form" style="margin-bottom:14px">
+        <div class="grp full" role="radiogroup" aria-label="Visão">Ver por<div class="chips"><label class="chip"><input type="radio" name="modo" value="geral" checked>Geral</label><label class="chip"><input type="radio" name="modo" value="turma">Turma</label><label class="chip"><input type="radio" name="modo" value="prof">Professor</label></div></div>
+        <div class="grp full"><div class="chips" id="chipsAlvo"></div></div>
+        <div class="grp full">Montagem automática<div class="chips">
+          <label class="chip"><input type="radio" name="gm" value="zero" checked>Recomeçar (mantém só as provas travadas)</label><label class="chip"><input type="radio" name="gm" value="compl">Completar o que falta</label>
+          <label class="chip"><input type="radio" name="ef" value="3000">Rápido</label><label class="chip"><input type="radio" name="ef" value="8000" checked>Normal</label><label class="chip"><input type="radio" name="ef" value="20000">Caprichado</label></div>
+          <div class="acoes"><button class="btn btn-primary" id="gerar">Montar calendário automaticamente</button><button class="btn btn-ghost sm" id="limpar">Limpar (mantém travadas)</button><button class="btn btn-ghost sm" id="imp">Imprimir / PDF</button><button class="btn btn-ghost sm" id="impTodas">Imprimir uma página por turma</button><button class="btn btn-ghost sm" id="csv">Baixar planilha (CSV)</button></div>
+          <p class="msg" id="msg" role="alert"></p></div>
+      </div>
+      <div class="gl"><div id="cal"></div>
+        <div class="lat"><div><h3>Provas a alocar</h3><div class="pool" id="pool"></div></div><div><h3>Avisos</h3><div id="probs"></div></div></div></div>
+    </section>
+
+    <section class="panel" id="s-conf" hidden>
+      <div class="head"><div><h2>Configurar</h2><p class="sub">Período, avaliações, regras e horário de aulas usado como base</p></div></div>
+      <div style="display:grid;gap:12px" id="conf"></div>
+    </section>
+  </div>
+</main>
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+/*PROVAS-INI*/
+const DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex"], DIAS_LONGO = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"], W = [0, 1, 3, 8];
+const norm = s => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const mins = h => { const [a, b] = String(h).split(":"); return +a * 60 + +b; };
+const hm = m => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+const curta = t => (String(t).match(/^\d+\S*\s+Ano\s+\S+/i) || [String(t)])[0];
+const fmt = d => String(d).split("-").reverse().join("/");
+const diaSemana = iso => (new Date(iso + "T12:00:00").getDay() + 6) % 7;   // 0 = segunda
+const addDias = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return d.toLocaleDateString("sv"); };
+let P = null, ATR = {}, AUL = {}, DISC_NOME = {}, DATAS = [], IDX = {}, LISTA = [];
+const MCN = "Matemática e Ciências da Natureza";
+function areaDe(dk) {
+  const n = String(dk), h = (...ks) => ks.some(k => n.includes(k));
+  if (h("lingua portuguesa", "redacao", "arte", "educacao fisica", "lingua inglesa", "esporte")) return "Linguagens";
+  if (h("matematica", "ciencias", "financeira", "robotica", "tecnologia", "praticas experimentais")) return MCN;
+  if (h("historia", "geografia", "projeto de vida")) return "Ciências Humanas";
+  return "Outras";
+}
+function estadoNovo() {
+  return { nome: "", inicio: "", fim: "", excluidas: [], base: "", aval: {}, disc: {}, plano: {}, travas: {},
+    regras: { modo: "qualquer", pref: "final", wPref: 2, wEspalhar: 3, wConsec: 2, wAreas: 2, wPropria: 1, wEquilibrio: 1, evitarDias: [], wEvitar: 2, maxTurmaDia: 2, maxProfDia: 6 } };
+}
+function prepararAulas(bruto) {   // bruto: [{turma, wd, ini, fim, dk, disc, prof}] em minutos
+  AUL = {}; DISC_NOME = {};
+  bruto.forEach(a => { ((AUL[a.turma] ||= [[], [], [], [], []])[a.wd]).push({ ini: a.ini, fim: a.fim, dk: a.dk, disc: a.disc, prof: a.prof || null }); if (!DISC_NOME[a.dk]) DISC_NOME[a.dk] = a.disc; });
+  for (const t in AUL) AUL[t].forEach(L => { L.sort((x, y) => x.ini - y.ini); let gmax = 0, gi = -1;
+    for (let i = 1; i < L.length; i++) { const g = L[i].ini - L[i - 1].fim; if (g > gmax) { gmax = g; gi = i; } }
+    L.forEach((a, i) => a.tarde = gi >= 0 && gmax >= 45 && i >= gi); });
+}
+function diasLetivos() { const out = []; if (!P.inicio || !P.fim) return out; for (let d = P.inicio; d <= P.fim; d = addDias(d, 1)) { if (diaSemana(d) < 5 && !P.excluidas.includes(d)) out.push(d); } return out; }
+function profProva(turma, dk) { for (const L of (AUL[turma] || [])) for (const a of L) if (a.dk === dk && a.prof) return a.prof; return ATR[turma + "|" + dk] || null; }
+function listaProvas() {
+  const out = [];
+  for (const id in P.aval) { if (!P.aval[id]) continue; const [turma, dk] = id.split("|"), cfg = P.disc[dk] || {};
+    out.push({ id, turma, dk, prof: profProva(turma, dk), n: cfg.n === 2 ? 2 : 1, propria: cfg.propria == null ? P.regras.modo === "propria" : !!cfg.propria }); }
+  return out.sort((a, b) => a.turma.localeCompare(b.turma, "pt", { numeric: true }) || String(DISC_NOME[a.dk]).localeCompare(String(DISC_NOME[b.dk]), "pt"));
+}
+function candidatos(e, data) {
+  const L = ((AUL[e.turma] || [])[diaSemana(data)]) || [], out = [];
+  if (!e.prof) return out;
+  for (let i = 0; i + e.n <= L.length; i++) {
+    let ok = true;
+    for (let k = 0; k < e.n && ok; k++) { const a = L[i + k]; if (a.prof !== e.prof || (e.propria && a.dk !== e.dk) || (k > 0 && a.ini - L[i + k - 1].fim >= 45)) ok = false; }
+    if (ok) out.push({ data, i });
+  }
+  return out;
+}
+function prepararProvas() {
+  DATAS = diasLetivos(); IDX = {}; DATAS.forEach((d, i) => IDX[d] = i); LISTA = listaProvas();
+  LISTA.forEach(e => { e.cands = DATAS.flatMap(d => candidatos(e, d)); });
+}
+const estNovo = () => ({ pl: {}, occ: new Set(), ctd: {}, cpd: {}, atd: {}, cd: {}, ti: {} });
+const kTD = (t, d) => t + "|" + d;
+function aplicar(st, e, c, s) {
+  const L = AUL[e.turma][diaSemana(c.data)], f = (o, k, v) => { o[k] = (o[k] || 0) + v; };
+  for (let k = 0; k < e.n; k++) { const key = e.turma + "|" + c.data + "|" + L[c.i + k].ini; if (s > 0) st.occ.add(key); else st.occ.delete(key); }
+  f(st.ctd, kTD(e.turma, c.data), s); f(st.cpd, e.prof + "|" + c.data, s); f(st.cd, c.data, s); f(st.atd, kTD(e.turma, c.data) + "|" + areaDe(e.dk), s); f(st.ti, e.turma + "|" + IDX[c.data], s);
+  if (s > 0) st.pl[e.id] = c; else delete st.pl[e.id];
+}
+function viavel(st, e, c) {
+  const L = AUL[e.turma][diaSemana(c.data)];
+  for (let k = 0; k < e.n; k++) if (st.occ.has(e.turma + "|" + c.data + "|" + L[c.i + k].ini)) return false;
+  if ((st.ctd[kTD(e.turma, c.data)] || 0) >= P.regras.maxTurmaDia) return false;
+  if (P.regras.maxProfDia > 0 && (st.cpd[e.prof + "|" + c.data] || 0) >= P.regras.maxProfDia) return false;
+  return true;
+}
+function delta(st, e, c) {   // custo de colocar a prova e neste dia/aula, dado o que já está colocado
+  const R = P.regras, L = AUL[e.turma][diaSemana(c.data)], n = L.length, wd = diaSemana(c.data), first = L[c.i], ult = c.i + e.n - 1; let x = 0;
+  const pos = R.pref === "final" ? (n > 1 ? (n - 1 - ult) / (n - 1) : 0) : R.pref === "inicio" ? (n > 1 ? c.i / (n - 1) : 0) : R.pref === "manha" ? (first.tarde ? 1 : 0) : R.pref === "tarde" ? (first.tarde ? 0 : 1) : 0;
+  x += W[R.wPref] * pos;
+  for (let k = 0; k < e.n; k++) if (L[c.i + k].dk !== e.dk) { x += W[R.wPropria]; break; }
+  if (R.evitarDias.includes(wd)) x += W[R.wEvitar];
+  x += W[R.wEspalhar] * (P_ST_ctd(st, e.turma, c.data));
+  const ix = IDX[c.data]; x += W[R.wConsec] * ((st.ti[e.turma + "|" + (ix - 1)] || 0) + (st.ti[e.turma + "|" + (ix + 1)] || 0));
+  x += W[R.wAreas] * (st.atd[kTD(e.turma, c.data) + "|" + areaDe(e.dk)] || 0);
+  x += W[R.wEquilibrio] * 0.25 * (2 * (st.cd[c.data] || 0) + 1);
+  return x;
+}
+const P_ST_ctd = (st, t, d) => st.ctd[kTD(t, d)] || 0;
+function construir(base) {
+  const st = estNovo(); base.forEach(({ e, c }) => aplicar(st, e, c, 1));
+  let custo = 0; const sobra = [], pend = LISTA.filter(e => !st.pl[e.id]);
+  const ord = new Map(pend.map(e => [e.id, e.cands.length + Math.random() * 3])); pend.sort((a, b) => ord.get(a.id) - ord.get(b.id));
+  for (const e of pend) {
+    let best = null, bc = Infinity;
+    for (const c of e.cands) { if (!viavel(st, e, c)) continue; const x = delta(st, e, c) + Math.random() * 0.8; if (x < bc) { bc = x; best = c; } }
+    if (!best) { sobra.push(e); continue; }
+    custo += delta(st, e, best); aplicar(st, e, best, 1);
+  }
+  return { st, custo, sobra };
+}
+function melhorar(r, iter) {
+  const { st } = r, mov = LISTA.filter(e => st.pl[e.id] && !P.travas[e.id] && e.cands.length > 1);
+  for (let it = 0; it < iter && mov.length; it++) {
+    const e = mov[(Math.random() * mov.length) | 0], old = st.pl[e.id];
+    aplicar(st, e, old, -1); const co = delta(st, e, old), c = e.cands[(Math.random() * e.cands.length) | 0];
+    if ((c.data !== old.data || c.i !== old.i) && viavel(st, e, c)) { const cn = delta(st, e, c); if (cn < co - 1e-9) { aplicar(st, e, c, 1); r.custo += cn - co; continue; } }
+    aplicar(st, e, old, 1);
+  }
+}
+async function montarCalendario(ms, completar, progresso) {
+  prepararProvas();
+  const base = LISTA.filter(e => P.plano[e.id] && (completar || P.travas[e.id])).map(e => ({ e, c: P.plano[e.id] }))
+    .filter(({ e, c }) => e.cands.some(x => x.data === c.data && x.i === c.i));
+  let melhor = null, tent = 0; const t0 = performance.now(), iter = Math.max(300, Math.min(5000, Math.round(ms / 3)));
+  do {
+    const r = construir(base); melhorar(r, iter); r.pont = r.sobra.length * 1000 + r.custo; tent++;
+    if (!melhor || r.pont < melhor.pont) melhor = r;
+    if (progresso) { progresso(tent, melhor); await new Promise(res => setTimeout(res)); }
+  } while (performance.now() - t0 < ms);
+  melhor.tent = tent; return melhor;
+}
+function motivoSemLugar(e) {
+  if (!e.prof) return "a disciplina não tem professor nas aulas desta turma";
+  if (!e.cands.length) return e.propria ? "no período não há aula desta disciplina com este professor (a opção 'só na própria aula' está ligada)" : "no período o professor não tem aula com esta turma";
+  return "os dias possíveis já atingiram o limite de provas por dia (turma ou professor) ou as aulas estão ocupadas";
+}
+/*PROVAS-FIM*/
+
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hoje = () => new Date().toLocaleDateString("sv");
+const marcado = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+const msg = (t, ok) => { $("msg").textContent = t; $("msg").className = "msg" + (ok ? " ok" : ""); };
+const vdc = i => { let r = 0, f = 0.5; while (i) { r += (i & 1) * f; i >>= 1; f /= 2; } return r; };
+let perfil, nomesProf = {}, vid = null, alvo = "", selP = null, versoes = [], fontes = [], OFICIAL = [], emailsOrd = [];
+const nomeProf = e => e ? (nomesProf[e] || e) : "";
+const nomeDisc = dk => DISC_NOME[dk] || dk;
+const corProf = e => { const i = Math.max(0, emailsOrd.indexOf(e)); return `hsl(${Math.round((vdc(i) * 360 + 15) % 360)} 62% 76%)`; };
+const sujo = () => { P.sujo = true; $("sujo").textContent = "● alterações não salvas"; };
+
+function tela(n) { ["Carregando","Login","Negado","Erro"].forEach(x => $("tela"+x).hidden = x !== n); $("sessao").hidden = !(n === "App" || n === "Negado"); $("app").hidden = n !== "App"; }
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout; $("sair2").onclick = logout;
+$("tentarNovamente").onclick = () => { tela("Carregando"); iniciar(); };
+
+/* ---------- carga de dados ---------- */
+function brutoDeVersao(d) {
+  const out = []; (d.turmas || []).forEach(t => { const fam = (d.familia || {})[parseInt(t)] || "A", H = (d.horarios || {})[fam]; if (!H) return;
+    (d.grade?.[t] || []).forEach((row, wd) => row.forEach((dk, p) => { if (!dk || !H.dias[wd]?.[p]) return; const ini = mins(H.dias[wd][p]); out.push({ turma: t, wd, ini, fim: ini + H.dur, dk, disc: d.disc?.[dk]?.nome || dk, prof: ATR[t + "|" + dk] || null }); })); });
+  return out;
+}
+async function usarFonte(id) {
+  let bruto = [];
+  if (id === "oficial") bruto = OFICIAL.map(r => ({ turma: r.turma, wd: r.dia, ini: mins(r.ini), fim: mins(r.fim), dk: norm(r.disciplina), disc: r.disciplina, prof: r.professor_email || null }));
+  else { const { data, error } = await sb.from("horarios").select("dados").eq("id", +id).maybeSingle(); if (error) throw error; bruto = data ? brutoDeVersao(data.dados) : []; }
+  prepararAulas(bruto); P.base = id;
+  emailsOrd = [...new Set(bruto.map(a => a.prof).filter(Boolean))].sort();
+}
+async function iniciar() {
+  try {
+    const { data, error: authError } = await sb.auth.getSession(); if (authError) throw authError;
+    const session = data?.session; if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+    const email = (session.user.email || "").toLowerCase(); if (!email) throw new Error("sem e-mail");
+    const { data: p, error: pe } = await sb.from("perfis").select("*").eq("email", email).maybeSingle(); if (pe) throw pe;
+    if (!p || !p.ativo || p.papel !== "direcao") { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+    perfil = p; $("olaNome").textContent = "Olá, " + (p.nome || email).split(" ")[0] + "!"; $("avatar").textContent = (p.nome || email)[0].toUpperCase();
+    const [a, n, h] = await Promise.all([sb.from("atribuicoes").select("*").limit(5000), sb.from("perfis").select("email,nome"), sb.from("horario_aulas").select("*").limit(5000)]);
+    if (a.error || n.error) throw a.error || n.error;
+    (n.data || []).forEach(x => nomesProf[x.email] = x.nome); (a.data || []).forEach(x => ATR[x.turma_nome + "|" + x.disc_chave] = x.professor_email);
+    OFICIAL = h.error ? [] : (h.data || []);
+    let v = await sb.from("horarios").select("id,nome,atualizado_em").order("atualizado_em", { ascending: false }); if (v.error) throw v.error;
+    fontes = [...(OFICIAL.length ? [{ id: "oficial", nome: "★ Horário oficial" }] : []), ...(v.data || []).map(x => ({ id: String(x.id), nome: x.nome }))];
+    if (!fontes.length) throw new Error("Nenhum horário de aulas encontrado. Monte e salve um horário na página de horários primeiro.");
+    P = estadoNovo(); await usarFonte(fontes[0].id);
+    await listarVersoes(); if (versoes.length) await abrirVersao(versoes[0].id);
+    tela("App"); aba("cal"); renderTudo();
+  } catch (error) {
+    console.error("Falha ao iniciar:", error);
+    $("erroGeral").textContent = /Nenhum horário/.test(String(error.message)) ? error.message : "Falha ao consultar os dados. Confira a conexão e as permissões do banco e tente novamente.";
+    tela("Erro");
+  }
+}
+async function listarVersoes() {
+  const { data, error } = await sb.from("calendarios_provas").select("id,nome,atualizado_em").order("atualizado_em", { ascending: false });
+  if (error) throw error; versoes = data || [];
+  $("vSel").innerHTML = '<option value="">Novo calendário</option>' + versoes.map(x => `<option value="${x.id}" ${x.id === vid ? "selected" : ""}>${esc(x.nome)} · ${new Date(x.atualizado_em).toLocaleDateString("pt-BR")}</option>`).join("");
+}
+async function abrirVersao(id) {
+  const { data, error } = await sb.from("calendarios_provas").select("*").eq("id", id).maybeSingle(); if (error) throw error; if (!data) return;
+  const novo = estadoNovo(), d = data.dados; P = { ...novo, ...d, regras: { ...novo.regras, ...(d.regras || {}) } };
+  if (P.base && fontes.some(f => f.id === P.base)) await usarFonte(P.base); else await usarFonte(fontes[0].id);
+  vid = data.id; $("vNome").value = data.nome; P.sujo = false; $("sujo").textContent = ""; alvo = ""; renderTudo();
+}
+$("vSel").onchange = async () => { const v = $("vSel").value; if (!v) { vid = null; $("vNome").value = ""; return; }
+  try { await abrirVersao(+v); } catch (e) { console.error(e); msg("Não foi possível abrir esse calendário."); } };
+async function salvar(nova) {
+  const btns = [$("salvar"), $("salvarNova")]; btns.forEach(b => b.disabled = true);
+  try {
+    const nome = $("vNome").value.trim() || "Calendário " + new Date().toLocaleDateString("pt-BR"); P.nome = nome; const dados = JSON.parse(JSON.stringify({ ...P, sujo: false }));
+    const r = (vid && !nova) ? await sb.from("calendarios_provas").update({ nome, dados }).eq("id", vid).select("id").single() : await sb.from("calendarios_provas").insert({ nome, dados }).select("id").single();
+    if (r.error) throw r.error; vid = r.data.id; P.sujo = false; $("sujo").textContent = ""; msg("Calendário salvo.", true);
+    try { await listarVersoes(); } catch (e) { console.error(e); }
+  } catch (e) { console.error("Falha ao salvar:", e); msg("Não foi possível salvar. Confira se o schema.sql das provas foi executado."); }
+  finally { btns.forEach(b => b.disabled = false); }
+}
+$("salvar").onclick = () => salvar(false); $("salvarNova").onclick = () => salvar(true);
+function aba(n) { ["cal","conf"].forEach(x => $("s-"+x).hidden = x !== n); document.querySelectorAll("#abas .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n)); if (n === "conf") renderConf(); else renderTudo(); }
+document.querySelectorAll("#abas .btn").forEach(b => b.onclick = () => aba(b.dataset.aba));
+
+/* ---------- calendário ---------- */
+function semanas() {
+  if (!P.inicio || !P.fim || P.inicio > P.fim) return [];
+  let d = P.inicio; while (diaSemana(d) !== 0) d = addDias(d, -1); const out = [];
+  while (d <= P.fim) { out.push([0, 1, 2, 3, 4].map(k => addDias(d, k))); d = addDias(d, 7); } return out;
+}
+const blocoDe = (e, c) => { const L = AUL[e.turma][diaSemana(c.data)]; return { ini: L[c.i].ini, fim: L[c.i + e.n - 1].fim }; };
+function passaFiltro(e) { const m = marcado("modo") || "geral"; return m === "geral" || (m === "turma" && e.turma === alvo) || (m === "prof" && e.prof === alvo); }
+function renderChips() {
+  const m = marcado("modo") || "geral";
+  const lista = m === "turma" ? Object.keys(AUL).sort((a, b) => a.localeCompare(b, "pt", { numeric: true })).map(t => [t, curta(t)]) : m === "prof" ? emailsOrd.slice().sort((a, b) => nomeProf(a).localeCompare(nomeProf(b), "pt")).map(e => [e, nomeProf(e)]) : [];
+  if (!lista.find(x => x[0] === alvo)) alvo = lista[0] ? lista[0][0] : "";
+  $("chipsAlvo").innerHTML = lista.map(([v, t]) => `<label class="chip"><input type="radio" name="alvo" value="${esc(v)}"${v === alvo ? " checked" : ""}>${esc(t)}</label>`).join("");
+}
+document.querySelectorAll('input[name="modo"]').forEach(r => r.onchange = () => { alvo = ""; renderTudo(); });
+$("chipsAlvo").onchange = () => { alvo = marcado("alvo"); renderCal(); };
+function renderTudo() { renderChips(); renderCal(); }
+function problemas() {
+  const prob = [], ctd = {}, cpd = {}, occ = {};
+  LISTA.forEach(e => { const c = P.plano[e.id]; if (!c) return;
+    const L = (AUL[e.turma] || [])[diaSemana(c.data)] || [];
+    if (!e.cands.some(x => x.data === c.data && x.i === c.i)) return prob.push(`${curta(e.turma)} · ${nomeDisc(e.dk)}: ${fmt(c.data)} não tem uma aula disponível do professor (${nomeProf(e.prof) || "sem professor"}). Mova a prova.`);
+    for (let k = 0; k < e.n; k++) { const key = e.turma + "|" + c.data + "|" + L[c.i + k].ini; if (occ[key]) prob.push(`${curta(e.turma)}: duas provas na mesma aula em ${fmt(c.data)} (${nomeDisc(e.dk)} e ${nomeDisc(occ[key])})`); occ[key] = e.dk; }
+    ctd[e.turma + "|" + c.data] = (ctd[e.turma + "|" + c.data] || 0) + 1; cpd[e.prof + "|" + c.data] = (cpd[e.prof + "|" + c.data] || 0) + 1; });
+  for (const k in ctd) if (ctd[k] > P.regras.maxTurmaDia) { const [t, d] = k.split("|"); prob.push(`${curta(t)}: ${ctd[k]} provas em ${fmt(d)} (limite ${P.regras.maxTurmaDia})`); }
+  if (P.regras.maxProfDia > 0) for (const k in cpd) if (cpd[k] > P.regras.maxProfDia) { const [e, d] = k.split("|"); prob.push(`${nomeProf(e)}: ${cpd[k]} provas em ${fmt(d)} (limite ${P.regras.maxProfDia})`); }
+  return prob;
+}
+function cartaoProva(e, c) {
+  const b = blocoDe(e, c), sel = selP === e.id ? " sel" : "";
+  return `<div class="prova${sel}" draggable="true" data-id="${esc(e.id)}" style="--bg:${corProf(e.prof)}"><b>${esc(curta(e.turma))} · ${esc(nomeDisc(e.dk))}</b><span>${hm(b.ini)}${e.n > 1 ? "–" + hm(b.fim) : ""} · ${esc((nomeProf(e.prof) || "sem prof.").split(" ")[0])}</span><button class="tv${P.travas[e.id] ? " on" : ""}" data-tv="${esc(e.id)}" title="Travar/destravar" aria-label="Travar prova">${P.travas[e.id] ? "🔒" : "🔓"}</button></div>`;
+}
+function renderCal() {
+  if (!P) return; prepararProvas(); const sem = semanas();
+  if (!sem.length) { $("cal").innerHTML = '<p class="hint">Defina o período na aba <b>Configurar</b> para ver o calendário.</p>'; $("pool").innerHTML = ""; $("probs").innerHTML = ""; return; }
+  const porData = {}; LISTA.forEach(e => { const c = P.plano[e.id]; if (c && passaFiltro(e)) (porData[c.data] ||= []).push({ e, c }); });
+  $("cal").innerHTML = `<div class="sem">${DIAS_LONGO.map(d => `<div class="sem-h">${d}</div>`).join("")}</div>` + sem.map(w => `<div class="sem">${w.map(d => {
+    const dentro = d >= P.inicio && d <= P.fim && !P.excluidas.includes(d);
+    const itens = (porData[d] || []).sort((x, y) => blocoDe(x.e, x.c).ini - blocoDe(y.e, y.c).ini || x.e.turma.localeCompare(y.e.turma, "pt", { numeric: true })).map(({ e, c }) => cartaoProva(e, c)).join("");
+    return `<div class="dcel${dentro ? "" : " fora"}" data-data="${d}"><span class="dn">${fmt(d).slice(0, 5)}${P.excluidas.includes(d) ? " · sem prova" : ""}</span>${itens}</div>`; }).join("")}</div>`).join("");
+  const sobra = LISTA.filter(e => !P.plano[e.id] && passaFiltro(e));
+  $("pool").innerHTML = sobra.map(e => `<div class="prova${selP === e.id ? " sel" : ""}" draggable="true" data-id="${esc(e.id)}" style="--bg:${corProf(e.prof)}"><b>${esc(curta(e.turma))} · ${esc(nomeDisc(e.dk))}</b><span>${esc(nomeProf(e.prof) || "sem professor")}${e.cands.length ? "" : " · sem aula possível"}</span></div>`).join("") || '<p class="hint">Todas as provas estão alocadas. Arraste uma prova para cá para tirá-la do calendário.</p>';
+  const prob = problemas(), total = LISTA.length, colocadas = LISTA.filter(e => P.plano[e.id]).length;
+  $("probs").innerHTML = `<p class="hint">${colocadas} de ${total} provas alocadas</p>` + (prob.length ? `<ul class="prob">${prob.slice(0, 12).map(x => `<li>${esc(x)}</li>`).join("")}${prob.length > 12 ? `<li>…e mais ${prob.length - 12}</li>` : ""}</ul>` : (total ? '<p class="hint">Nenhum conflito. 👍</p>' : ""));
+}
+
+/* ---------- arrastar, soltar e tocar ---------- */
+function estadoAtual(semId) { const st = estNovo(); LISTA.forEach(e => { const c = P.plano[e.id]; if (c && e.id !== semId && e.cands.some(x => x.data === c.data && x.i === c.i)) aplicar(st, e, c, 1); }); return st; }
+function moverProva(id, data) {
+  prepararProvas(); const e = LISTA.find(x => x.id === id); if (!e) return;
+  if (!DATAS.includes(data)) return msg("Esse dia está fora do período ou marcado como sem prova.");
+  if (P.travas[id] && P.plano[id]) return msg("Esta prova está travada. Destrave para mover.");
+  const st = estadoAtual(id), cs = e.cands.filter(c => c.data === data);
+  if (!cs.length) return msg(`Neste dia o professor ${nomeProf(e.prof) || "(sem professor)"} não tem aula com a ${curta(e.turma)}${e.propria ? " na própria disciplina" : ""}.`);
+  const ok = cs.filter(c => viavel(st, e, c)); if (!ok.length) return msg("Neste dia não dá: o limite de provas por dia (turma ou professor) foi atingido ou as aulas do professor já estão ocupadas.");
+  ok.sort((a, b) => delta(st, e, a) - delta(st, e, b)); P.plano[id] = ok[0]; msg(""); selP = null; sujo(); renderCal();
+}
+function tirarProva(id) { if (P.travas[id]) return msg("Esta prova está travada."); delete P.plano[id]; selP = null; sujo(); renderCal(); }
+$("cal").addEventListener("dragstart", e => { const a = e.target.closest(".prova"); if (a) { selP = a.dataset.id; e.dataTransfer.setData("text/plain", "x"); } });
+$("pool").addEventListener("dragstart", e => { const a = e.target.closest(".prova"); if (a) { selP = a.dataset.id; e.dataTransfer.setData("text/plain", "x"); } });
+$("cal").addEventListener("dragover", e => { if (selP) { e.preventDefault(); document.querySelectorAll(".sobre").forEach(x => x.classList.remove("sobre")); const c = e.target.closest(".dcel"); if (c) c.classList.add("sobre"); } });
+$("cal").addEventListener("drop", e => { e.preventDefault(); document.querySelectorAll(".sobre").forEach(x => x.classList.remove("sobre")); const c = e.target.closest(".dcel"); if (c && selP) moverProva(selP, c.dataset.data); });
+$("pool").addEventListener("dragover", e => { if (selP) { e.preventDefault(); $("pool").classList.add("sobre"); } });
+$("pool").addEventListener("dragleave", () => $("pool").classList.remove("sobre"));
+$("pool").addEventListener("drop", e => { e.preventDefault(); $("pool").classList.remove("sobre"); if (selP) tirarProva(selP); });
+$("cal").addEventListener("click", e => {
+  const tv = e.target.closest("[data-tv]"); if (tv) { const id = tv.dataset.tv; if (P.travas[id]) delete P.travas[id]; else P.travas[id] = true; sujo(); return renderCal(); }
+  const a = e.target.closest(".prova"), c = e.target.closest(".dcel");
+  if (a) { selP = selP === a.dataset.id ? null : a.dataset.id; return renderCal(); }
+  if (c && selP) moverProva(selP, c.dataset.data);
+});
+$("pool").addEventListener("click", e => { const a = e.target.closest(".prova"); if (a) { selP = selP === a.dataset.id ? null : a.dataset.id; renderCal(); } else if (selP && P.plano[selP]) tirarProva(selP); });
+
+/* ---------- montar, limpar ---------- */
+$("gerar").onclick = async () => {
+  prepararProvas(); if (!DATAS.length) return msg("Defina o período (início e fim) na aba Configurar.");
+  if (!LISTA.length) return msg("Escolha as avaliações na aba Configurar.");
+  if (marcado("gm") === "zero" && !confirm("Isto refaz o calendário inteiro, mantendo só as provas travadas. Continuar?")) return;
+  $("gerar").disabled = true; msg("Montando…", true);
+  try {
+    const r = await montarCalendario(+marcado("ef"), marcado("gm") === "compl", (n, m) => msg(`Tentativa ${n}… melhor: ${m.sobra.length} prova(s) sem lugar`, true));
+    P.plano = { ...r.st.pl }; sujo(); renderCal();
+    const faltam = r.sobra.map(e => `${curta(e.turma)} ${nomeDisc(e.dk)}: ${motivoSemLugar(e)}`);
+    msg(r.sobra.length ? `Pronto, mas ${r.sobra.length} prova(s) não couberam. ${faltam.slice(0, 3).join(" | ")}` : `Pronto! ${r.tent} tentativas, todas as provas alocadas.`, !r.sobra.length);
+  } catch (e) { console.error(e); msg("A montagem falhou. Confira as configurações e tente novamente."); }
+  finally { $("gerar").disabled = false; }
+};
+$("limpar").onclick = () => { if (!confirm("Remover do calendário as provas que não estão travadas?")) return; Object.keys(P.plano).forEach(id => { if (!P.travas[id]) delete P.plano[id]; }); sujo(); renderCal(); };
+
+/* ---------- configurar ---------- */
+function renderConf() {
+  prepararProvas();
+  const turmas = Object.keys(AUL).sort((a, b) => a.localeCompare(b, "pt", { numeric: true })), dks = Object.keys(DISC_NOME).sort((a, b) => nomeDisc(a).localeCompare(nomeDisc(b), "pt")), R = P.regras;
+  const opt = (v, lista) => lista.map(([val, t]) => `<option value="${val}"${String(v) === String(val) ? " selected" : ""}>${t}</option>`).join("");
+  const niv = [[0, "Desligado"], [1, "Baixa"], [2, "Média"], [3, "Alta"]];
+  const sel = (k, lista) => `<select class="in sel2" data-r="${k}">${opt(R[k], lista)}</select>`;
+  const regs = [["Preferir aulas no final do dia (ou outro horário, escolhido ao lado)", "wPref", `<select class="in sel2" data-r="pref">${opt(R.pref, [["final", "Final do dia"], ["inicio", "Início do dia"], ["manha", "Manhã"], ["tarde", "Tarde"], ["nenhuma", "Sem preferência"]])}</select>`],
+    ["Espalhar as provas de cada turma (evitar várias no mesmo dia)", "wEspalhar"], ["Evitar provas em dias seguidos para a mesma turma", "wConsec"],
+    ["Alternar áreas do conhecimento (não repetir a área no mesmo dia da turma)", "wAreas"], ["Preferir a aula da própria disciplina (quando o professor tem outra aula com a turma)", "wPropria"],
+    ["Equilibrar o número de provas entre os dias", "wEquilibrio"], ["Evitar os dias da semana marcados abaixo", "wEvitar"]]
+    .map(([t, k, extra]) => `<tr><td style="text-align:left">${t}</td><td>${extra || ""}</td><td>${sel(k, niv)}</td></tr>`).join("");
+  const matriz = `<div style="overflow-x:auto"><table class="tab"><tr><th>Disciplina</th>${turmas.map(t => `<th>${esc(curta(t))}</th>`).join("")}<th>Aulas</th><th>Só na própria aula</th></tr>` +
+    dks.map(dk => { const cfg = P.disc[dk] || {}; return `<tr><td>${esc(nomeDisc(dk))} <button class="btn btn-ghost sm" data-todas="${esc(dk)}" style="padding:2px 8px">todas</button> <button class="btn btn-ghost sm" data-nenhuma="${esc(dk)}" style="padding:2px 8px">nenhuma</button></td>` +
+      turmas.map(t => { const pr = profProva(t, dk), existe = (AUL[t] || []).some(L => L.some(a => a.dk === dk)); return `<td>${existe && pr ? `<input type="checkbox" data-av="${esc(t + "|" + dk)}"${P.aval[t + "|" + dk] ? " checked" : ""} aria-label="${esc(nomeDisc(dk) + " " + curta(t))}">` : "—"}</td>`; }).join("") +
+      `<td><select class="in sel2" data-dn="${esc(dk)}">${opt(cfg.n === 2 ? 2 : 1, [[1, "1 aula"], [2, "2 aulas"]])}</select></td><td><select class="in sel2" data-dp="${esc(dk)}">${opt(cfg.propria == null ? "" : cfg.propria ? "1" : "0", [["", "Padrão"], ["1", "Sim"], ["0", "Não"]])}</select></td></tr>`; }).join("") + "</table></div>";
+  $("conf").innerHTML = `<details class="cfg" open><summary>Período e dias sem prova</summary><div class="form" style="margin-top:10px">
+      <label class="f">Início<input class="in" type="date" data-ini value="${P.inicio}"></label><label class="f">Fim<input class="in" type="date" data-fim value="${P.fim}"></label>
+      <div class="grp full">Dias sem prova (feriados, conselho de classe…)<div class="acoes"><input class="in" type="date" id="novoEx" style="width:auto"><button class="btn btn-ghost sm" data-addex>Adicionar</button></div>
+      <div class="chips">${P.excluidas.slice().sort().map(d => `<button class="btn btn-ghost sm" data-rmex="${d}" title="Remover">${fmt(d)} ✕</button>`).join("") || '<span class="hint" style="font-weight:400">Nenhum dia marcado. Sábados e domingos já ficam de fora.</span>'}</div></div></div></details>
+    <details class="cfg" open><summary>Horário de aulas usado como base</summary><p class="hint" style="margin:6px 0">As provas só entram em aulas que o professor realmente tem com a turma, segundo este horário.</p>
+      <select class="in sel2" data-base>${fontes.map(f => `<option value="${esc(f.id)}"${f.id === P.base ? " selected" : ""}>${esc(f.nome)}</option>`).join("")}</select></details>
+    <details class="cfg" open><summary>Avaliações que vão acontecer</summary><p class="hint" style="margin:6px 0">Marque cada turma que fará a avaliação de cada disciplina. “Aulas” é quanto tempo a prova ocupa. “Só na própria aula” obriga a prova a cair numa aula da própria disciplina; no “Padrão” vale a regra global abaixo.</p>${matriz}</details>
+    <details class="cfg" open><summary>Regras</summary>
+      <div class="form" style="margin:10px 0"><div class="grp full">Onde a prova pode acontecer (regra global)<div class="chips">
+        <label class="chip"><input type="radio" name="modoGlobal" data-modo="qualquer"${R.modo === "qualquer" ? " checked" : ""}>Em qualquer aula do mesmo professor com a turma</label>
+        <label class="chip"><input type="radio" name="modoGlobal" data-modo="propria"${R.modo === "propria" ? " checked" : ""}>Necessariamente na aula da própria disciplina</label></div></div>
+        <label class="f">Máximo de provas por dia, por turma<input class="in mini" type="number" min="1" max="6" data-r="maxTurmaDia" value="${R.maxTurmaDia}"></label>
+        <label class="f">Máximo de provas por dia, por professor (0 = sem limite)<input class="in mini" type="number" min="0" max="20" data-r="maxProfDia" value="${R.maxProfDia}"></label>
+        <div class="grp full">Dias da semana a evitar<div class="chips">${DIAS_LONGO.map((d, i) => `<label class="chip"><input type="checkbox" data-ed="${i}"${R.evitarDias.includes(i) ? " checked" : ""}>${d}</label>`).join("")}</div></div></div>
+      <table class="tab"><tr><th style="text-align:left">Preferência</th><th></th><th>Importância</th></tr>${regs}</table></details>`;
+}
+$("conf").addEventListener("click", e => {
+  const D = e.target.closest("button")?.dataset; if (!D) return;
+  if ("addex" in D) { const v = $("novoEx").value; if (v && !P.excluidas.includes(v)) { P.excluidas.push(v); sujo(); renderConf(); } }
+  else if (D.rmex) { P.excluidas = P.excluidas.filter(x => x !== D.rmex); sujo(); renderConf(); }
+  else if (D.todas || D.nenhuma) { const dk = D.todas || D.nenhuma; Object.keys(AUL).forEach(t => { if ((AUL[t] || []).some(L => L.some(a => a.dk === dk)) && profProva(t, dk)) { if (D.todas) P.aval[t + "|" + dk] = true; else delete P.aval[t + "|" + dk]; } }); limparPlano(); sujo(); renderConf(); }
+});
+$("conf").addEventListener("change", async e => {
+  const el = e.target, D = el.dataset; if (!D) return;
+  if ("ini" in D) P.inicio = el.value; else if ("fim" in D) P.fim = el.value;
+  else if (D.av) { if (el.checked) P.aval[D.av] = true; else delete P.aval[D.av]; limparPlano(); }
+  else if (D.dn) (P.disc[D.dn] ||= {}).n = +el.value;
+  else if (D.dp) { (P.disc[D.dp] ||= {}).propria = el.value === "" ? null : el.value === "1"; }
+  else if (D.modo) P.regras.modo = D.modo;
+  else if (D.ed != null) { const i = +D.ed, a = P.regras.evitarDias, k = a.indexOf(i); if (el.checked && k < 0) a.push(i); if (!el.checked && k >= 0) a.splice(k, 1); }
+  else if (D.r) P.regras[D.r] = (D.r === "pref") ? el.value : (+el.value || 0);
+  else if ("base" in D) { try { await usarFonte(el.value); P.plano = {}; limparPlano(); } catch (err) { console.error(err); msg("Não foi possível carregar esse horário."); return; } }
+  else return;
+  P.regras.maxTurmaDia = Math.max(1, P.regras.maxTurmaDia || 1); sujo(); renderConf();
+});
+function limparPlano() { const ids = new Set(Object.keys(P.aval)); Object.keys(P.plano).forEach(id => { if (!ids.has(id)) delete P.plano[id]; }); }
+
+/* ---------- impressão e planilha ---------- */
+function linhasProva(e, c) { const b = blocoDe(e, c); return `<b>${hm(b.ini)}${e.n > 1 ? "–" + hm(b.fim) : ""}</b> ${esc(curta(e.turma))} · ${esc(nomeDisc(e.dk))}<br><small>${esc(nomeProf(e.prof))}</small>`; }
+function htmlCalendario(filtro) {
+  const sem = semanas(), porData = {}; LISTA.forEach(e => { const c = P.plano[e.id]; if (c && filtro(e)) (porData[c.data] ||= []).push({ e, c }); });
+  return sem.map(w => `<table class="tab" style="margin-bottom:10px"><tr>${w.map(d => `<th>${DIAS[diaSemana(d)]} ${fmt(d).slice(0, 5)}</th>`).join("")}</tr><tr>${w.map(d => `<td>${P.excluidas.includes(d) ? "<small>sem prova</small>" : (porData[d] || []).sort((x, y) => blocoDe(x.e, x.c).ini - blocoDe(y.e, y.c).ini).map(({ e, c }) => linhasProva(e, c)).join("<hr style='border:0;border-top:1px dotted #999;margin:3px 0'>")}</td>`).join("")}</tr></table>`).join("");
+}
+function imprimir(html, titulo) { $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>${esc(titulo)}</h2>${html}<p style="font-size:9pt;margin-top:10px">Emitido por ${esc(perfil.nome)} em ${fmt(hoje())}${P.nome ? " · versão: " + esc(P.nome) : ""}</p>`; window.print(); }
+$("imp").onclick = () => { prepararProvas(); if (!semanas().length) return msg("Defina o período na aba Configurar."); const m = marcado("modo") || "geral", t = m === "turma" ? "Calendário de provas · " + curta(alvo) : m === "prof" ? "Calendário de provas · " + nomeProf(alvo) : "Calendário de provas";
+  imprimir(htmlCalendario(passaFiltro), `${t} · ${fmt(P.inicio)} a ${fmt(P.fim)}`); };
+$("impTodas").onclick = () => { prepararProvas(); if (!semanas().length) return msg("Defina o período na aba Configurar.");
+  imprimir(Object.keys(AUL).sort((a, b) => a.localeCompare(b, "pt", { numeric: true })).filter(t => LISTA.some(e => e.turma === t && P.plano[e.id])).map(t => `<div class="quebra"><h3>${esc(t)}</h3>${htmlCalendario(e => e.turma === t)}</div>`).join(""), `Calendário de provas · ${fmt(P.inicio)} a ${fmt(P.fim)}`); };
+$("csv").onclick = () => {
+  prepararProvas(); const c = v => { let s = String(v ?? ""); if (/^[\s\u0000-\u001f]*[=+@-]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; }, lin = [["Data", "Dia", "Início", "Fim", "Turma", "Disciplina", "Professor", "Aulas"]];
+  LISTA.filter(e => P.plano[e.id]).sort((a, b) => P.plano[a.id].data.localeCompare(P.plano[b.id].data) || blocoDe(a, P.plano[a.id]).ini - blocoDe(b, P.plano[b.id]).ini).forEach(e => { const cc = P.plano[e.id], b = blocoDe(e, cc); lin.push([fmt(cc.data), DIAS_LONGO[diaSemana(cc.data)], hm(b.ini), hm(b.fim), e.turma, nomeDisc(e.dk), nomeProf(e.prof), e.n]); });
+  const blob = new Blob(["\ufeff" + lin.map(l => l.map(c).join(";")).join("\r\n")], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "calendario_provas.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+};
+window.addEventListener("beforeunload", e => { if (P && P.sujo) { e.preventDefault(); e.returnValue = ""; } });
+iniciar();
+</script>
+</body>
+</html>

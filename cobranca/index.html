@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Relatório de pendências Sala do Futuro · JMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.abas{display:flex;gap:8px;flex-wrap:wrap}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+.btn.sm{padding:7px 14px;font-size:.84rem}
+.pc{display:grid;gap:10px;padding:14px 16px;background:var(--light);border:1px solid var(--bb);border-radius:16px}
+.pc-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.pc-h b{font-size:1rem}
+.pc ul{margin:0;padding-left:18px;font-size:.88rem}.pc li{margin:2px 0}
+.acoes{display:flex;gap:8px;flex-wrap:wrap}.hint{margin:0;font-size:.84rem;color:var(--muted)}
+.alerta{padding:12px 14px;border-radius:14px;background:var(--warnbg);color:var(--warn);font-size:.88rem}.alerta ul{margin:6px 0 0;padding-left:18px}
+.tag.resp{background:var(--light);color:var(--blue);border:1px solid var(--bb)}
+@media print{#ficha th{border:1px solid #000;padding:4px 8px;background:#eee;text-align:left}}
+.tab{width:100%;border-collapse:collapse;font-size:.88rem}.tab th,.tab td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}.tab th{color:var(--muted);font-weight:600}.tab td:not(:first-child),.tab th:not(:first-child){text-align:center}
+@media print{#ficha .tab{font-size:10pt}#ficha .tab td:not(:first-child),#ficha .tab th:not(:first-child){text-align:center}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>RELATÓRIO DE PENDÊNCIAS<small>Sala do Futuro</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden><h2 style="justify-content:center">Acesso restrito</h2><p>Entre com seu e-mail institucional.</p><button class="btn btn-primary" id="entrar">Entrar com Google</button></section>
+  <section class="panel center" id="telaNegado" hidden><h2 style="justify-content:center">Acesso restrito à direção</h2><p><b id="emailNegado"></b> não tem permissão para esta página.</p><button class="btn btn-ghost" id="sair2">Sair</button></section>
+
+  <div id="app" hidden style="display:contents">
+    <div class="abas" id="abas"><button class="btn btn-ghost" data-aba="cob">Pendências</button><button class="btn btn-ghost" data-aba="atr">Atribuições</button><button class="btn btn-ghost" data-aba="hist">Histórico</button></div>
+
+    <section class="panel" id="s-cob">
+      <div class="head"><div><h2>Relatório de pendências Sala do Futuro</h2><p class="sub">Suba os relatórios da semana (um por turma). As cobranças enviadas ficam guardadas no banco e voltam quando você reabrir a página</p></div></div>
+      <div class="form">
+        <div class="grp full" role="radiogroup" aria-label="Considerar aulas">Considerar aulas<div class="chips">
+          <label class="chip"><input type="radio" name="quando" value="ontem" checked>Até ontem</label>
+          <label class="chip"><input type="radio" name="quando" value="fim">Que já terminaram hoje</label></div></div>
+        <label class="f full">Relatórios (.xlsx), pode escolher vários de uma vez<input class="in" type="file" id="arqs" accept=".xlsx" multiple></label>
+        <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="ler">Ler relatórios</button><button class="btn btn-ghost" id="atualizar" title="Recarrega do banco as cobranças em aberto (descarta a leitura atual)">Recarregar cobranças em aberto</button><p class="msg" id="msgC" role="alert"></p></div>
+      </div>
+      <div id="res" style="display:grid;gap:12px;margin-top:18px"></div>
+    </section>
+
+    <section class="panel" id="s-atr" hidden>
+      <div class="head"><div><h2>Atribuições</h2><p class="sub" id="atrStatus"></p></div></div>
+      <div class="form">
+        <label class="f full">Modelo preenchido (.xlsx)<input class="in" type="file" id="modelo" accept=".xlsx"></label>
+        <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-ghost" id="lerModelo">Ler modelo</button><button class="btn btn-primary" id="salvarAtr" hidden>Salvar atribuições</button><p class="msg" id="msgA" role="alert"></p></div>
+        <div class="full" id="atrPrev" style="display:grid;gap:10px"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="s-hist" hidden>
+      <div class="head"><div><h2>Histórico de pendências</h2><p class="sub">Aulas sem lançamento por mais de 24 horas, por professor. O registro é permanente, mesmo depois de regularizado</p></div></div>
+      <div class="form">
+        <label class="f">De (data da aula)<input class="in" type="date" id="hDe"></label><label class="f">Até<input class="in" type="date" id="hAte"></label>
+        <div class="grp full" role="radiogroup" aria-label="Professor">Professor<div class="chips" id="hProfs"></div></div>
+        <div class="grp full" role="radiogroup" aria-label="Conteúdo do PDF">Conteúdo do PDF<div class="chips">
+          <label class="chip"><input type="radio" name="hdet" value="sim" checked>Resumo e lista de aulas</label>
+          <label class="chip"><input type="radio" name="hdet" value="nao">Só o resumo</label></div></div>
+        <div class="full" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn btn-ghost" id="verHist">Ver na tela</button><button class="btn btn-primary" id="hPdf">Gerar PDF / imprimir</button><button class="btn btn-ghost" id="hCsv">Baixar planilha (CSV)</button><p class="msg" id="msgH" role="alert"></p></div>
+      </div>
+      <div id="histRes" style="display:grid;gap:12px;margin-top:18px"></div>
+    </section>
+  </div>
+</main>
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+// Disciplinas que NÃO entram na conferência (são lançadas em outra janela da plataforma). Use o nome sem acento e em minúsculas.
+const IGNORAR = ["eletivas"];
+/*PURO-INI*/
+const norm = s => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const curta = t => (String(t).match(/^\d+\S*\s+Ano\s+\S+/i) || [String(t)])[0];
+const linhas = ws => XLSX.utils.sheet_to_json(ws, { header: 1, defval: "", raw: false });
+function lerRelatorio(wb) {
+  const L = linhas(wb.Sheets[wb.SheetNames[0]]);
+  const turma = String((L.find(r => String(r[0]).trim() === "Turma:") || [])[1] || "").trim();
+  const hi = L.findIndex(r => String(r[0]).trim() === "Horários");
+  if (!turma || hi < 0) return null;
+  const datas = L[hi].map(h => { const m = String(h).match(/(\d{2})\/(\d{2})\/(\d{4})/); return m ? `${m[3]}-${m[2]}-${m[1]}` : null; });
+  const aulas = [];
+  for (let i = hi + 1; i < L.length; i++) {
+    const hor = String(L[i][0]).match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/); if (!hor) continue;
+    for (let c = 1; c < L[i].length; c++) {
+      const v = String(L[i][c] || ""); if (!datas[c] || !/Freq/.test(v)) continue;   // "--" = sem aula
+      const disc = v.split("\n")[0].trim(); if (IGNORAR.includes(norm(disc))) continue;
+      aulas.push({ turma, dia: datas[c], ini: hor[1], fim: hor[2], disc, freq: /✔\s*Freq/.test(v), reg: /✔\s*Reg/.test(v) });
+    }
+  }
+  return { turma, aulas };
+}
+function lerModelo(wb) {
+  const wsP = wb.Sheets["Professores"], wsA = wb.Sheets["Atribuições"];
+  if (!wsP || !wsA) throw new Error("abas");
+  const por = {};
+  linhas(wsP).slice(1).filter(r => r[0] && r[1]).forEach(r => { por[norm(r[0])] = { nome: String(r[0]).trim(), email: String(r[1]).trim().toLowerCase(), whatsapp: String(r[2] || "").replace(/\D/g, "") }; });
+  const A = linhas(wsA), h = A.findIndex(r => String(r[0]).trim() === "Código");
+  if (h < 0) throw new Error("cabecalho");
+  const head = A[h], atrib = [], avisos = [];
+  for (let i = h + 1; i < A.length; i++) {
+    const disc = String(A[i][1] || "").trim(); if (!disc) continue;
+    for (let c = 2; c < head.length; c++) {
+      const turma = String(head[c] || "").trim(), nome = String(A[i][c] || "").trim(); if (!turma || !nome) continue;
+      const p = por[norm(nome)];
+      if (!p) { avisos.push(`“${nome}” (${curta(turma)} · ${disc}) não está na aba Professores`); continue; }
+      atrib.push({ turma_chave: norm(turma), turma_nome: turma, disc_chave: norm(disc), disc_nome: disc, professor_email: p.email });
+    }
+  }
+  const contatos = Object.values(por).map(p => ({ email: p.email, whatsapp: p.whatsapp }));
+  Object.values(por).forEach(p => { if (p.whatsapp && p.whatsapp.length !== 11) avisos.push(`WhatsApp de ${p.nome} tem ${p.whatsapp.length} dígitos (esperado: DDD + 9 dígitos). Confira.`); });
+  return { atrib, contatos, avisos, turmas: [...new Set(atrib.map(a => a.turma_nome))], profs: Object.keys(por).length };
+}
+/*PURO-FIM*/
+
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hoje = () => new Date().toLocaleDateString("sv");
+const fmt = d => String(d).split("-").reverse().join("/");
+const fmtDia = d => new Date(d + "T12:00:00").toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit" }).replace(".", "");
+const aviso = (id, t, ok) => { $(id).textContent = t; $(id).className = "msg" + (ok ? " ok" : ""); };
+let ultimoRes, perfil, mapa = {}, turmasCad = new Set(), nomes = {}, fones = {}, ultimo = {}, pend = {}, totalAtr = 0, modeloLido = null;
+
+function tela(n) { ["Carregando","Login","Negado"].forEach(x => $("tela"+x).hidden = x !== n); $("sessao").hidden = !(n === "App" || n === "Negado"); $("app").hidden = n !== "App"; }
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout; $("sair2").onclick = logout;
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+  const email = session.user.email.toLowerCase();
+  const { data: p } = await sb.from("perfis").select("*").eq("email", email).maybeSingle();
+  if (!p || !p.ativo || p.papel !== "direcao") { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+  perfil = p; $("olaNome").textContent = "Olá, " + p.nome.split(" ")[0] + "!"; $("avatar").textContent = p.nome[0].toUpperCase();
+  tela("App"); aba("cob"); $("hDe").value = hoje().slice(0, 8) + "01"; $("hAte").value = hoje(); await carregarBase(); await restaurarEExibir();
+}
+async function carregarBase() {
+  const [a, c, n, l] = await Promise.all([sb.from("atribuicoes").select("*").limit(5000), sb.from("professores_contato").select("*"),
+    sb.from("perfis").select("email,nome"), sb.from("lembretes").select("professor_email,enviado_em,canal").order("enviado_em", { ascending: false }).limit(500)]);
+  mapa = {}; turmasCad = new Set(); (a.data || []).forEach(x => { mapa[x.turma_chave + "|" + x.disc_chave] = x.professor_email; turmasCad.add(x.turma_chave); });
+  const profs = [...new Set(Object.values(mapa))];
+  totalAtr = (a.data || []).length; fones = {}; (c.data || []).forEach(x => fones[x.email] = x.whatsapp);
+  nomes = {}; (n.data || []).forEach(x => nomes[x.email] = x.nome);
+  profs.sort((x, y) => (nomes[x] || x).localeCompare(nomes[y] || y, "pt"));
+  $("hProfs").innerHTML = '<label class="chip"><input type="radio" name="hprof" value="" checked>Todos</label>' + profs.map(e => `<label class="chip"><input type="radio" name="hprof" value="${esc(e)}">${esc(nomes[e] || e)}</label>`).join("");
+  ultimo = {}; (l.data || []).forEach(x => { if (!ultimo[x.professor_email]) ultimo[x.professor_email] = x; });
+  $("atrStatus").textContent = totalAtr ? `${totalAtr} atribuições cadastradas em ${turmasCad.size} turmas` : "Nenhuma atribuição cadastrada ainda";
+}
+function aba(n) {
+  ["cob","atr","hist"].forEach(x => $("s-"+x).hidden = x !== n);
+  document.querySelectorAll("#abas .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n));
+}
+document.querySelectorAll("#abas .btn").forEach(b => b.onclick = () => aba(b.dataset.aba));
+
+/* ---------- Cobrança ---------- */
+const lerArq = async f => XLSX.read(await f.arrayBuffer(), { type: "array" });
+$("ler").onclick = async () => {
+  const files = [...$("arqs").files]; if (!files.length) return aviso("msgC", "Escolha ao menos um relatório.");
+  if (!totalAtr) return aviso("msgC", "Cadastre as atribuições primeiro (aba Atribuições).");
+  aviso("msgC", "Lendo…", true); $("ler").disabled = true;
+  const aulas = [], turmas = [], falhas = [];
+  for (const f of files) { try { const r = lerRelatorio(await lerArq(f)); if (!r) falhas.push(f.name); else { turmas.push(r.turma); aulas.push(...r.aulas); } } catch (_) { falhas.push(f.name); } }
+  $("ler").disabled = false; aviso("msgC", "");
+  const ontem = document.querySelector('input[name="quando"]:checked').value === "ontem", agora = new Date(), h = hoje();
+  const devida = a => ontem ? a.dia < h : new Date(`${a.dia}T${a.fim}:00`) < agora;
+  const faltam = aulas.filter(a => devida(a) && (!a.freq || !a.reg)), aberta = new Map(), sem = [];
+  Object.entries(pend).forEach(([e, l]) => l.forEach(a => aberta.set(chaveAula(a), { e, a })));     // cobranças já guardadas (restauradas do banco)
+  aulas.forEach(a => { const k = chaveAula(a), x = aberta.get(k); if (!x) return;
+    if (a.freq && a.reg) aberta.delete(k); else x.a = { ...x.a, freq: a.freq, reg: a.reg, fim: a.fim }; });  // regularizada → sai da lista; senão atualiza o que falta
+  faltam.forEach(a => { const e = mapa[norm(a.turma) + "|" + norm(a.disc)], k = chaveAula(a); if (!e) return sem.push(a); aberta.set(k, { e, a: { ...a, cob: aberta.get(k)?.a.cob } }); });
+  pend = {}; aberta.forEach(({ e, a }) => (pend[e] ||= []).push(a));
+  desenhar({ turmas, falhas, sem, total: aulas.length, nFaltam: faltam.length });
+  registrarHistorico(aulas);
+};
+// Guarda no histórico (para sempre) as aulas pendentes há mais de 24 horas (e dá baixa nas que já foram regularizadas)
+async function registrarHistorico(aulas) {
+  const ch = a => norm(a.turma) + "|" + norm(a.disc), pm = new Map(), okm = new Map();
+  const venceu = a => new Date(`${a.dia}T${a.fim}:00`).getTime() + 864e5 < Date.now();   // mais de 24 h depois do fim da aula
+  aulas.forEach(a => {
+    const k = ch(a) + "|" + a.dia + "|" + a.ini;
+    if (!a.freq || !a.reg) { if (venceu(a) && mapa[ch(a)]) pm.set(k, { turma_chave: norm(a.turma), turma_nome: a.turma, disc_chave: norm(a.disc), disc_nome: a.disc, dia: a.dia, ini: a.ini, professor_email: mapa[ch(a)], sem_freq: !a.freq, sem_reg: !a.reg }); }
+    else okm.set(k, { turma_chave: norm(a.turma), disc_chave: norm(a.disc), dia: a.dia, ini: a.ini });
+  });
+  const { data, error } = await sb.rpc("registrar_conferencia", { p_pend: [...pm.values()], p_ok: [...okm.values()] });
+  aviso("msgC", error ? "Atenção: não foi possível salvar no histórico." : `Histórico atualizado: ${data.novas} nova(s) pendência(s) registrada(s), ${data.regularizadas} regularizada(s).`, !error);
+}
+const falta = a => !a.freq && !a.reg ? "frequência e registro" : !a.freq ? "frequência" : "registro";
+const ordem = l => [...l].sort((x, y) => x.dia.localeCompare(y.dia) || x.ini.localeCompare(y.ini) || curta(x.turma).localeCompare(curta(y.turma)));
+function texto(email) {
+  const nome = (nomes[email] || "").split(" ")[0], lista = ordem(pend[email]);
+  let t = `Olá${nome ? ", " + nome : ""}! Estes lançamentos estão pendentes na Sala do Futuro:\n\n`, n = 0;
+  for (const a of lista) { const l = `• ${curta(a.turma)} · ${a.disc} — ${fmtDia(a.dia)}, ${a.ini}: ${falta(a)}\n`; if ((t + l).length > 2500) break; t += l; n++; }
+  if (n < lista.length) t += `• …e mais ${lista.length - n} aula(s). Confira no relatório.\n`;
+  return t + "\nPor favor, regularize assim que possível. Obrigado!";
+}
+const chaveAula = a => norm(a.turma) + "|" + norm(a.disc) + "|" + a.dia + "|" + a.ini;
+const foraPrazo = a => (a.fim ? new Date(`${a.dia}T${a.fim}:00`) : new Date(new Date(`${a.dia}T${a.ini}:00`).getTime() + 50 * 60000)).getTime() + 864e5 < Date.now();
+const dh = v => new Date(v).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+async function restaurar() {   // carrega do banco as aulas já cobradas e ainda não regularizadas
+  const { data, error } = await sb.from("pendencias").select("*").is("resolvida_em", null).not("cobrada_em", "is", null).order("dia", { ascending: true }).limit(3000);
+  if (error) { console.error("Falha ao restaurar as cobranças:", error); return false; }
+  pend = {}; (data || []).filter(r => !IGNORAR.includes(r.disc_chave)).forEach(r => (pend[r.professor_email] ||= []).push({ turma: r.turma_nome, disc: r.disc_nome, dia: r.dia, ini: r.ini, freq: !r.sem_freq, reg: !r.sem_reg, cob: { cobrada_em: r.cobrada_em, ultimo: r.ultimo_aviso_em, canal: r.canal_ultimo_aviso } }));
+  return true;
+}
+async function restaurarEExibir() {
+  const ok = await restaurar(); desenhar(null);
+  aviso("msgC", ok ? "" : "Não foi possível carregar as cobranças em aberto do banco. Confira se o cobrancas.sql foi executado no Supabase.");
+  return ok;
+}
+$("atualizar").onclick = async () => { $("atualizar").disabled = true; const ok = await restaurarEExibir(); $("atualizar").disabled = false; if (ok) aviso("msgC", "Cobranças em aberto recarregadas do banco.", true); };
+function desenhar(r) {
+  const restaurada = !r; r = r || { turmas: [], falhas: [], sem: [], total: 0, nFaltam: 0 }; ultimoRes = r;
+  const emails = Object.keys(pend).sort((a, b) => (nomes[a] || a).localeCompare(nomes[b] || b, "pt"));
+  const semCad = r.turmas.filter(t => !turmasCad.has(norm(t)));
+  const nAulas = emails.reduce((c, e) => c + pend[e].length, 0);
+  let html = restaurada ? `<p class="hint">Cobranças em aberto guardadas no banco: <b>${nAulas}</b> aula(s) de ${emails.length} professor(es)</p>`
+    : `<p class="hint">${r.turmas.length} relatório(s) lido(s) · ${r.total} aulas · <b>${r.nFaltam}</b> com lançamento pendente · ${nAulas} aula(s) em aberto de ${emails.length} professor(es) (inclui cobranças anteriores)</p>`;
+  if (r.falhas.length) html += `<div class="alerta">Não consegui ler: ${esc(r.falhas.join(", "))}. Confira se é o relatório de frequência e registro.</div>`;
+  if (semCad.length) html += `<div class="alerta">Turmas do relatório sem atribuição cadastrada (confira o nome na aba Atribuições): <ul>${semCad.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>`;
+  const sem = r.sem.filter(a => turmasCad.has(norm(a.turma)));
+  if (sem.length) html += `<div class="alerta">Pendências sem professor cadastrado (${sem.length}; estas não são guardadas no banco):<ul>${ordem(sem).map(a => `<li>${esc(curta(a.turma))} · ${esc(a.disc)} — ${fmtDia(a.dia)}, ${a.ini}</li>`).join("")}</ul></div>`;
+  if (emails.length) html += `<div class="acoes"><button class="btn btn-primary" id="todos">Enviar aviso a todos (${emails.length})</button></div>`;
+  html += emails.map(e => {
+    const cobs = pend[e].filter(a => a.cob?.ultimo).sort((x, y) => String(x.cob.ultimo).localeCompare(String(y.cob.ultimo))), lemb = ultimo[e];
+    const ult = cobs.length ? { quando: cobs[cobs.length - 1].cob.ultimo, canal: cobs[cobs.length - 1].cob.canal } : lemb ? { quando: lemb.enviado_em, canal: lemb.canal } : null;
+    const rec = ult && (Date.now() - new Date(ult.quando)) < 864e5;
+    return `<div class="pc"><div class="pc-h"><b>${esc(nomes[e] || e)}</b><span class="tag ${rec ? "concluida" : "enviada"}">${pend[e].length} aula(s)</span></div>
+      <ul>${ordem(pend[e]).map(a => `<li>${esc(curta(a.turma))} · ${esc(a.disc)} — ${fmtDia(a.dia)}, ${a.ini}: <b>${falta(a)}</b>${a.cob ? ` <span class="hint">· cobrada em ${new Date(a.cob.cobrada_em).toLocaleDateString("pt-BR")}</span>` : ""}</li>`).join("")}</ul>
+      <div class="acoes"><button class="btn btn-primary sm" data-env="${esc(e)}">Aviso + notificação</button>
+      <button class="btn btn-ghost sm" data-wa="${esc(e)}" ${fones[e] ? "" : "disabled"}>${fones[e] ? "WhatsApp" : "Sem WhatsApp"}</button></div>
+      <p class="hint">${ult ? "Último aviso: " + dh(ult.quando) + " (" + (ult.canal === "whatsapp" ? "WhatsApp" : "aviso") + ")" : "Nenhum aviso enviado ainda"}</p></div>`;
+  }).join("");
+  if (!emails.length && !sem.length) html += restaurada ? `<p class="vazio">Nenhuma cobrança em aberto. Suba os relatórios da semana para conferir.</p>` : `<p class="vazio">Nenhum lançamento pendente com professor cadastrado. 🎉</p>`;
+  $("res").innerHTML = html;
+}
+// Guarda no banco cada aula cobrada (uma linha por aula; a 1ª data de cobrança é preservada) e o canal/data do último aviso
+async function registrar(email, canal) {
+  const agora = new Date().toISOString(), m = new Map();
+  pend[email].forEach(a => m.set(chaveAula(a), { turma_chave: norm(a.turma), turma_nome: a.turma, disc_chave: norm(a.disc), disc_nome: a.disc, dia: a.dia, ini: a.ini, professor_email: email, sem_freq: !a.freq, sem_reg: !a.reg, fora_prazo: foraPrazo(a) }));
+  const r = await sb.rpc("registrar_cobranca", { p_aulas: [...m.values()], p_canal: canal }), salvou = !r.error;
+  if (!salvou) console.error("Falha ao guardar a cobrança:", r.error); else pend[email].forEach(a => a.cob = { cobrada_em: a.cob?.cobrada_em || agora, ultimo: agora, canal });
+  const { error } = await sb.from("lembretes").insert({ professor_email: email, enviado_por: perfil.email, canal, resumo: pend[email].length + " aula(s)" });
+  if (!error) ultimo[email] = { professor_email: email, enviado_em: agora, canal };
+  return salvou;
+}
+async function enviar(email) {
+  const { data: id, error } = await sb.rpc("enviar_aviso", { p_titulo: "Lançamentos pendentes (frequência e registro)", p_texto: texto(email), p_papeis: [], p_grupos: [], p_emails: [email] });
+  if (error) return false;
+  sb.functions.invoke("enviar-push", { body: { aviso_id: id } });
+  return (await registrar(email, "aviso")) ? true : "semBanco";
+}
+const SEM_BANCO = "Aviso enviado, mas a cobrança NÃO foi guardada no banco (confira o cobrancas.sql).";
+$("res").onclick = async e => {
+  const env = e.target.closest("[data-env]"), wa = e.target.closest("[data-wa]"), todos = e.target.closest("#todos");
+  if (env) { env.disabled = true; const r = await enviar(env.dataset.env); aviso("msgC", r === true ? "Aviso enviado e cobrança guardada." : r === "semBanco" ? SEM_BANCO : "Não foi possível enviar.", r === true); rel(); }
+  else if (wa) {
+    const em = wa.dataset.wa; let n = fones[em].replace(/\D/g, ""); if (n.length <= 11) n = "55" + n;
+    window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(texto(em)), "_blank", "noopener"); const ok = await registrar(em, "whatsapp");
+    aviso("msgC", ok ? "Cobrança guardada." : "A mensagem abriu, mas a cobrança NÃO foi guardada no banco (confira o cobrancas.sql).", ok); rel();
+  } else if (todos) {
+    const lista = Object.keys(pend); if (!confirm(`Enviar o aviso para ${lista.length} professor(es)?`)) return;
+    todos.disabled = true; let ok = 0, semBanco = 0; for (const em of lista) { const r = await enviar(em); if (r) ok++; if (r === "semBanco") semBanco++; }
+    aviso("msgC", `${ok} de ${lista.length} avisos enviados.` + (semBanco ? ` Em ${semBanco}, a cobrança não foi guardada no banco.` : ""), ok === lista.length && !semBanco); rel();
+  }
+};
+const rel = () => { const y = scrollY; desenhar(ultimoRes); scrollTo(0, y); };
+
+/* ---------- Atribuições ---------- */
+$("lerModelo").onclick = async () => {
+  const f = $("modelo").files[0]; if (!f) return aviso("msgA", "Escolha o arquivo do modelo.");
+  try { modeloLido = lerModelo(await lerArq(f)); } catch (_) { return aviso("msgA", "Não reconheci o modelo. Use o arquivo com as abas Atribuições e Professores."); }
+  const m = modeloLido; aviso("msgA", "");
+  $("atrPrev").innerHTML = `<p class="hint"><b>${m.atrib.length}</b> atribuições · <b>${m.turmas.length}</b> turmas · <b>${m.profs}</b> professores na lista</p>
+    <p class="hint">Turmas: ${m.turmas.map(t => esc(curta(t))).join(", ")}</p>` +
+    (m.avisos.length ? `<div class="alerta">Confira antes de salvar:<ul>${m.avisos.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>` : "");
+  $("salvarAtr").hidden = !m.atrib.length;
+};
+$("salvarAtr").onclick = async () => {
+  if (!confirm("Isto substitui TODAS as atribuições atuais. Continuar?")) return;
+  $("salvarAtr").disabled = true;
+  const { error } = await sb.rpc("salvar_atribuicoes", { p_atrib: modeloLido.atrib, p_contatos: modeloLido.contatos });
+  $("salvarAtr").disabled = false;
+  if (error) return aviso("msgA", "Não foi possível salvar.");
+  aviso("msgA", "Atribuições salvas.", true); $("salvarAtr").hidden = true; carregarBase();
+};
+
+/* ---------- Relatório de atrasos ---------- */
+let histDados = [];
+const atraso = p => Math.max(0, Math.round(((p.resolvida_em ? new Date(p.resolvida_em) : new Date()) - new Date(p.dia + "T12:00:00")) / 864e5));
+const faltou = p => p.sem_freq && p.sem_reg ? "frequência e registro" : p.sem_freq ? "frequência" : "registro";
+const quem = () => document.querySelector('input[name="hprof"]:checked')?.value || "";
+const nomeProf = e => nomes[e] || e;
+async function carregarHist() {
+  const de = $("hDe").value, ate = $("hAte").value;
+  if (!de || !ate || de > ate) { aviso("msgH", "Confira as datas."); return false; }
+  let q = sb.from("pendencias").select("*").eq("fora_prazo", true).gte("dia", de).lte("dia", ate).order("dia").limit(5000);
+  if (quem()) q = q.eq("professor_email", quem());
+  const { data, error } = await q;
+  if (error) { aviso("msgH", "Não foi possível carregar o relatório."); return false; }
+  histDados = (data || []).filter(p => !IGNORAR.includes(p.disc_chave)); aviso("msgH", histDados.length ? "" : "Nenhuma pendência registrada nesse período."); return histDados.length > 0;
+}
+function resumo() {
+  const g = {};
+  histDados.forEach(p => { const r = (g[p.professor_email] ||= { email: p.professor_email, itens: [], f: 0, r: 0, fr: 0, ab: 0 });
+    r.itens.push(p); if (p.sem_freq && p.sem_reg) r.fr++; else if (p.sem_freq) r.f++; else r.r++; if (!p.resolvida_em) r.ab++; });
+  return Object.values(g).sort((a, b) => b.itens.length - a.itens.length || nomeProf(a.email).localeCompare(nomeProf(b.email), "pt"));
+}
+function tabelaResumo(rs) {
+  const t = { n: 0, f: 0, r: 0, fr: 0, ab: 0 }; rs.forEach(r => { t.n += r.itens.length; t.f += r.f; t.r += r.r; t.fr += r.fr; t.ab += r.ab; });
+  const lin = (nome, n, f, r, fr, ab, mx, neg) => `<tr${neg ? ' style="font-weight:700"' : ""}><td>${nome}</td><td>${n}</td><td>${f}</td><td>${r}</td><td>${fr}</td><td>${ab}</td><td>${n - ab}</td><td>${mx}</td></tr>`;
+  return `<table class="tab"><tr><th>Professor</th><th>Aulas fora do prazo</th><th>Só frequência</th><th>Só registro</th><th>Freq. e registro</th><th>Ainda pendentes</th><th>Regularizadas</th><th>Maior tempo fora do prazo (dias)</th></tr>` +
+    rs.map(r => lin(esc(nomeProf(r.email)), r.itens.length, r.f, r.r, r.fr, r.ab, Math.max(...r.itens.map(atraso)))).join("") +
+    lin("Total", t.n, t.f, t.r, t.fr, t.ab, Math.max(...histDados.map(atraso)), true) + "</table>";
+}
+const linhaHist = p => `<li>${fmtDia(p.dia)} ${p.ini} · ${esc(curta(p.turma_nome))} · ${esc(p.disc_nome)} — ${faltou(p)} · ${p.resolvida_em ? "regularizada (constatado em " + new Date(p.resolvida_em).toLocaleDateString("pt-BR") + ")" : "<b>ainda pendente</b>"} · ${atraso(p)} dia(s) fora do prazo</li>`;
+function desenharHist() {
+  const rs = resumo();
+  $("histRes").innerHTML = `<div style="overflow-x:auto">${tabelaResumo(rs)}</div>` + rs.map(r =>
+    `<div class="pc"><div class="pc-h"><b>${esc(nomeProf(r.email))}</b><span class="tag ${r.ab ? "enviada" : "concluida"}">${r.itens.length} fora do prazo</span></div>
+     <details><summary class="hint" style="cursor:pointer">Ver aulas (${r.ab} ainda pendente(s))</summary><ul>${r.itens.map(linhaHist).join("")}</ul></details></div>`).join("");
+}
+$("verHist").onclick = async () => { if (await carregarHist()) desenharHist(); else $("histRes").innerHTML = ""; };
+$("hPdf").onclick = async () => {
+  if (!(await carregarHist())) return;
+  desenharHist(); const rs = resumo(), de = $("hDe").value, ate = $("hAte").value, det = document.querySelector('input[name="hdet"]:checked').value === "sim";
+  $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>Pendências de lançamento · ${fmt(de)} a ${fmt(ate)}${quem() ? " · " + esc(nomeProf(quem())) : ""}</h2>${tabelaResumo(rs)}` +
+    (det ? rs.map(r => `<h3>${esc(nomeProf(r.email))} — ${r.itens.length} aula(s) fora do prazo</h3><table><tr><th>Aula</th><th>Turma · Disciplina</th><th>Faltou</th><th>Situação</th><th>Atraso</th></tr>` +
+      r.itens.map(p => `<tr><td>${fmtDia(p.dia)} ${p.ini}</td><td>${esc(curta(p.turma_nome))} · ${esc(p.disc_nome)}</td><td>${faltou(p)}</td><td>${p.resolvida_em ? "Regularizada" : "Pendente"}</td><td>${atraso(p)} dia(s)</td></tr>`).join("") + "</table>").join("") : "") +
+    `<p style="margin-top:16px">Fora do prazo: aula sem lançamento mais de 24 horas após o seu término. Situação conforme a última conferência dos relatórios. Emitido por ${esc(perfil.nome)} em ${fmt(hoje())}.</p>`;
+  window.print();
+};
+$("hCsv").onclick = async () => {
+  if (!(await carregarHist())) return;
+  const c = v => `"${String(v ?? "").replace(/"/g, '""')}"`, dt = v => v ? new Date(v).toLocaleString("pt-BR") : "";
+  const cab = ["Professor", "E-mail", "Data da aula", "Horário", "Turma", "Disciplina", "Faltou", "Situação", "Dias fora do prazo", "Detectada em", "Regularizada (constatado em)", "Registrada por"];
+  const lin = histDados.map(p => [nomeProf(p.professor_email), p.professor_email, fmt(p.dia), p.ini, p.turma_nome, p.disc_nome, faltou(p), p.resolvida_em ? "Regularizada" : "Pendente", atraso(p), dt(p.detectada_em), dt(p.resolvida_em), p.registrada_por || ""]);
+  const blob = new Blob(["\ufeff" + [cab, ...lin].map(l => l.map(c).join(";")).join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `pendencias_${$("hDe").value}_a_${$("hAte").value}.csv`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+};
+iniciar();
+</script>
+</body>
+</html>

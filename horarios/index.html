@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Montagem de horário · JMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1280px}
+.abas{display:flex;gap:8px;flex-wrap:wrap}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+.btn.sm{padding:7px 14px;font-size:.84rem}.hint{margin:0;font-size:.84rem;color:var(--muted)}.acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gl{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;align-items:start}
+.semana{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:8px;overflow-x:auto;padding-bottom:6px}
+.dia{display:grid;gap:5px;align-content:start}.dia h4{margin:0 0 2px;text-align:center;font:700 .95rem var(--display)}
+.cel{min-height:62px;padding:4px;border:1px dashed var(--bb);border-radius:12px;background:var(--card);display:grid;gap:2px;align-content:start}
+.cel.sobre{border-color:var(--blue);background:var(--light)}.cel.erro{border:2px solid var(--danger)}.cel.alerta{border:2px solid var(--warn)}
+.hora{font-size:.68rem;color:var(--muted)}
+.aula{--c:#64748b;display:grid;gap:1px;padding:5px 8px;border-radius:10px;border:1px solid rgba(0,0,0,.22);border-left:4px solid rgba(0,0,0,.4);background:var(--bg,#d1d5db);color:var(--fg,#111827);cursor:grab;font-size:.78rem;line-height:1.25;position:relative;user-select:none}
+.aula b{font-size:.8rem;padding-right:18px}.aula span{color:inherit;opacity:.88;font-size:.72rem}.aula.sel{outline:3px solid var(--blue)}
+.aula .tv{position:absolute;top:2px;right:3px;border:0;background:none;color:inherit;cursor:pointer;font-size:.8rem;opacity:.5}.aula .tv.on{opacity:1}
+.pausa{padding:3px 6px;border-radius:8px;background:var(--light);color:var(--muted);font-size:.68rem;text-align:center}
+.pool{display:grid;gap:6px;padding:10px;border:1px dashed var(--bb);border-radius:14px;min-height:60px}.pool .aula b::after{content:" × " attr(data-n);opacity:.8;font-weight:600}
+.pool.sobre{background:var(--light);border-color:var(--blue)}
+.lat{display:grid;gap:12px}.lat h3{margin:0;font:700 .95rem var(--display)}
+.prob{margin:0;padding-left:16px;font-size:.78rem;color:var(--danger)}.prob.av{color:var(--warn)}
+.leg{display:flex;gap:10px;flex-wrap:wrap;font-size:.72rem;color:var(--muted)}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.tab{width:100%;border-collapse:collapse;font-size:.85rem}.tab th,.tab td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.tab th{color:var(--muted);font-weight:600}
+.tab td:not(:first-child),.tab th:not(:first-child){text-align:center}
+.in.mini{width:68px;padding:6px 8px;text-align:center}.in.sel2{padding:6px 8px;width:auto}
+details.cfg{border:1px solid var(--line);border-radius:16px;padding:12px 16px;background:var(--card)}details.cfg summary{cursor:pointer;font:700 1rem var(--display)}
+.alerta-b{padding:12px 14px;border-radius:14px;background:var(--warnbg);color:var(--warn);font-size:.88rem}
+@media(max-width:900px){.gl{grid-template-columns:1fr}}
+@media print{#ficha .tab td:not(:first-child),#ficha .tab th:not(:first-child){text-align:left}#ficha .tab{font-size:9pt}#ficha th{border:1px solid #000;padding:4px 6px;background:#eee}#ficha td{padding:4px 6px}.quebra{page-break-after:always}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>HORÁRIOS<small>Montagem de horário de aulas</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden><h2 style="justify-content:center">Acesso restrito</h2><p>Entre com seu e-mail institucional.</p><button class="btn btn-primary" id="entrar">Entrar com Google</button></section>
+  <section class="panel center" id="telaNegado" hidden><h2 style="justify-content:center">Acesso restrito à direção</h2><p><b id="emailNegado"></b> não tem permissão para esta página.</p><button class="btn btn-ghost" id="sair2">Sair</button></section>
+  <section class="panel center" id="telaErro" hidden><h2 style="justify-content:center">Não foi possível carregar</h2><p id="erroGeral" role="alert">Verifique sua conexão e tente novamente.</p><button class="btn btn-primary" id="tentarNovamente">Tentar novamente</button></section>
+
+  <div id="app" hidden style="display:contents">
+    <div class="abas" id="abas"><button class="btn btn-ghost" data-aba="grade">Grade</button><button class="btn btn-ghost" data-aba="conf">Configurar</button></div>
+
+    <section class="panel" id="s-grade">
+      <div class="head"><div><h2>Grade de horários</h2><p class="sub">Arraste as aulas (ou toque na aula e depois no horário). Vermelho = conflito de professor</p></div>
+        <div class="acoes"><select class="in sel2" id="vSel" aria-label="Versões salvas"></select><input class="in sel2" id="vNome" placeholder="Nome da versão" style="width:170px"><button class="btn btn-primary sm" id="salvar">Salvar</button><button class="btn btn-ghost sm" id="salvarNova">Salvar como nova</button><button class="btn btn-ghost sm" id="oficial">Tornar oficial</button><span class="tag concluida" id="selo" hidden>★ Versão oficial</span><span class="hint" id="sujo"></span></div></div>
+      <div class="form" style="margin-bottom:14px">
+        <div class="grp full" role="radiogroup" aria-label="Visão">Ver por<div class="chips"><label class="chip"><input type="radio" name="modo" value="turma" checked>Turma</label><label class="chip"><input type="radio" name="modo" value="prof">Professor</label></div></div>
+        <div class="grp full"><div class="chips" id="chipsAlvo"></div></div>
+        <div class="grp full" id="gerarBox">Geração automática<div class="chips">
+          <label class="chip"><input type="radio" name="gm" value="zero" checked>Recomeçar (mantém só as travadas)</label><label class="chip"><input type="radio" name="gm" value="compl">Completar o que falta</label>
+          <label class="chip"><input type="radio" name="ef" value="4000">Rápido</label><label class="chip"><input type="radio" name="ef" value="10000" checked>Normal</label><label class="chip"><input type="radio" name="ef" value="25000">Caprichado</label></div>
+          <div class="acoes"><button class="btn btn-primary" id="gerar">Gerar horário automaticamente</button><button class="btn btn-ghost sm" id="limpar">Limpar esta turma</button><button class="btn btn-ghost sm" id="imp">Imprimir / PDF</button><button class="btn btn-ghost sm" id="impTodas">Imprimir todas as turmas</button><button class="btn btn-primary sm" id="xlsx">Baixar Excel (modelo)</button><button class="btn btn-ghost sm" id="csv">Baixar CSV (dados)</button><button class="btn btn-ghost sm" id="expJson">Exportar versão (.json)</button><label class="btn btn-ghost sm" style="cursor:pointer">Importar versão (.json)<input type="file" id="impJson" accept=".json,application/json" hidden></label></div>
+          <p class="msg" id="msg" role="alert"></p></div>
+      </div>
+      <div class="gl"><div><div class="semana" id="semana"></div><div class="leg" id="leg" style="margin-top:8px"></div></div>
+        <div class="lat"><div><h3>Aulas a alocar</h3><div class="pool" id="pool"></div></div><div><h3>Avisos</h3><div id="probs"></div></div></div></div>
+    </section>
+
+    <section class="panel" id="s-conf" hidden>
+      <div class="head"><div><h2>Configurar</h2><p class="sub">Horários, quantidades de aulas, disciplinas, professores e regras</p></div></div>
+      <div style="display:grid;gap:12px" id="conf"></div>
+    </section>
+  </div>
+</main>
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+/*SOLVER-INI*/
+const DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex"], W = [0, 1, 3, 8];
+const norm = s => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const mins = h => { const [a, b] = h.split(":"); return +a * 60 + +b; };
+const hm = m => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+const curta = t => (String(t).match(/^\d+\S*\s+Ano\s+\S+/i) || [String(t)])[0];
+let S = null, ATR = {}, cacheSlots = {};
+const MCN = "Matemática e Ciências da Natureza";
+const AREAS = { "Linguagens": "#2f80d8", [MCN]: "#e07a1f", "Ciências Humanas": "#8b5cf6", "Outras": "#64748b" };
+function classificar(nome) {
+  const n = norm(nome), L = "Linguagens", M = MCN, N = MCN, H = "Ciências Humanas";
+  const tabela = [["orientacao de estudo lingua portuguesa", L, "PD"], ["orientacao de estudo matematica", M, "PD"], ["redacao e leitura", L, "PD"], ["educacao financeira", M, "PD"],
+    ["projeto de vida", H, "PD"], ["praticas experimentais", N, "PD"], ["robotica", N, "PD"], ["tecnologia e inovacao", M, "PD"], ["eletivas", "Outras", "PD"], ["esporte musica arte", L, "PD"],
+    ["lingua portuguesa", L, "BNCC"], ["arte", L, "BNCC"], ["educacao fisica", L, "BNCC"], ["lingua inglesa", L, "BNCC"], ["matematica", M, "BNCC"], ["ciencias", N, "BNCC"], ["geografia", H, "BNCC"], ["historia", H, "BNCC"]];
+  const r = tabela.find(x => x[0] === n); return { nome, area: r ? r[1] : "Outras", tipo: r ? r[2] : "PD", dupla: true };
+}
+const HOR_PADRAO = {
+  A: { dur: 50, dias: [["07:00","07:50","09:15","10:05","10:55","12:45","13:35","14:40"], ["07:00","07:50","08:55","09:45","10:35","12:25","13:15","14:20","15:10"], ["07:00","07:50","09:15","10:05","10:55","12:45","13:35","14:40"], ["07:00","07:50","09:15","10:05","10:55","12:45","13:35","14:40"], ["08:55","09:45","10:35","12:25","13:15","14:20","15:10"]] },
+  B: { dur: 50, dias: [["07:00","07:50","08:40","10:05","10:55","11:45","13:35","14:25"], ["07:00","07:50","08:40","09:45","10:35","11:25","13:15","14:05","15:10"], ["07:00","07:50","08:40","10:05","10:55","11:45","13:35","14:25"], ["07:00","07:50","08:40","10:05","10:55","11:45","13:35","14:25"], ["08:40","09:45","10:35","11:25","13:15","14:05","15:10"]] }
+};
+const famDe = t => S.familia[parseInt(t)] || "A";
+function slots(t) {
+  const f = famDe(t); if (cacheSlots[f]) return cacheSlots[f];
+  const H = S.horarios[f];
+  return cacheSlots[f] = H.dias.map(lista => {
+    const arr = lista.map((ini, p) => ({ p, ini: mins(ini), fim: mins(ini) + H.dur })); let gmax = 0, gi = -1;
+    for (let i = 1; i < arr.length; i++) { const g = arr[i].ini - arr[i - 1].fim; if (g > gmax) { gmax = g; gi = i; } }
+    arr.forEach((s, i) => s.tarde = gi >= 0 && gmax >= 45 && i >= gi); return arr;
+  });
+}
+const info = dk => S.disc[dk] || { area: "Outras", tipo: "PD", dupla: true };
+const profDe = (t, dk) => ATR[t + "|" + dk] || null;
+const trava = (t, d, p) => !!(S.travas[t] && S.travas[t][d + "-" + p]);
+function garantirGrade(t) {
+  const sl = slots(t), g = S.grade[t] ||= [];
+  for (let d = 0; d < 5; d++) { const a = g[d] ||= []; while (a.length < sl[d].length) a.push(null); a.length = sl[d].length; }
+  return g;
+}
+function custoDia(t, d, row) {
+  const R = S.regras, sl = slots(t)[d]; let c = 0; const pos = {};
+  row.forEach((dk, p) => {
+    if (!dk) return; (pos[dk] ||= []).push(p); const i = info(dk), e = profDe(t, dk);
+    if (R.bncc) { if (i.tipo === "BNCC" && sl[p].tarde) c += W[R.bncc]; else if (i.tipo !== "BNCC" && !sl[p].tarde) c += W[R.bncc] * 0.4; }
+    if (R.tarde && e && S.prof[e]?.evitarTarde && sl[p].tarde) c += W[R.tarde];
+  });
+  for (const dk in pos) {
+    const ps = pos[dk], q = S.qtd[t]?.[dk] || 0;
+    if (ps.length > 2) c += 60;
+    if (R.dupla && info(dk).dupla !== false && q >= 2) {
+      if (ps.length === 1) c += W[R.dupla];
+      else if (ps.length === 2 && ps[1] - ps[0] !== 1) c += W[R.dupla];
+      else if (ps.length === 2 && sl[ps[1]].ini - sl[ps[0]].fim > 0) c += W[R.dupla] * 0.3;
+    }
+    if (R.espalhar && ps.length === 2 && ps[1] - ps[0] !== 1) c += W[R.espalhar];
+  }
+  if (R.areas) { let run = 0, ant = null; for (const dk of row) { const a = dk ? info(dk).area : null; run = a && a === ant ? run + 1 : (a ? 1 : 0); ant = a; if (run >= 3) c += W[R.areas]; } }
+  return c;
+}
+function custoTurma(t, G) {
+  let c = 0; const dd = {};
+  for (let d = 0; d < 5; d++) { c += custoDia(t, d, G[t][d]); G[t][d].forEach(dk => { if (dk) (dd[dk] ||= new Set()).add(d); }); }
+  if (S.regras.espalhar) for (const dk in dd) for (let d = 0; d < 4; d++) if (dd[dk].has(d) && dd[dk].has(d + 1)) c += W[S.regras.espalhar] * 0.3;
+  return c;
+}
+function addOcc(occ, e, t, d, p) { if (!e) return; const s = slots(t)[d][p]; if (!occ.has(e)) occ.set(e, []); occ.get(e).push({ t, d, p, ini: s.ini, fim: s.fim }); }
+function delOcc(occ, e, t, d, p) { if (!e) return; const a = occ.get(e), i = a.findIndex(o => o.t === t && o.d === d && o.p === p); if (i >= 0) a.splice(i, 1); }
+const livre = (occ, e, d, ini, fim) => !e || !(occ.get(e) || []).some(o => o.d === d && o.ini < fim && ini < o.fim);
+const bloqueado = (e, d) => !!(e && S.prof[e]?.bloq?.includes(d));
+function criarOcc(G) { const occ = new Map(); S.turmas.forEach(t => G[t].forEach((row, d) => row.forEach((dk, p) => { if (dk) addOcc(occ, profDe(t, dk), t, d, p); }))); return occ; }
+function colocar(b, G, occ) {
+  const { t, dk, e, sz } = b, sl = slots(t); let best = null, bc = Infinity;
+  for (let d = 0; d < 5; d++) {
+    if (bloqueado(e, d)) continue;
+    const row = G[t][d], n = row.filter(x => x === dk).length; if (n + sz > 2) continue;
+    const antes = custoDia(t, d, row);
+    for (let p = 0; p + sz <= sl[d].length; p++) {
+      let ok = true; for (let k = 0; k < sz; k++) if (row[p + k] || !livre(occ, e, d, sl[d][p + k].ini, sl[d][p + k].fim)) { ok = false; break; }
+      if (!ok) continue;
+      for (let k = 0; k < sz; k++) row[p + k] = dk;
+      let c = custoDia(t, d, row) - antes + Math.random() * 1.2;
+      if (n === 0) { if (d > 0 && G[t][d - 1].includes(dk)) c += W[S.regras.espalhar] * 0.3; if (d < 4 && G[t][d + 1].includes(dk)) c += W[S.regras.espalhar] * 0.3; }
+      for (let k = 0; k < sz; k++) row[p + k] = null;
+      if (c < bc) { bc = c; best = { d, p }; }
+    }
+  }
+  if (!best) return false;
+  for (let k = 0; k < sz; k++) { G[t][best.d][best.p + k] = dk; addOcc(occ, e, t, best.d, best.p + k); }
+  return true;
+}
+function construir(base) {
+  const G = {}; S.turmas.forEach(t => G[t] = base[t].map(r => r.slice()));
+  const occ = criarOcc(G), blocos = [], carga = {};
+  S.turmas.forEach(t => { const q = S.qtd[t] || {}; for (const dk in q) {
+    let f = q[dk] - G[t].flat().filter(x => x === dk).length; if (f <= 0) continue; const e = profDe(t, dk); if (e) carga[e] = (carga[e] || 0) + f;
+    const dupla = S.regras.dupla && info(dk).dupla !== false;
+    while (dupla && f >= 2) { blocos.push({ t, dk, e, sz: 2 }); f -= 2; } while (f-- > 0) blocos.push({ t, dk, e, sz: 1 }); } });
+  blocos.forEach(b => b.o = (b.e ? carga[b.e] : 0) + b.sz * 4 + (b.e ? (S.prof[b.e]?.bloq?.length || 0) * 12 + (S.prof[b.e]?.evitarTarde ? 6 : 0) : 0) + Math.random() * 10);
+  blocos.sort((a, b) => b.o - a.o);
+  const sobra = [];
+  for (const b of blocos) if (!colocar(b, G, occ)) { if (b.sz === 2) { for (let i = 0; i < 2; i++) if (!colocar({ ...b, sz: 1 }, G, occ)) sobra.push({ ...b, sz: 1 }); } else sobra.push(b); }
+  return { G, occ, sobra };
+}
+function melhorar(s, iter) {
+  const { G, occ } = s;
+  for (let it = 0; it < iter; it++) {
+    const t = S.turmas[(Math.random() * S.turmas.length) | 0], sl = slots(t);
+    const d1 = (Math.random() * 5) | 0, d2 = (Math.random() * 5) | 0, p1 = (Math.random() * sl[d1].length) | 0, p2 = (Math.random() * sl[d2].length) | 0;
+    if (d1 === d2 && p1 === p2) continue;
+    const a = G[t][d1][p1], b = G[t][d2][p2]; if (!a && !b) continue; if (trava(t, d1, p1) || trava(t, d2, p2)) continue;
+    const ea = a && profDe(t, a), eb = b && profDe(t, b);
+    if (a) delOcc(occ, ea, t, d1, p1); if (b) delOcc(occ, eb, t, d2, p2);
+    let ok = true;
+    if (a && (bloqueado(ea, d2) || !livre(occ, ea, d2, sl[d2][p2].ini, sl[d2][p2].fim))) ok = false;
+    if (ok && b && (bloqueado(eb, d1) || !livre(occ, eb, d1, sl[d1][p1].ini, sl[d1][p1].fim))) ok = false;
+    if (ok) { G[t][d1][p1] = b; G[t][d2][p2] = a; for (const d of [d1, d2]) for (const dk of [a, b]) if (dk && G[t][d].filter(x => x === dk).length > 2) ok = false;
+      if (ok) { const novo = custoTurma(t, G); G[t][d1][p1] = a; G[t][d2][p2] = b; const velho = custoTurma(t, G); G[t][d1][p1] = b; G[t][d2][p2] = a; if (novo > velho) ok = false; } }
+    if (ok) { if (a) addOcc(occ, ea, t, d2, p2); if (b) addOcc(occ, eb, t, d1, p1); }
+    else { G[t][d1][p1] = a; G[t][d2][p2] = b; if (a) addOcc(occ, ea, t, d1, p1); if (b) addOcc(occ, eb, t, d2, p2); }
+  }
+}
+async function gerarHorario(ms, completar, progresso) {
+  const base = {}; S.turmas.forEach(t => { garantirGrade(t); base[t] = S.grade[t].map((row, d) => row.map((dk, p) => completar || trava(t, d, p) ? dk : null)); });
+  let melhor = null, tent = 0; const t0 = performance.now();
+  const iterMelhoria = Math.max(400, Math.min(6000, Math.round(ms / 4)));
+  do {
+    const s = construir(base); melhorar(s, iterMelhoria);
+    s.pont = s.sobra.length * 1000 + S.turmas.reduce((c, t) => c + custoTurma(t, s.G), 0); tent++;
+    if (!melhor || s.pont < melhor.pont) melhor = s;
+    if (progresso) { progresso(tent, melhor); await new Promise(r => setTimeout(r)); }
+  } while (performance.now() - t0 < ms);
+  melhor.tent = tent; return melhor;
+}
+
+/* cor por professor: cada um tem um matiz; o tom (mais claro/escuro) varia conforme a turma e a disciplina dele */
+let paleta = null;
+const vdc = i => { let r = 0, f = 0.5; while (i) { r += (i & 1) * f; i >>= 1; f /= 2; } return r; };
+function montarPaleta() {
+  S.cores ||= {}; paleta = {}; const por = {};
+  for (const k in ATR) (por[ATR[k]] ||= []).push(k);
+  Object.keys(por).sort().forEach(e => { if (S.cores[e] === undefined) S.cores[e] = Object.keys(S.cores).length; });
+  for (const e in por) {
+    const ks = por[e].sort((a, b) => { const [ta, da] = a.split("|"), [tb, db] = b.split("|"); return (parseInt(ta) - parseInt(tb)) || da.localeCompare(db) || ta.localeCompare(tb, "pt", { numeric: true }); });
+    const h = Math.round((vdc(S.cores[e]) * 360 + 15) % 360), n = ks.length;   // matizes bem espaçados e estáveis
+    ks.forEach((k, r) => { const L = n === 1 ? 54 : Math.round(76 - r * (42 / (n - 1))); paleta[k] = { bg: `hsl(${h} 62% ${L}%)`, fg: L > 56 ? "#111827" : "#ffffff", base: `hsl(${h} 62% 54%)`, h, L }; });
+  }
+}
+function corAula(t, dk) { if (!paleta) montarPaleta(); return paleta[t + "|" + dk] || { bg: "#d1d5db", fg: "#111827", base: "#9ca3af" }; }
+/*SOLVER-FIM*/
+
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hoje = () => new Date().toLocaleDateString("sv");
+const fmt = d => String(d).split("-").reverse().join("/");
+const marcado = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+const msg = (t, ok) => { $("msg").textContent = t; $("msg").className = "msg" + (ok ? " ok" : ""); };
+let perfil, nomesProf = {}, oficialAtual = false, vid = null, alvo = "", sel = null, versoes = [];
+const nomeDisc = dk => info(dk).nome || dk;
+const nomeProf = e => e ? (nomesProf[e] || e) : "";
+const est = (t, dk) => { const c = corAula(t, dk); return `--bg:${c.bg};--fg:${c.fg}`; };
+const sujo = () => { S.sujo = true; $("sujo").textContent = "● alterações não salvas"; };
+
+function tela(n) { ["Carregando","Login","Negado","Erro"].forEach(x => $("tela"+x).hidden = x !== n); $("sessao").hidden = !(n === "App" || n === "Negado"); $("app").hidden = n !== "App"; }
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout; $("sair2").onclick = logout;
+$("tentarNovamente").onclick = () => { tela("Carregando"); iniciar(); };
+
+function estadoNovo(turmas) {
+  const s = { nome: "", turmas, familia: { 6: "A", 7: "A", 8: "B", 9: "B" }, horarios: JSON.parse(JSON.stringify(HOR_PADRAO)), disc: {}, qtd: {}, prof: {}, grade: {}, travas: {},
+              regras: { dupla: 2, bncc: 1, areas: 2, espalhar: 2, tarde: 3 } };
+  return s;
+}
+function sincronizarDisc() { // garante cadastro das disciplinas vindas das atribuições
+  const nomes = window.NOMES_DISC || {};
+  for (const k in ATR) { const dk = k.split("|")[1]; if (!S.disc[dk]) S.disc[dk] = classificar(nomes[dk] || dk); }
+  for (const dk in S.disc) if (S.disc[dk].area === "Matemática" || S.disc[dk].area === "Ciências da Natureza") S.disc[dk].area = MCN;   // versões antigas
+}
+async function iniciar() {
+  try {
+    const { data, error: authError } = await sb.auth.getSession();
+    if (authError) throw authError;
+    const session = data?.session;
+    if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+    const email = (session.user.email || "").toLowerCase();
+    if (!email) throw new Error("A conta autenticada não retornou um e-mail.");
+    const { data: p, error: perfilError } = await sb.from("perfis").select("*").eq("email", email).maybeSingle();
+    if (perfilError) throw perfilError;
+    if (!p || !p.ativo || p.papel !== "direcao") { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+    perfil = p; $("olaNome").textContent = "Olá, " + (p.nome || email).split(" ")[0] + "!"; $("avatar").textContent = (p.nome || email)[0].toUpperCase();
+    const [a, n] = await Promise.all([sb.from("atribuicoes").select("*").limit(5000), sb.from("perfis").select("email,nome")]);
+    if (a.error || n.error) throw a.error || n.error;
+    (n.data || []).forEach(x => nomesProf[x.email] = x.nome);
+    window.NOMES_DISC = {}; const turmas = new Set();
+    (a.data || []).forEach(x => { ATR[x.turma_nome + "|" + x.disc_chave] = x.professor_email; window.NOMES_DISC[x.disc_chave] = x.disc_nome; turmas.add(x.turma_nome); });
+    // as chaves de ATR usam o nome da turma; a chave da disciplina é a mesma norm() do relatório
+    S = estadoNovo([...turmas].sort((x, y) => x.localeCompare(y, "pt", { numeric: true }))); sincronizarDisc();
+    await listarVersoes(); if (versoes.length) await abrirVersao(versoes[0].id);
+    tela("App"); aba("grade"); S.turmas.forEach(garantirGrade); alvo = alvo || S.turmas[0] || ""; atualizarOficial(); renderTudo();
+  } catch (error) {
+    console.error("Falha ao iniciar o aplicativo:", error);
+    $("erroGeral").textContent = "Falha ao consultar os dados. Confira a conexão e as permissões do banco e tente novamente.";
+    tela("Erro");
+  }
+}
+async function listarVersoes() {
+  const { data, error } = await sb.from("horarios").select("id,nome,atualizado_em,oficial").order("atualizado_em", { ascending: false });
+  if (error) throw error;
+  versoes = data || [];
+  $("vSel").innerHTML = '<option value="">Nova versão</option>' + versoes.map(v => `<option value="${v.id}" ${v.id === vid ? "selected" : ""}>${v.oficial ? "★ " : ""}${esc(v.nome)} · ${new Date(v.atualizado_em).toLocaleDateString("pt-BR")}</option>`).join("");
+}
+function aplicarDados(d) {
+  const novo = estadoNovo(S.turmas); S = { ...novo, ...d, horarios: { ...novo.horarios, ...(d.horarios || {}) }, regras: { ...novo.regras, ...(d.regras || {}) } };
+  const turmasAtr = new Set(Object.keys(ATR).map(k => k.split("|")[0])); S.turmas = [...new Set([...(S.turmas || []), ...turmasAtr])].sort((x, y) => x.localeCompare(y, "pt", { numeric: true }));
+  sincronizarDisc(); cacheSlots = {}; paleta = null; S.turmas.forEach(garantirGrade); if (!S.turmas.includes(alvo)) alvo = S.turmas[0] || "";
+}
+function atualizarOficial() { $("selo").hidden = !oficialAtual; $("oficial").hidden = oficialAtual || !vid; }
+async function abrirVersao(id) {
+  const { data, error } = await sb.from("horarios").select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  if (!data) return;
+  aplicarDados(data.dados); vid = data.id; oficialAtual = !!data.oficial; $("vNome").value = data.nome; S.sujo = false; $("sujo").textContent = ""; atualizarOficial(); renderTudo();
+}
+$("vSel").onchange = async () => {
+  const v = $("vSel").value;
+  if (!v) { vid = null; oficialAtual = false; $("vNome").value = ""; atualizarOficial(); return; }
+  try { await abrirVersao(+v); } catch (error) { console.error("Falha ao abrir versão:", error); msg("Não foi possível carregar essa versão."); }
+};
+async function salvar(nova) {
+  if (vid && !nova && oficialAtual) return msg("Esta é a versão oficial e fica protegida. Use “Salvar como nova” e, depois, “Tornar oficial”.");
+  const btns = [$("salvar"), $("salvarNova")]; btns.forEach(b => b.disabled = true);
+  try {
+    const nome = $("vNome").value.trim() || "Horário " + new Date().toLocaleDateString("pt-BR"); S.nome = nome; const dados = JSON.parse(JSON.stringify({ ...S, sujo: false }));
+    const r = (vid && !nova) ? await sb.from("horarios").update({ nome, dados }).eq("id", vid).select("id").single() : await sb.from("horarios").insert({ nome, dados }).select("id").single();
+    if (r.error) throw r.error;
+    vid = r.data.id; oficialAtual = false; S.sujo = false; $("sujo").textContent = ""; msg("Versão salva.", true);
+    try { await listarVersoes(); } catch (error) { console.error("Falha ao atualizar a lista de versões:", error); msg("Versão salva, mas não foi possível atualizar a lista."); }
+    atualizarOficial();
+  } catch (error) {
+    console.error("Falha ao salvar horário:", error);
+    msg("Não foi possível salvar. Verifique a conexão e as permissões do banco.");
+  } finally { btns.forEach(b => b.disabled = false); }
+}
+$("salvar").onclick = () => salvar(false); $("salvarNova").onclick = () => salvar(true);
+function aba(n) { ["grade","conf"].forEach(x => $("s-"+x).hidden = x !== n); document.querySelectorAll("#abas .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n)); if (n === "conf") renderConf(); }
+document.querySelectorAll("#abas .btn").forEach(b => b.onclick = () => aba(b.dataset.aba));
+
+/* ---------- horário oficial, exportar e importar versão ---------- */
+function aulasOficiais() {
+  const out = []; S.turmas.forEach(t => { const sl = slots(t); garantirGrade(t).forEach((row, d) => row.forEach((dk, p) => { if (dk) out.push({ turma: t, dia: d, ini: hm(sl[d][p].ini), fim: hm(sl[d][p].fim), disciplina: nomeDisc(dk), professor_email: profDe(t, dk) || "" }); })); });
+  return out;
+}
+$("oficial").onclick = async () => {
+  if (!vid) return msg("Salve a versão antes de torná-la oficial.");
+  if (S.sujo) return msg("Há alterações não salvas. Salve a versão antes de torná-la oficial.");
+  const aulas = aulasOficiais(); if (!confirm(`Tornar esta versão o horário OFICIAL?\n\n• ${aulas.length} aulas passam a valer como o horário de verdade (turmas, professores e disciplinas).\n• A versão oficial anterior continua guardada, mas deixa de ser a oficial.\n• Esta versão fica protegida contra alterações.`)) return;
+  try {
+    const { error } = await sb.rpc("definir_oficial", { p_id: vid, p_aulas: aulas }); if (error) throw error;
+    oficialAtual = true; await listarVersoes(); atualizarOficial(); msg(`Versão oficial definida: ${aulas.length} aulas gravadas.`, true);
+  } catch (error) { console.error("Falha ao definir a versão oficial:", error); msg("Não foi possível tornar oficial. Confira se o SQL do horário oficial foi executado no Supabase."); }
+};
+$("expJson").onclick = () => {
+  const nome = $("vNome").value.trim() || S.nome || "horario", arq = { formato: "horario-jma-1", nome, exportadoEm: new Date().toISOString(), dados: JSON.parse(JSON.stringify({ ...S, sujo: false })) };
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(arq)], { type: "application/json" }));
+  a.download = "horario_" + String(nome).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".json"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  msg("Arquivo exportado. Guarde-o como cópia de segurança.", true);
+};
+$("impJson").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  try { const arq = JSON.parse(await f.text()); if (arq.formato !== "horario-jma-1" || !arq.dados) throw 0;
+    if (S.sujo && !confirm("Há alterações não salvas. Importar vai substituí-las. Continuar?")) return;
+    aplicarDados(arq.dados); vid = null; oficialAtual = false; $("vNome").value = (arq.nome || "Horário") + " (importada)"; $("vSel").value = ""; atualizarOficial(); sujo(); renderTudo();
+    msg("Versão importada para revisão. Ela ainda NÃO foi salva: use “Salvar como nova”.", true);
+  } catch (_) { msg("Arquivo não reconhecido. Use um arquivo exportado por esta página."); }
+};
+
+/* ---------- análise de conflitos ---------- */
+function analisar() {
+  const prob = new Map(), aulas = [], geral = [];
+  const add = (t, d, p, tipo, txt, professor = null) => { const k = t + "|" + d + "|" + p; if (!prob.has(k)) prob.set(k, []); prob.get(k).push({ tipo, txt, professor }); };
+  S.turmas.forEach(t => { const g = garantirGrade(t), sl = slots(t);
+    for (let d = 0; d < 5; d++) { const cont = {};
+      for (let p = 0; p < sl[d].length; p++) { const dk = g[d][p]; if (!dk) continue; cont[dk] = (cont[dk] || 0) + 1; const e = profDe(t, dk);
+        aulas.push({ t, d, p, dk, e, ini: sl[d][p].ini, fim: sl[d][p].fim });
+        if (bloqueado(e, d)) add(t, d, p, "erro", `${nomeProf(e)} está marcado(a) como indisponível em ${DIAS[d]}, mas foi alocado(a) em ${curta(t)} · ${nomeDisc(dk)}, ${hm(sl[d][p].ini)}–${hm(sl[d][p].fim)}.`, e);
+        if (e && S.prof[e]?.evitarTarde && sl[d][p].tarde) add(t, d, p, "alerta", nomeProf(e) + " prefere não ter aula à tarde", e); }
+      for (const dk in cont) if (cont[dk] > 2) geral.push(`${curta(t)}: ${nomeDisc(dk)} com ${cont[dk]} aulas em ${DIAS[d]}`); } });
+  const por = {}; aulas.forEach(a => { if (a.e) (por[a.e] ||= []).push(a); });
+  for (const e in por) { const l = por[e]; for (let i = 0; i < l.length; i++) for (let j = i + 1; j < l.length; j++) { const a = l[i], b = l[j];
+    if (a.d === b.d && a.ini < b.fim && b.ini < a.fim) {
+      const ini = Math.max(a.ini, b.ini), fim = Math.min(a.fim, b.fim);
+      const txt = `${nomeProf(e)} está alocado(a) em duas turmas ao mesmo tempo (${DIAS[a.d]}, choque ${hm(ini)}–${hm(fim)}): ${curta(a.t)} · ${nomeDisc(a.dk)} (${hm(a.ini)}–${hm(a.fim)}) e ${curta(b.t)} · ${nomeDisc(b.dk)} (${hm(b.ini)}–${hm(b.fim)}).`;
+      add(a.t, a.d, a.p, "erro", txt, e); add(b.t, b.d, b.p, "erro", txt, e);
+    } } }
+  S.turmas.forEach(t => { const q = S.qtd[t] || {}, c = {}; (S.grade[t] || []).flat().forEach(dk => { if (dk) c[dk] = (c[dk] || 0) + 1; });
+    for (const dk in q) if ((c[dk] || 0) < q[dk]) geral.push(`${curta(t)}: faltam ${q[dk] - (c[dk] || 0)} aula(s) de ${nomeDisc(dk)}`); else if ((c[dk] || 0) > q[dk]) geral.push(`${curta(t)}: ${nomeDisc(dk)} com ${c[dk] - q[dk]} aula(s) a mais`); });
+  return { prob, geral };
+}
+
+/* ---------- grade ---------- */
+function renderTudo() { renderChips(); renderGrade(); }
+function renderChips() {
+  const modo = marcado("modo") || "turma"; const lista = modo === "turma" ? S.turmas.map(t => [t, curta(t)]) : [...new Set(Object.values(ATR))].sort((a, b) => nomeProf(a).localeCompare(nomeProf(b), "pt")).map(e => [e, nomeProf(e)]);
+  if (!lista.find(x => x[0] === alvo)) alvo = lista[0] ? lista[0][0] : "";
+  $("chipsAlvo").innerHTML = lista.map(([v, t]) => `<label class="chip"><input type="radio" name="alvo" value="${esc(v)}"${v === alvo ? " checked" : ""}>${esc(t)}</label>`).join("");
+  $("gerarBox").style.display = "";
+}
+document.querySelectorAll('input[name="modo"]').forEach(r => r.onchange = () => { alvo = ""; renderChips(); renderGrade(); });
+$("chipsAlvo").onchange = () => { alvo = marcado("alvo"); sel = null; renderGrade(); };
+function celulaHtml(t, d, p, s, dk, pr) {
+  const k = t + "|" + d + "|" + p, ps = pr.get(k) || [], cls = ps.some(x => x.tipo === "erro") ? " erro" : ps.length ? " alerta" : "";
+  const card = dk ? `<div class="aula${sel && sel.tipo === "cel" && sel.d === d && sel.p === p ? " sel" : ""}" draggable="true" data-d="${d}" data-p="${p}" style="${est(t, dk)}"><b>${esc(nomeDisc(dk))}</b><span>${esc(nomeProf(profDe(t, dk)) || "sem professor")}</span><button class="tv${trava(t, d, p) ? " on" : ""}" data-tv="${d}-${p}" title="Travar/destravar" aria-label="Travar aula">${trava(t, d, p) ? "🔒" : "🔓"}</button></div>` : "";
+  return `<div class="cel${cls}" data-d="${d}" data-p="${p}" title="${esc(ps.map(x => x.txt).join(" · "))}"><span class="hora">${hm(s.ini)}–${hm(s.fim)}</span>${card}</div>`;
+}
+function renderGrade() {
+  const modo = marcado("modo") || "turma", { prob, geral } = analisar();
+  const itens = [...prob.values()].flat(), relevantes = modo === "prof" ? itens.filter(x => x.professor === alvo) : itens;
+  const erros = [...new Set(relevantes.filter(x => x.tipo === "erro").map(x => x.txt))];
+  const alertas = [...new Set(relevantes.filter(x => x.tipo === "alerta").map(x => x.txt))];
+  montarPaleta(); $("leg").innerHTML = "";
+  if (modo === "turma") {
+    const t = alvo; if (!t) { $("semana").innerHTML = ""; return; } const sl = slots(t), g = garantirGrade(t);
+    $("semana").innerHTML = DIAS.map((nome, d) => { let h = `<div class="dia"><h4>${nome}</h4>`;
+      if (d === 4 && sl[d][0].ini > 420) h += `<div class="pausa">07:00–${hm(sl[d][0].ini)} · Clubes juvenis / ATPCG</div>`;
+      sl[d].forEach((s, p) => { if (p > 0) { const gap = s.ini - sl[d][p - 1].fim; if (gap > 0) h += `<div class="pausa">${gap >= 45 ? "Almoço" : "Intervalo"} · ${hm(sl[d][p - 1].fim)}–${hm(s.ini)}</div>`; } h += celulaHtml(t, d, p, s, g[d][p], prob); });
+      return h + "</div>"; }).join("");
+    const q = S.qtd[t] || {}, c = {}; g.flat().forEach(dk => { if (dk) c[dk] = (c[dk] || 0) + 1; });
+    $("pool").innerHTML = Object.keys(q).filter(dk => (q[dk] - (c[dk] || 0)) > 0).map(dk => `<div class="aula${sel && sel.tipo === "pool" && sel.dk === dk ? " sel" : ""}" draggable="true" data-dk="${esc(dk)}" style="${est(t, dk)}"><b data-n="${q[dk] - (c[dk] || 0)}">${esc(nomeDisc(dk))}</b><span>${esc(nomeProf(profDe(t, dk)) || "sem professor")}</span></div>`).join("") || '<p class="hint">Tudo alocado nesta turma. Arraste uma aula para cá para tirá-la da grade.</p>';
+    const vistos = {}; Object.keys(q).forEach(dk => { const e = profDe(t, dk); if (e && !vistos[e]) vistos[e] = corAula(t, dk).base; });
+    $("leg").innerHTML = Object.entries(vistos).sort((a, b) => nomeProf(a[0]).localeCompare(nomeProf(b[0]), "pt")).map(([e, c]) => `<span><i style="background:${c}"></i>${esc(nomeProf(e))}</span>`).join("") + "<span>Tom mais escuro = anos mais altos / outra disciplina do mesmo professor</span>";
+    $("gerarBox").style.display = "";
+  } else {
+    const e = alvo; $("pool").innerHTML = '<p class="hint">Visão do professor: somente leitura.</p>';
+    const aulas = []; S.turmas.forEach(t => { const g = garantirGrade(t), sl = slots(t); g.forEach((row, d) => row.forEach((dk, p) => { if (dk && profDe(t, dk) === e) aulas.push({ t, d, dk, ini: sl[d][p].ini, fim: sl[d][p].fim }); })); });
+    $("semana").innerHTML = DIAS.map((nome, d) => `<div class="dia"><h4>${nome}</h4>${d === 4 ? '<div class="pausa">07:00–08:40 · ATPCG</div>' : ""}` + aulas.filter(a => a.d === d).sort((a, b) => a.ini - b.ini).map(a => `<div class="aula" style="${est(a.t, a.dk)}"><b>${hm(a.ini)}–${hm(a.fim)}</b><span>${esc(nomeDisc(a.dk))} · ${esc(curta(a.t))}</span></div>`).join("") + "</div>").join("");
+    const detalhe = erros.length
+      ? `<h4>Conflitos deste professor (${erros.length})</h4><ul class="prob">${erros.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+      : '<p class="hint">Nenhum choque de horário ou dia indisponível para este professor.</p>';
+    const pref = alertas.length ? `<h4>Preferências</h4><ul class="prob av">${alertas.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : "";
+    $("probs").innerHTML = `<p class="hint">${aulas.length} aula(s) por semana</p>${detalhe}${pref}`; return;
+  }
+  let avisos = erros.length
+    ? `<h4>Conflitos identificados (${erros.length})</h4><ul class="prob">${erros.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+    : '<p class="hint">Nenhum choque de horário ou dia indisponível.</p>';
+  if (alertas.length) avisos += `<h4>Preferências dos professores</h4><ul class="prob av">${alertas.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  if (geral.length) avisos += `<h4>Outros avisos</h4><ul class="prob av">${geral.slice(0, 12).map(x => `<li>${esc(x)}</li>`).join("")}${geral.length > 12 ? `<li>…e mais ${geral.length - 12}</li>` : ""}</ul>`;
+  $("probs").innerHTML = avisos;
+}
+
+/* ---------- arrastar, soltar e tocar ---------- */
+const sel2 = el => el.closest(".aula");
+$("semana").addEventListener("dragstart", e => { const a = sel2(e.target); if (!a || !a.dataset.d) return; sel = { tipo: "cel", d: +a.dataset.d, p: +a.dataset.p }; e.dataTransfer.setData("text/plain", "x"); });
+$("pool").addEventListener("dragstart", e => { const a = sel2(e.target); if (a && a.dataset.dk) { sel = { tipo: "pool", dk: a.dataset.dk }; e.dataTransfer.setData("text/plain", "x"); } });
+["semana", "pool"].forEach(id => { $(id).addEventListener("dragover", e => { if (sel) { e.preventDefault(); const c = e.target.closest(id === "pool" ? "#pool" : ".cel"); document.querySelectorAll(".sobre").forEach(x => x.classList.remove("sobre")); if (c) c.classList.add("sobre"); } });
+  $(id).addEventListener("drop", e => { e.preventDefault(); document.querySelectorAll(".sobre").forEach(x => x.classList.remove("sobre")); if (id === "pool") return remover(); const c = e.target.closest(".cel"); if (c) mover(+c.dataset.d, +c.dataset.p); }); });
+$("semana").addEventListener("dragend", () => document.querySelectorAll(".sobre").forEach(x => x.classList.remove("sobre")));
+$("semana").addEventListener("click", e => {
+  const tv = e.target.closest("[data-tv]"); if (tv) { const t = alvo; (S.travas[t] ||= {}); const k = tv.dataset.tv; if (S.travas[t][k]) delete S.travas[t][k]; else S.travas[t][k] = true; sujo(); return renderGrade(); }
+  if ((marcado("modo") || "turma") !== "turma") return;
+  const a = sel2(e.target), c = e.target.closest(".cel");
+  if (a && a.dataset.d) { const d = +a.dataset.d, p = +a.dataset.p; if (sel && !(sel.tipo === "cel" && sel.d === d && sel.p === p)) return mover(d, p); sel = sel && sel.tipo === "cel" && sel.d === d && sel.p === p ? null : { tipo: "cel", d, p }; return renderGrade(); }
+  if (c && sel) mover(+c.dataset.d, +c.dataset.p);
+});
+$("pool").addEventListener("click", e => { const a = sel2(e.target); if (a && a.dataset.dk) { sel = sel && sel.tipo === "pool" && sel.dk === a.dataset.dk ? null : { tipo: "pool", dk: a.dataset.dk }; renderGrade(); } else if (sel && sel.tipo === "cel") remover(); });
+function mover(d, p) {
+  const t = alvo, g = S.grade[t]; if (!sel) return;
+  if (sel.tipo === "pool") { if (trava(t, d, p)) return msg("Esta aula está travada."); if (g[d][p]) return msg("Esse horário já tem uma aula. Mova-a ou remova-a antes de alocar outra."); g[d][p] = sel.dk; }
+  else { if (sel.d === d && sel.p === p) { sel = null; return renderGrade(); } if (trava(t, sel.d, sel.p) || trava(t, d, p)) return msg("Aula travada: destrave antes de mover.");
+    const tmp = g[d][p]; g[d][p] = g[sel.d][sel.p]; g[sel.d][sel.p] = tmp; }
+  msg(""); sel = null; sujo(); renderGrade();
+}
+function remover() { if (!sel || sel.tipo !== "cel") return; const t = alvo; if (trava(t, sel.d, sel.p)) return msg("Aula travada."); S.grade[t][sel.d][sel.p] = null; sel = null; sujo(); renderGrade(); }
+
+/* ---------- gerar, limpar ---------- */
+$("gerar").onclick = async () => {
+  const faltaProf = S.turmas.some(t => Object.keys(S.qtd[t] || {}).length === 0); if (faltaProf && !confirm("Há turmas sem quantidades de aulas (aba Configurar). Elas ficarão vazias. Continuar?")) return;
+  if (marcado("gm") === "zero" && !confirm("Isto refaz a grade de todas as turmas, mantendo só as aulas travadas. Continuar?")) return;
+  $("gerar").disabled = true; msg("Gerando…", true);
+  try {
+    const r = await gerarHorario(+marcado("ef"), marcado("gm") === "compl", (n, m) => msg(`Tentativa ${n}… melhor resultado: ${m.sobra.length} aula(s) sem lugar, custo ${Math.round(m.pont % 1000)}`, true));
+    S.turmas.forEach(t => S.grade[t] = r.G[t]); sujo(); renderGrade();
+    msg(r.sobra.length ? `Pronto, mas ${r.sobra.length} aula(s) não couberam: ${[...new Set(r.sobra.map(b => curta(b.t) + " " + nomeDisc(b.dk)))].slice(0, 6).join("; ")}. Veja os professores com muita carga ou dias indisponíveis.` : `Pronto! ${r.tent} tentativas, nenhuma aula sem lugar.`, !r.sobra.length);
+  } catch (error) { console.error("Falha na geração do horário:", error); msg("A geração falhou. Confira os horários e as configurações e tente novamente."); }
+  finally { $("gerar").disabled = false; }
+};
+$("limpar").onclick = () => { if (!alvo || (marcado("modo") || "turma") !== "turma" || !confirm("Limpar as aulas não travadas desta turma?")) return; S.grade[alvo] = S.grade[alvo].map((row, d) => row.map((dk, p) => trava(alvo, d, p) ? dk : null)); sujo(); renderGrade(); };
+
+/* ---------- configurar ---------- */
+function renderConf() {
+  const fam = { A: "6º e 7º anos", B: "8º e 9º anos" }, tur = S.turmas, dks = Object.keys(S.disc).sort((a, b) => nomeDisc(a).localeCompare(nomeDisc(b), "pt"));
+  const sel = (v, opts) => opts.map(o => `<option${o === v ? " selected" : ""}>${o}</option>`).join("");
+  const horas = ["A", "B"].map(f => `<h4 style="margin:10px 0 4px">${fam[f]} · duração da aula <input class="in mini" data-dur="${f}" value="${S.horarios[f].dur}"> min</h4><table class="tab">${DIAS.map((n, d) => `<tr><td style="width:60px">${n}</td><td style="text-align:left"><input class="in" data-h="${f}|${d}" value="${S.horarios[f].dias[d].join(" ")}"></td></tr>`).join("")}</table>`).join("");
+  const cap = t => slots(t).reduce((c, d) => c + d.length, 0);
+  const qtd = `<div class="acoes" style="margin-bottom:8px"><label class="btn btn-ghost sm" style="cursor:pointer">Importar relatórios (.xlsx)<input type="file" id="impRel" accept=".xlsx" multiple hidden></label><label class="chip"><input type="checkbox" id="impGrade" checked>Importar também a grade atual</label></div><p class="hint" id="impMsg" style="margin-bottom:8px">Suba os relatórios de frequência e registro (um por turma). Eles trazem as quantidades e o horário atual.</p>
+    <div style="overflow-x:auto"><table class="tab"><tr><th>Disciplina</th>${tur.map(t => `<th>${esc(curta(t))}</th>`).join("")}</tr>${dks.map(dk => `<tr><td>${esc(nomeDisc(dk))}</td>${tur.map(t => `<td><input class="in mini" type="number" min="0" max="10" data-q="${esc(t)}|${esc(dk)}" value="${S.qtd[t]?.[dk] || ""}"></td>`).join("")}</tr>`).join("")}
+    <tr><th>Total / vagas</th>${tur.map(t => { const s = Object.values(S.qtd[t] || {}).reduce((a, b) => a + b, 0); return `<th style="color:${s === cap(t) ? "var(--ok)" : "var(--danger)"}">${s} / ${cap(t)}</th>`; }).join("")}</tr></table></div>`;
+  const discs = `<table class="tab"><tr><th>Disciplina</th><th>Área</th><th>Tipo</th><th>Aceita dupla</th></tr>${dks.map(dk => `<tr><td>${esc(nomeDisc(dk))}</td><td><select class="in sel2" data-da="${esc(dk)}">${sel(info(dk).area, Object.keys(AREAS))}</select></td><td><select class="in sel2" data-dt="${esc(dk)}">${sel(info(dk).tipo, ["BNCC", "PD"])}</select></td><td><input type="checkbox" data-dd="${esc(dk)}"${info(dk).dupla !== false ? " checked" : ""}></td></tr>`).join("")}</table><p class="hint">PD = parte diversificada.</p>`;
+  const profs = [...new Set(Object.values(ATR))].sort((a, b) => nomeProf(a).localeCompare(nomeProf(b), "pt"));
+  const prof = `<table class="tab"><tr><th>Professor</th><th>Evitar à tarde</th>${DIAS.map(d => `<th>Sem ${d}</th>`).join("")}</tr>${profs.map(e => `<tr><td>${esc(nomeProf(e))}</td><td><input type="checkbox" data-pt="${esc(e)}"${S.prof[e]?.evitarTarde ? " checked" : ""}></td>${DIAS.map((_, d) => `<td><input type="checkbox" data-pb="${esc(e)}|${d}"${S.prof[e]?.bloq?.includes(d) ? " checked" : ""}></td>`).join("")}</tr>`).join("")}</table>`;
+  const niv = ["Desligado", "Baixa", "Média", "Alta"], R = S.regras, reg = [["dupla", "Preferir aulas duplas"], ["bncc", "BNCC pela manhã e parte diversificada à tarde"], ["areas", "Alternar áreas do conhecimento (sem 3 seguidas)"], ["espalhar", "Espalhar cada disciplina pelos dias"], ["tarde", "Respeitar “evitar à tarde” dos professores"]]
+    .map(([k, t]) => `<tr><td style="text-align:left">${t}</td><td><select class="in sel2" data-r="${k}">${niv.map((n, i) => `<option value="${i}"${R[k] === i ? " selected" : ""}>${n}</option>`).join("")}</select></td></tr>`).join("");
+  $("conf").innerHTML = `<details class="cfg" open><summary>Horários, intervalos e almoço</summary><p class="hint">Digite o início de cada aula separado por espaço. Os intervalos e o almoço são calculados pelas lacunas.</p>${horas}</details>
+    <details class="cfg" open><summary>Quantidade de aulas por turma</summary>${qtd}</details>
+    <details class="cfg"><summary>Disciplinas (área e tipo)</summary>${discs}</details>
+    <details class="cfg"><summary>Professores (restrições)</summary><p class="hint">Os professores vêm das atribuições. Marque “evitar à tarde” ou os dias em que não podem dar aula.</p>${prof}</details>
+    <details class="cfg" open><summary>Regras da geração automática</summary><table class="tab">${reg}</table></details>`;
+}
+function validarHorario(f, horario) {
+  if (!Number.isInteger(horario.dur) || horario.dur < 10 || horario.dur > 180) return "A duração da aula deve ser um número inteiro entre 10 e 180 minutos.";
+  for (let d = 0; d < 5; d++) {
+    const inicios = horario.dias[d];
+    if (!inicios?.length) return `Informe ao menos um horário para ${DIAS[d]}.`;
+    let fimAnterior = -1;
+    for (const inicio of inicios) {
+      if (!/^\d{2}:\d{2}$/.test(inicio)) return `Horário inválido em ${DIAS[d]}. Use o formato HH:MM.`;
+      const m = mins(inicio);
+      if (m >= 1440 || m + horario.dur > 1440 || m < fimAnterior) return `Os horários de ${DIAS[d]} devem estar em ordem e sem sobreposição.`;
+      fimAnterior = m + horario.dur;
+    }
+  }
+  for (const t of S.turmas) if (famDe(t) === f) {
+    const g = S.grade[t] || [];
+    for (let d = 0; d < 5; d++) if ((g[d] || []).slice(horario.dias[d].length).some(Boolean))
+      return `A alteração apagaria uma aula já alocada em ${curta(t)} (${DIAS[d]}). Mova essa aula antes de reduzir os períodos.`;
+  }
+  return "";
+}
+$("conf").addEventListener("change", e => {
+  const el = e.target, D = el.dataset; if (!D) return;
+  if (D.dur || D.h) {
+    const f = D.dur || D.h.split("|")[0], horario = { dur: S.horarios[f].dur, dias: S.horarios[f].dias.map(x => x.slice()) };
+    if (D.dur) { const dur = Number(el.value); if (!Number.isInteger(dur)) { renderConf(); $("impMsg").textContent = "A duração da aula deve ser um número inteiro entre 10 e 180 minutos."; return; } horario.dur = dur; }
+    else {
+      const d = +D.h.split("|")[1], tokens = el.value.trim().split(/\s+/).filter(Boolean), parsed = [];
+      for (const token of tokens) { const m = token.match(/^(\d{1,2}):([0-5]\d)$/); if (!m || +m[1] > 23) { renderConf(); $("impMsg").textContent = "Horário inválido. Use valores no formato HH:MM, separados por espaço."; return; } parsed.push(String(+m[1]).padStart(2, "0") + ":" + m[2]); }
+      horario.dias[d] = parsed;
+    }
+    const erro = validarHorario(f, horario);
+    if (erro) { renderConf(); $("impMsg").textContent = erro; return; }
+    S.horarios[f] = horario; cacheSlots = {}; S.turmas.forEach(garantirGrade);
+  }
+  else if (D.q) { const [t, dk] = D.q.split("|"); (S.qtd[t] ||= {}); if (+el.value > 0) S.qtd[t][dk] = +el.value; else delete S.qtd[t][dk]; }
+  else if (D.da) S.disc[D.da].area = el.value; else if (D.dt) S.disc[D.dt].tipo = el.value; else if (D.dd) S.disc[D.dd].dupla = el.checked;
+  else if (D.pt) (S.prof[D.pt] ||= {}).evitarTarde = el.checked;
+  else if (D.pb) { const [em, d] = D.pb.split("|"), P = (S.prof[em] ||= {}); P.bloq = P.bloq || []; const i = P.bloq.indexOf(+d); if (el.checked && i < 0) P.bloq.push(+d); if (!el.checked && i >= 0) P.bloq.splice(i, 1); }
+  else if (D.r) S.regras[D.r] = +el.value;
+  else if (el.id === "impRel") return importar([...el.files]);
+  sujo(); if (D.q || D.h || D.dur) renderConf();
+});
+async function importar(files) {
+  if (!files.length) return; const comGrade = $("impGrade").checked; let n = 0; const falhas = [];
+  for (const f of files) { try {
+    const wb = XLSX.read(await f.arrayBuffer(), { type: "array" }), L = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: "", raw: false });
+    const t = String((L.find(r => String(r[0]).trim() === "Turma:") || [])[1] || "").trim(), hi = L.findIndex(r => String(r[0]).trim() === "Horários"); if (!t || hi < 0) { falhas.push(f.name); continue; }
+    if (!S.turmas.includes(t)) { S.turmas.push(t); S.turmas.sort((x, y) => x.localeCompare(y, "pt", { numeric: true })); }
+    const datas = L[hi].map(h => { const m = String(h).match(/(\d{2})\/(\d{2})\/(\d{4})/); return m ? `${m[3]}-${m[2]}-${m[1]}` : null; });
+    S.qtd[t] = {}; const g = comGrade ? (S.grade[t] = []) && garantirGrade(t) : null, sl = slots(t);
+    for (let i = hi + 1; i < L.length; i++) { const hor = String(L[i][0]).match(/(\d{2}:\d{2})\s*-/); if (!hor) continue;
+      for (let c = 1; c < L[i].length; c++) { const v = String(L[i][c] || ""); if (!datas[c] || !/Freq/.test(v)) continue;
+        const nome = v.split("\n")[0].trim(), dk = norm(nome); if (!S.disc[dk]) S.disc[dk] = classificar(nome); else if (!S.disc[dk].nome) S.disc[dk].nome = nome; S.qtd[t][dk] = (S.qtd[t][dk] || 0) + 1;
+        if (g) { const d = (new Date(datas[c] + "T12:00:00").getDay() + 6) % 7, p = d < 5 ? sl[d].findIndex(s => s.ini === mins(hor[1])) : -1; if (p >= 0) g[d][p] = dk; } } }
+    n++; } catch (_) { falhas.push(f.name); } }
+  sujo(); renderConf(); renderTudo(); $("impMsg").textContent = `${n} relatório(s) importado(s).` + (falhas.length ? ` Não consegui ler: ${falhas.join(", ")}.` : "");
+}
+
+/* ---------- impressão e planilha ---------- */
+function htmlTurma(t) {
+  const sl = slots(t), g = garantirGrade(t), n = Math.max(...sl.map(x => x.length)); let h = `<h3>${esc(t)}</h3><table class="tab"><tr>${DIAS.map(d => `<th>${d}</th>`).join("")}</tr>`;
+  for (let p = 0; p < n; p++) h += "<tr>" + sl.map((dia, d) => { const s = dia[p]; if (!s) return "<td></td>"; const dk = g[d][p]; return `<td><small>${hm(s.ini)}–${hm(s.fim)}</small><br>${dk ? "<b>" + esc(nomeDisc(dk)) + "</b>" : "—"}${dk && profDe(t, dk) ? "<br><small>" + esc(nomeProf(profDe(t, dk))) + "</small>" : ""}</td>`; }).join("") + "</tr>";
+  return h + "</table>";
+}
+function htmlProf(e) {
+  const aulas = []; S.turmas.forEach(t => { const sl = slots(t); garantirGrade(t).forEach((row, d) => row.forEach((dk, p) => { if (dk && profDe(t, dk) === e) aulas.push({ t, d, dk, ini: sl[d][p].ini, fim: sl[d][p].fim }); })); });
+  return `<h3>${esc(nomeProf(e))} · ${aulas.length} aula(s)</h3><table class="tab"><tr>${DIAS.map(d => `<th>${d}</th>`).join("")}</tr><tr>${DIAS.map((_, d) => "<td>" + (d === 4 ? "<small>07:00–08:40 · ATPCG</small><br>" : "") + aulas.filter(a => a.d === d).sort((a, b) => a.ini - b.ini).map(a => `<small>${hm(a.ini)}–${hm(a.fim)}</small> ${esc(nomeDisc(a.dk))} · ${esc(curta(a.t))}`).join("<br>") + "</td>").join("")}</tr></table>`;
+}
+function imprimir(html, titulo) { $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>${esc(titulo)}</h2>${html}<p style="font-size:9pt;margin-top:10px">Emitido por ${esc(perfil.nome)} em ${fmt(hoje())}${S.nome ? " · versão: " + esc(S.nome) : ""}</p>`; window.print(); }
+$("imp").onclick = () => { if (!alvo) return; (marcado("modo") || "turma") === "turma" ? imprimir(htmlTurma(alvo), "Horário de aulas · " + curta(alvo)) : imprimir(htmlProf(alvo), "Horário do professor"); };
+$("impTodas").onclick = () => imprimir(S.turmas.map(t => `<div class="quebra">${htmlTurma(t)}</div>`).join(""), "Horário de aulas · todas as turmas");
+
+/* ---------- Excel no modelo da planilha da escola ---------- */
+function turmaExcelInfo(t) {
+  const n = norm(t), m = n.match(/^(6|7|8|9)\s*(?:ano\s*)?([a-z])(?:\s|$)/), ano = m ? +m[1] : (parseInt(t, 10) || (famDe(t) === "A" ? 6 : 8));
+  return { grupo: ano <= 7 ? "A" : "B", ano, letra: m ? m[2].toUpperCase() : "", titulo: curta(t).toLocaleUpperCase("pt-BR") };
+}
+function abreviarDiscExcel(dk) {
+  const n = norm(nomeDisc(dk));
+  const regras = [["orientacao de estudo lingua portuguesa", "OE"], ["orientacao de estudo matematica", "OE"], ["projeto de vida", "PV"], ["redacao e leitura", "RED"], ["educacao financeira", "EFIN"], ["praticas experimentais", "PE"], ["tecnologia e inovacao", "TEC"], ["educacao fisica", "EF"], ["lingua portuguesa", "LP"], ["lingua inglesa", "ING"], ["matematica", "MAT"], ["ciencias", "CIE"], ["geografia", "GEO"], ["historia", "HIST"], ["robotica", "ROB"], ["esporte musica arte", "EMA"], ["arte", "ARTE"], ["eletivas", "ELETIVAS"]];
+  const r = regras.find(([chave]) => n.includes(chave)); return r ? r[1] : nomeDisc(dk);
+}
+function horaExcel(minuto) { const h = Math.floor(minuto / 60), m = minuto % 60; return `${h}h${m ? String(m).padStart(2, "0") : ""}`; }
+function eventosExcel(familia, dia) {
+  const configuracao = S.horarios[familia], lista = configuracao.dias[dia] || [], periodos = lista.map((ini, p) => ({ p, ini: mins(ini), fim: mins(ini) + configuracao.dur })), eventos = [];
+  let anterior = null;
+  if (dia === 4) {
+    eventos.push({ tipo: "especial", ini: 420, fim: 470, texto: "CLUBES (ATPCG)", num: 1 }, { tipo: "especial", ini: 470, fim: 520, texto: "CLUBES (ATPCG)", num: 2 });
+    anterior = 520;
+  }
+  for (const aula of periodos) {
+    if (anterior !== null && aula.ini > anterior) {
+      const gap = aula.ini - anterior, texto = gap >= 45 ? "ALMOÇO" : gap >= 30 ? "INTERVALO/ TUTORIA COLETIVA" : "INTERVALO";
+      eventos.push({ tipo: "pausa", ini: anterior, fim: aula.ini, texto });
+    }
+    eventos.push({ tipo: "aula", ...aula }); anterior = aula.fim;
+  }
+  if (anterior !== null && dia !== 1 && dia !== 4 && anterior <= 930) {
+    if (anterior < 930) eventos.push({ tipo: "pausa", ini: anterior, fim: 930, texto: "INTERVALO" });
+    eventos.push({ tipo: "especial", ini: 930, fim: 960, texto: "TUTORIA COLETIVA" });
+  }
+  return eventos;
+}
+// mesma cor da tela: o matiz é do professor e o tom varia conforme a turma e a disciplina
+function corExcelAula(t, dk) {
+  const c = corAula(t, dk); if (c.h === undefined) return "FFD9D9D9";
+  const s = 0.62, l = c.L / 100, a = s * Math.min(l, 1 - l), f = n => { const k = (n + c.h / 30) % 12; return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return "FF" + [f(0), f(8), f(4)].map(x => Math.round(x * 255).toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+function baixarBufferExcel(buffer, nome) {
+  const url = URL.createObjectURL(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })), a = document.createElement("a");
+  a.href = url; a.download = nome; a.click(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+async function exportarExcelModelo() {
+  if (!window.ExcelJS) throw new Error("A biblioteca do Excel não carregou. Atualize a página e tente novamente.");
+  const grupos = { A: [], B: [] };
+  S.turmas.forEach(t => grupos[turmaExcelInfo(t).grupo].push(t));
+  for (const g of ["A", "B"]) grupos[g].sort((a, b) => { const x = turmaExcelInfo(a), y = turmaExcelInfo(b); return x.ano - y.ano || x.letra.localeCompare(y.letra, "pt") || a.localeCompare(b, "pt", { numeric: true }); });
+  const nA = grupos.A.length, nB = grupos.B.length, leftNum = 2, leftTime = 3, leftClass = 4, rightNum = leftClass + nA, rightTime = rightNum + 1, rightClass = rightTime + 1, total = Math.max(4, rightClass + nB - 1);
+  const wb = new ExcelJS.Workbook(); wb.creator = ESCOLA; wb.created = new Date(); wb.modified = new Date();
+  const ws = wb.addWorksheet("HORÁRIO DE AULAS", { pageSetup: { paperSize: 9, orientation: "landscape", fitToPage: true, fitToWidth: 1, fitToHeight: 0, margins: { left: 0.25, right: 0.25, top: 0.45, bottom: 0.45, header: 0.2, footer: 0.2 } } });
+  ws.properties.defaultRowHeight = 22; ws.views = [{ state: "frozen", ySplit: 3 }];
+  for (let c = 1; c <= total; c++) ws.getColumn(c).width = c === 1 ? 2.5 : (c === leftNum || c === rightNum ? 4.5 : (c === leftTime || c === rightTime ? 17 : 17));
+  const borda = { top: { style: "thin", color: { argb: "FF758397" } }, left: { style: "thin", color: { argb: "FF758397" } }, bottom: { style: "thin", color: { argb: "FF758397" } }, right: { style: "thin", color: { argb: "FF758397" } } };
+  const titulo = ws.getRow(1); ws.mergeCells(1, 1, 1, total); titulo.getCell(1).value = `HORÁRIO DE AULAS${S.nome ? " · " + S.nome.toLocaleUpperCase("pt-BR") : ""}`;
+  titulo.height = 34; titulo.getCell(1).font = { name: "Calibri", size: 20, bold: true, color: { argb: "FFFFFFFF" } }; titulo.getCell(1).alignment = { horizontal: "center", vertical: "middle" }; titulo.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF17365D" } };
+  let rowNum = 2;
+  const aplicarBase = (row, fim) => { for (let c = 1; c <= total; c++) { const cell = row.getCell(c); cell.border = borda; cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true }; cell.font = { name: "Calibri", size: 10 }; } if (fim) row.height = 30; };
+  function escreverEvento(row, evento, lado, dia, classeTurmas) {
+    const numCol = lado === "A" ? leftNum : rightNum, horaCol = lado === "A" ? leftTime : rightTime, classeCol = lado === "A" ? leftClass : rightClass;
+    if (!evento) return;
+    const horario = `${horaExcel(evento.ini)} às ${horaExcel(evento.fim)}`;
+    if (evento.tipo === "aula") {
+      row.getCell(numCol).value = evento.p + 1 + (dia === 4 ? 2 : 0); row.getCell(horaCol).value = horario;   // na sexta, as aulas 1 e 2 são os clubes
+      classeTurmas.forEach((t, i) => {
+        const dk = (S.grade[t]?.[dia] || [])[evento.p]; if (!dk) return;
+        const prof = profDe(t, dk), primeiroNome = prof ? nomeProf(prof).trim().split(/\s+/)[0] : "";
+        const texto = [primeiroNome, abreviarDiscExcel(dk)].filter(Boolean).join(" "), cx = corAula(t, dk);
+        const cell = row.getCell(classeCol + i); cell.value = texto; cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: corExcelAula(t, dk) } };
+        cell.font = { name: "Calibri", size: 10, color: { argb: cx.L === undefined || cx.L > 56 ? "FF17212F" : "FFFFFFFF" } };
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+      });
+      return;
+    }
+    row.getCell(horaCol).value = horario; if (evento.num) row.getCell(numCol).value = evento.num;
+    if (!classeTurmas.length) return;
+    const fimCol = classeCol + classeTurmas.length - 1;
+    if (fimCol > classeCol) ws.mergeCells(row.number, classeCol, row.number, fimCol);
+    const cell = row.getCell(classeCol); cell.value = evento.texto; cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFD9E2F3" } };
+    cell.font = { name: "Calibri", size: 10, bold: true, color: { argb: "FF263238" } }; cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+  }
+  for (let d = 0; d < 5; d++) {
+    const diaRow = ws.getRow(rowNum); ws.mergeCells(rowNum, 1, rowNum, total); const dh = diaRow.getCell(1); dh.value = ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA"][d];
+    dh.font = { name: "Calibri", size: 12, bold: true, color: { argb: "FFFFFFFF" } }; dh.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF4472C4" } }; dh.alignment = { horizontal: "center", vertical: "middle" }; diaRow.height = 22; rowNum++;
+    if (d === 0) {
+      const header = ws.getRow(rowNum); aplicarBase(header); header.height = 26;
+      grupos.A.forEach((t, i) => { const cell = header.getCell(leftClass + i); cell.value = turmaExcelInfo(t).titulo; cell.font = { name: "Calibri", size: 10, bold: true, color: { argb: "FFFFFFFF" } }; cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF5B9BD5" } }; });
+      grupos.B.forEach((t, i) => { const cell = header.getCell(rightClass + i); cell.value = turmaExcelInfo(t).titulo; cell.font = { name: "Calibri", size: 10, bold: true, color: { argb: "FFFFFFFF" } }; cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF70AD47" } }; });
+      rowNum++;
+    }
+    const eventosA = eventosExcel("A", d), eventosB = eventosExcel("B", d), n = Math.max(eventosA.length, eventosB.length);
+    for (let i = 0; i < n; i++) {
+      const row = ws.getRow(rowNum++); aplicarBase(row); row.height = 28;
+      escreverEvento(row, eventosA[i], "A", d, grupos.A); escreverEvento(row, eventosB[i], "B", d, grupos.B);
+      for (let c = 1; c <= total; c++) if (!row.getCell(c).fill || row.getCell(c).fill.type !== "pattern") row.getCell(c).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } };
+    }
+  }
+  const rodape = ws.getRow(rowNum + 1); ws.mergeCells(rowNum + 1, 1, rowNum + 1, total); rodape.getCell(1).value = `Emitido em ${new Date().toLocaleDateString("pt-BR")} · ${ESCOLA}`; rodape.getCell(1).font = { name: "Calibri", size: 9, italic: true, color: { argb: "FF666666" } }; rodape.getCell(1).alignment = { horizontal: "right" };
+  const buffer = await wb.xlsx.writeBuffer(), sufixo = norm(S.nome || "").replace(/\s+/g, "_").replace(/[^a-z0-9_-]/g, "");
+  baixarBufferExcel(buffer, `horario_aulas${sufixo ? "_" + sufixo : ""}.xlsx`);
+}
+$("xlsx").onclick = async () => {
+  const button = $("xlsx"); button.disabled = true;
+  try { await exportarExcelModelo(); msg("Arquivo Excel formatado no modelo da planilha enviado.", true); }
+  catch (error) { console.error("Falha ao exportar o Excel:", error); msg("Não foi possível gerar o Excel. Confira sua conexão e tente novamente."); }
+  finally { button.disabled = false; }
+};
+$("csv").onclick = () => {
+  const c = v => { let s = String(v ?? ""); if (/^[\s\u0000-\u001f]*[=+@-]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; }, lin = [["Turma", "Dia", "Início", "Fim", "Disciplina", "Professor"]];
+  S.turmas.forEach(t => { const sl = slots(t); garantirGrade(t).forEach((row, d) => row.forEach((dk, p) => { if (dk) lin.push([t, DIAS[d], hm(sl[d][p].ini), hm(sl[d][p].fim), nomeDisc(dk), nomeProf(profDe(t, dk))]); })); });
+  const blob = new Blob(["\ufeff" + lin.map(l => l.map(c).join(";")).join("\r\n")], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "horario_aulas.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+};
+window.addEventListener("beforeunload", e => { if (S && S.sujo) { e.preventDefault(); e.returnValue = ""; } });
+iniciar();
+</script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Substituições · JMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn-danger{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger);border-color:color-mix(in srgb,var(--danger) 45%,transparent)}.btn-danger:hover{background:color-mix(in srgb,var(--danger) 20%,transparent);border-color:var(--danger)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1100px}
+.abas{display:flex;gap:8px;flex-wrap:wrap}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+.btn.sm{padding:7px 14px;font-size:.84rem}.hint{margin:0;font-size:.84rem;color:var(--muted)}.acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tit{margin:14px 0 6px;font:700 1rem var(--display)}
+.aula{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px}
+.aula.cancelada{opacity:.6}.aula .hr{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.aula .hr small{display:block;font:600 .66rem var(--text);opacity:.85}.aula .tx{flex:1;min-width:200px}.aula .tx b{display:block}.aula .tx span{font-size:.84rem;color:var(--muted)}
+.tag.cancelada{background:var(--line);color:var(--muted)}.tag.warn{background:var(--warnbg);color:var(--warn)}.tag.bad{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.cand{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--bb);border-radius:14px;background:var(--card)}.cand .tx{flex:1;min-width:170px}.cand .tx span{display:block;font-size:.78rem;color:var(--muted)}
+.aula .acoes,.cand.col .acoes{flex:1 1 100%}
+.gh{margin:14px 0 6px;font:700 .82rem var(--display);color:var(--blue);text-transform:uppercase;letter-spacing:.05em}
+.card{display:grid;gap:8px;padding:14px 16px;background:var(--light);border:1px solid var(--bb);border-radius:16px}.card-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.alerta{padding:12px 14px;border-radius:14px;background:var(--warnbg);color:var(--warn);font-size:.88rem}
+.alerta.bad{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 30%,transparent)}
+.tab{width:100%;border-collapse:collapse;font-size:.88rem}.tab th,.tab td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.tab th{color:var(--muted);font-weight:600}.tab td:not(:first-child),.tab th:not(:first-child){text-align:center}
+.in.sel2{padding:8px 10px;width:auto}
+@media print{#ficha .tab td,#ficha .tab th{font-size:9.5pt;vertical-align:top}#ficha th{border:1px solid #000;padding:4px 6px;background:#eee}#ficha td{padding:4px 6px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>SUBSTITUIÇÕES<small>Cobertura de aulas</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden><h2 style="justify-content:center">Acesso restrito</h2><p>Entre com seu e-mail institucional.</p><button class="btn btn-primary" id="entrar">Entrar com Google</button></section>
+  <section class="panel center" id="telaNegado" hidden><h2 style="justify-content:center">Acesso restrito à direção</h2><p><b id="emailNegado"></b> não tem permissão para esta página.</p><button class="btn btn-ghost" id="sair2">Sair</button></section>
+  <section class="panel center" id="telaErro" hidden><h2 style="justify-content:center">Não foi possível carregar</h2><p id="erroGeral" role="alert">Verifique sua conexão e tente novamente.</p><button class="btn btn-primary" id="tentarNovamente">Tentar novamente</button></section>
+
+  <div id="app" hidden style="display:contents">
+    <div class="abas" id="abas"><button class="btn btn-ghost" data-aba="subs">Aulas a cobrir</button><button class="btn btn-ghost" data-aba="aus">Ausências</button><button class="btn btn-ghost" data-aba="rel">Relatório</button><button class="btn btn-ghost" data-aba="reg">Regras</button><button class="btn btn-ghost" data-aba="cad">Cadastros</button></div>
+    <p class="msg" id="msg" role="alert"></p>
+
+    <section class="panel" id="s-subs">
+      <div class="head"><div><h2>Aulas a cobrir</h2><p class="sub" id="subTxt"></p></div><button class="btn btn-ghost sm" id="atualizar">Atualizar</button></div>
+      <div class="form">
+        <label class="f">De<input class="in" type="date" id="fDe"></label><label class="f">Até<input class="in" type="date" id="fAte"></label>
+        <div class="grp full" role="radiogroup" aria-label="Situação">Mostrar<div class="chips">
+          <label class="chip"><input type="radio" name="fst" value="pendente" checked>Sem substituto</label><label class="chip"><input type="radio" name="fst" value="atribuida">Atribuídas</label>
+          <label class="chip"><input type="radio" name="fst" value="cancelada">Canceladas</label><label class="chip"><input type="radio" name="fst" value="todas">Todas</label></div></div>
+        <div class="full" id="filtroAus" hidden><span class="tag warn" id="filtroAusTxt"></span> <button class="btn btn-ghost sm" id="limparAus">Ver todas as ausências</button></div>
+      </div>
+      <div id="listaSubs" style="margin-top:6px"></div>
+    </section>
+
+    <section class="panel" id="s-aus" hidden>
+      <div class="head"><div><h2>Registrar ausência</h2><p class="sub">As aulas do professor no período viram “aulas a cobrir”, segundo o horário oficial</p></div></div>
+      <div class="form">
+        <div class="grp full" role="radiogroup" aria-label="Professor ausente">Professor(a) ausente<div class="chips grade" id="aProfs"></div></div>
+        <label class="f">Primeiro dia<input class="in" type="date" id="aIni"></label><label class="f">Último dia<input class="in" type="date" id="aFim"></label>
+        <div class="grp full" role="radiogroup" aria-label="Período do dia">Período<div class="chips"><label class="chip"><input type="radio" name="aper" value="dia" checked>Dia inteiro</label><label class="chip"><input type="radio" name="aper" value="parte">Só parte do dia</label></div></div>
+        <label class="f" id="aHorasBox" hidden>Das<input class="in" type="time" id="aHi"></label><label class="f" id="aHorasBox2" hidden>Até<input class="in" type="time" id="aHf"></label>
+        <label class="f full">Motivo (opcional)<input class="in" id="aMotivo" maxlength="200" placeholder="Ex.: atestado, licença, curso" autocomplete="off"></label>
+        <div class="full acoes"><button class="btn btn-primary" id="aSalvar">Registrar ausência e gerar aulas a cobrir</button><label class="chip"><input type="checkbox" id="aAvisar" checked>Avisar os substitutos</label></div>
+      </div>
+      <h3 class="tit" style="margin-top:22px">Ausências recentes e futuras</h3>
+      <div id="listaAus" style="display:grid;gap:10px"></div>
+    </section>
+
+    <section class="panel" id="s-rel" hidden>
+      <div class="head"><div><h2>Relatório de substituições</h2><p class="sub">Quem cobriu quantas aulas, e por qual critério da ordem de prioridade</p></div></div>
+      <div class="form">
+        <label class="f">De<input class="in" type="date" id="rDe"></label><label class="f">Até<input class="in" type="date" id="rAte"></label>
+        <div class="full acoes"><button class="btn btn-ghost" id="rVer">Ver na tela</button><button class="btn btn-primary" id="rPdf">Gerar PDF / imprimir</button><button class="btn btn-ghost" id="rCsv">Baixar planilha (CSV)</button></div>
+      </div>
+      <div id="relRes" style="display:grid;gap:12px;margin-top:16px"></div>
+    </section>
+
+    <section class="panel" id="s-reg" hidden>
+      <div class="head"><div><h2>Regras das substituições</h2><p class="sub">Escolha a ordem de quem é sugerido, bloqueie professores e defina se precisa já dar aula na turma</p></div></div>
+      <div id="regAviso"></div>
+      <h3 class="tit">Ordem de prioridade</h3>
+      <p class="hint">O sistema sugere primeiro o grupo que está no topo. Use as setas para mudar a ordem; desmarque “Usar” para nunca sugerir um grupo. Em cada grupo, escolha se o professor precisa já dar aula na turma da aula a cobrir.</p>
+      <div id="regGrupos" style="display:grid;gap:8px;margin-top:10px"></div>
+      <div class="grp" role="radiogroup" aria-label="Critério" style="margin-top:14px">Dentro de cada grupo, vem primeiro quem tem…<div class="chips" id="regCrit"></div></div>
+      <div class="acoes" style="margin-top:12px"><button class="btn btn-primary" id="regSalvar">Salvar ordem e regras</button></div>
+      <h3 class="tit" style="margin-top:24px">Professores bloqueados</h3>
+      <p class="hint">Quem está bloqueado não é sugerido e não pode ser atribuído nas datas do bloqueio. Deixe as datas em branco para bloquear sem prazo.</p>
+      <div class="form" style="margin-top:10px">
+        <label class="f">Professor(a)<select class="in" id="blProf"></select></label><label class="f">Motivo (opcional)<input class="in" id="blMotivo" maxlength="150" autocomplete="off"></label>
+        <label class="f">Bloqueado a partir de<input class="in" type="date" id="blDe"></label><label class="f">Até<input class="in" type="date" id="blAte"></label>
+        <div class="full acoes"><button class="btn btn-ghost" id="blAdd">Bloquear</button></div>
+      </div>
+      <div id="blLista" style="display:grid;gap:10px;margin-top:12px"></div>
+    </section>
+
+    <section class="panel" id="s-cad" hidden>
+      <div class="head"><div><h2>Cadastros</h2><p class="sub">Áreas, PCA e CGPG que definem a ordem das substituições</p></div></div>
+      <div id="cadRes" style="display:grid;gap:14px"></div>
+    </section>
+  </div>
+</main>
+
+<dialog id="dlg">
+  <div class="d-head"><h3 id="dTitulo">Escolher substituto</h3><button class="x" id="dFechar" aria-label="Fechar janela">&times;</button></div>
+  <div class="d-body" id="dCorpo"></div>
+  <div class="d-foot"><p class="msg" id="dMsg" role="alert" style="margin-right:auto"></p><label class="chip" style="margin-right:6px"><input type="checkbox" id="dAvisar" checked>Avisar o professor</label><button class="btn btn-ghost" id="dOk">Fechar</button></div>
+</dialog>
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hoje = () => new Date().toLocaleDateString("sv");
+const addDias = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return d.toLocaleDateString("sv"); };
+const fmt = d => d ? String(d).split("-").reverse().join("/") : "—";
+const NOMES_DIA = ["seg", "ter", "qua", "qui", "sex", "sáb", "dom"];
+const rotuloDia = iso => `${NOMES_DIA[(new Date(iso + "T12:00:00").getDay() + 6) % 7]} ${fmt(iso).slice(0, 5)}`;
+const marcado = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+const msg = (t, ok) => { $("msg").textContent = t; $("msg").className = "msg" + (ok ? " ok" : ""); if (t) scrollTo({ top: 0, behavior: "smooth" }); };
+const dmsg = (t, ok) => { $("dMsg").textContent = t; $("dMsg").className = "msg" + (ok ? " ok" : ""); };
+const GRUPOS = ["Mesma área", "Outras áreas", "PCA da área", "PCA de outra área", "CGPG"];
+let grupos = [], criterio = "carga", bloqueados = [], regrasOk = true, perfil, profs = [], nomes = {}, areas = {}, profAreas = {}, funcoes = [], diasSem = [], ausencias = [], contagem = {}, subs = [], subAtual = null, soAusencia = null, emailsProf = [];
+const nome = e => nomes[e] || e || "—";
+const primeiro = e => nome(e).split(" ")[0];
+
+function tela(n) { ["Carregando","Login","Negado","Erro"].forEach(x => $("tela"+x).hidden = x !== n); $("sessao").hidden = !(n === "App" || n === "Negado"); $("app").hidden = n !== "App"; }
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout; $("sair2").onclick = logout; $("tentarNovamente").onclick = () => { tela("Carregando"); iniciar(); };
+function traduzir(m) {
+  m = String(m || "");
+  if (/indisponivel/.test(m)) return "Esta pessoa não pode assumir esta aula: está ocupada neste horário (aula, outra substituição ou ausência) ou fica fora das regras de prioridade.";
+  if (/sem permissao/.test(m)) return "Você não tem permissão para esta ação.";
+  if (/cancelada/.test(m)) return "Esta aula foi cancelada.";
+  if (/ausencia inexistente|substituicao inexistente/.test(m)) return "Registro não encontrado. Atualize a página.";
+  if (/duplicate|unique/.test(m)) return "Já existe um registro igual.";
+  return "Não foi possível concluir" + (m ? ` (${m}).` : ". Tente novamente.");
+}
+
+async function iniciar() {
+  try {
+    const { data, error: ae } = await sb.auth.getSession(); if (ae) throw ae;
+    const session = data?.session; if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+    const email = (session.user.email || "").toLowerCase(); if (!email) throw new Error("sem e-mail");
+    const { data: p, error: pe } = await sb.from("perfis").select("*").eq("email", email).maybeSingle(); if (pe) throw pe;
+    if (!p || !p.ativo || p.papel !== "direcao") { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+    perfil = p; $("olaNome").textContent = "Olá, " + (p.nome || email).split(" ")[0] + "!"; $("avatar").textContent = (p.nome || email)[0].toUpperCase();
+    await carregarBase();
+    $("fDe").value = hoje(); $("fAte").value = addDias(hoje(), 30); $("rDe").value = hoje().slice(0, 8) + "01"; $("rAte").value = hoje(); $("aIni").value = hoje(); $("aFim").value = hoje();
+    tela("App"); aba("subs"); await recarregar();
+  } catch (e) { console.error("Falha ao iniciar:", e); $("erroGeral").textContent = "Falha ao consultar os dados. Confira a conexão e se o SQL das substituições foi executado."; tela("Erro"); }
+}
+async function carregarBase() {
+  const [p, a, pa, f, ds] = await Promise.all([sb.from("perfis").select("email,nome,papel,ativo").order("nome"), sb.from("areas").select("*").order("id"), sb.from("prof_areas").select("*"), sb.from("funcoes").select("*"), sb.from("dias_sem_aula").select("*").order("data")]);
+  for (const r of [p, a, pa, f, ds]) if (r.error) throw r.error;
+  profs = p.data || []; nomes = {}; profs.forEach(x => nomes[x.email] = x.nome);
+  areas = {}; (a.data || []).forEach(x => areas[x.id] = x.nome);
+  profAreas = {}; (pa.data || []).forEach(x => (profAreas[x.email] ||= []).push(x.area_id));
+  funcoes = f.data || []; diasSem = ds.data || [];
+  const fe = new Set(funcoes.map(x => x.email));
+  emailsProf = profs.filter(x => x.ativo && (x.papel === "professor" || fe.has(x.email))).map(x => x.email);
+  $("aProfs").innerHTML = emailsProf.map(e => `<label class="chip"><input type="radio" name="aprof" value="${esc(e)}">${esc(nome(e))}</label>`).join("");
+  const [g, o, b] = await Promise.all([sb.from("substituicao_grupos").select("*").order("ordem"), sb.from("substituicao_opcoes").select("*").eq("id", 1).maybeSingle(), sb.from("substitutos_bloqueados").select("*").order("criado_em", { ascending: false })]);
+  regrasOk = !(g.error || o.error || b.error);
+  grupos = regrasOk ? (g.data || []) : GRUPOS.map((n, i) => ({ grupo: n, ordem: i + 1, ativo: true, turma_modo: "indiferente" }));
+  criterio = (o.data && o.data.criterio) || "carga"; bloqueados = regrasOk ? (b.data || []) : [];
+}
+async function recarregar() { await Promise.all([carregarAus(), carregarSubs()]); renderSubs(); renderAus(); renderCad(); }
+async function carregarSubs() {
+  const de = $("fDe").value, ate = $("fAte").value, st = marcado("fst") || "pendente";
+  let q = sb.from("substituicoes").select("*").gte("data", de).lte("data", ate).order("data", { ascending: true }).order("ini", { ascending: true }).limit(2000);
+  if (st !== "todas") q = q.eq("status", st); if (soAusencia) q = q.eq("ausencia_id", soAusencia);
+  const { data, error } = await q; if (error) { console.error(error); msg("Não foi possível carregar as aulas."); return; } subs = data || [];
+}
+async function carregarAus() {
+  const { data, error } = await sb.from("ausencias_prof").select("*").gte("data_fim", addDias(hoje(), -30)).order("data_inicio", { ascending: false }).limit(100);
+  if (error) { console.error(error); return; } ausencias = data || []; contagem = {};
+  if (!ausencias.length) return;
+  const { data: c } = await sb.from("substituicoes").select("ausencia_id,status").in("ausencia_id", ausencias.map(a => a.id)).limit(5000);
+  (c || []).forEach(x => { const k = contagem[x.ausencia_id] ||= { pendente: 0, atribuida: 0, cancelada: 0 }; k[x.status]++; });
+}
+function aba(n) { ["subs","aus","rel","reg","cad"].forEach(x => $("s-"+x).hidden = x !== n); document.querySelectorAll("#abas .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n)); if (n === "reg") renderReg(); }
+document.querySelectorAll("#abas .btn").forEach(b => b.onclick = () => aba(b.dataset.aba));
+$("atualizar").onclick = async () => { msg(""); await recarregar(); };
+["fDe", "fAte"].forEach(id => $(id).onchange = async () => { await carregarSubs(); renderSubs(); });
+document.querySelectorAll('input[name="fst"]').forEach(r => r.onchange = async () => { await carregarSubs(); renderSubs(); });
+$("limparAus").onclick = async () => { soAusencia = null; await carregarSubs(); renderSubs(); };
+
+/* ---------- Aulas a cobrir ---------- */
+const TAG = { pendente: ["warn", "Sem substituto"], atribuida: ["concluida", "Atribuída"], cancelada: ["cancelada", "Cancelada"] };
+function linhaSub(s) {
+  const [cls, txt] = TAG[s.status], bot = s.status === "pendente" ? `<button class="btn btn-primary sm" data-esc="${s.id}">Escolher substituto</button><button class="btn btn-ghost sm" data-can="${s.id}">Cancelar aula</button>`
+    : s.status === "atribuida" ? `<button class="btn btn-ghost sm" data-esc="${s.id}">Trocar</button><button class="btn btn-ghost sm" data-lib="${s.id}">Liberar</button>` : "";
+  return `<li class="aula ${s.status}"><span class="hr">${esc(s.ini)}<small>${esc(s.fim)}</small></span>
+    <div class="tx"><b>${esc(s.turma)} · ${esc(s.disciplina)}</b><span>Ausente: ${esc(nome(s.prof_ausente))}${s.status === "atribuida" ? ` · Substituto: <b>${esc(nome(s.substituto_email))}</b> (${esc(s.grupo || "")})` : ""}${s.status === "cancelada" && s.obs ? " · " + esc(s.obs) : ""}</span></div>
+    <div class="acoes"><span class="tag ${cls}">${txt}</span>${bot}</div></li>`;
+}
+function renderSubs() {
+  $("filtroAus").hidden = !soAusencia;
+  if (soAusencia) { const a = ausencias.find(x => x.id === soAusencia); $("filtroAusTxt").textContent = a ? "Só a ausência de " + nome(a.professor_email) + " (" + fmt(a.data_inicio) + " a " + fmt(a.data_fim) + ")" : "Só uma ausência"; }
+  const pend = subs.filter(s => s.status === "pendente").length;
+  $("subTxt").textContent = subs.length ? `${subs.length} aula(s) no período · ${pend} sem substituto` : "Nenhuma aula neste filtro";
+  const por = {}; subs.forEach(s => (por[s.data] ||= []).push(s));
+  $("listaSubs").innerHTML = Object.keys(por).sort().map(d => `<h3 class="tit">${rotuloDia(d)}</h3><ul class="list">${por[d].map(linhaSub).join("")}</ul>`).join("") || '<p class="vazio">Nenhuma aula a cobrir neste período.</p>';
+}
+$("listaSubs").onclick = async e => {
+  const b = e.target.closest("button"); if (!b) return; const d = b.dataset;
+  if (d.esc) abrirEscolha(subs.find(s => s.id === +d.esc));
+  else if (d.lib) { if (!confirm("Tirar o substituto desta aula? Ela volta para “sem substituto”.")) return; const { error } = await sb.rpc("liberar_substituicao", { p_sub: +d.lib }); if (error) return msg(traduzir(error.message)); msg("Substituto removido.", true); await recarregar(); }
+  else if (d.can) { const obs = prompt("Cancelar esta aula (por exemplo, aula dispensada ou sem substituto possível). Motivo:", ""); if (obs === null) return; const { error } = await sb.rpc("cancelar_substituicao", { p_sub: +d.can, p_obs: obs.trim() || null }); if (error) return msg(traduzir(error.message)); msg("Aula cancelada.", true); await recarregar(); }
+};
+
+/* ---------- Escolher substituto ---------- */
+async function abrirEscolha(s) {
+  if (!s) return; subAtual = s; dmsg(""); $("dTitulo").textContent = `${s.turma} · ${s.disciplina}`;
+  $("dCorpo").innerHTML = `<p class="hint">${rotuloDia(s.data)} · ${esc(s.ini)}–${esc(s.fim)} · ausente: ${esc(nome(s.prof_ausente))}${s.status === "atribuida" ? ` · hoje: <b>${esc(nome(s.substituto_email))}</b>` : ""}</p><p class="hint">Carregando sugestões…</p>`;
+  $("dlg").showModal();
+  const { data, error } = await sb.rpc("sugerir_substitutos", { p_sub: s.id });
+  if (error) { console.error(error); $("dCorpo").innerHTML += '<div class="alerta">Não foi possível carregar as sugestões.</div>'; return; }
+  const por = {}; (data || []).forEach(c => (por[c.grupo] ||= []).push(c));
+  const cartao = c => {
+    const atual = s.substituto_email === c.email;
+    const novaCarga = c.carga + 1;
+    const btnAtrib = atual
+      ? `<button class="btn btn-primary sm" data-atrib="${esc(c.email)}">Manter</button>`
+      : c.acima_limite
+        ? `<button class="btn btn-danger sm" data-atrib="${esc(c.email)}" data-excede="${novaCarga}" title="Atenção: este professor ultrapassará 32 aulas na semana">Atribuir (${novaCarga}ª aula)</button>`
+        : `<button class="btn btn-primary sm" data-atrib="${esc(c.email)}">Atribuir</button>`;
+    const tagIntervalo = c.quebra_intervalo
+      ? `<span class="tag ${c.quebra_intervalo === "Cancela almoço" ? "bad" : "warn"}">⚠ ${esc(c.quebra_intervalo)}</span>`
+      : "";
+    return `<div class="cand col"><div class="tx"><b>${esc(c.nome)}</b><span>${esc(c.areas || "sem área cadastrada")} · ${c.aulas_semana} aula(s) na grade + ${c.subs_semana} substituição(ões) na semana · ${c.aulas_dia} aula(s) neste dia</span></div>
+      <div class="acoes">${c.acima_limite ? `<span class="tag bad">⚠ ${c.carga} aulas na semana (irá para ${novaCarga})</span>` : `<span class="tag cancelada">${c.carga} na semana</span>`}
+      <span class="tag ${c.na_escola ? "concluida" : "warn"}">${c.na_escola ? "Na escola neste dia" : "Sem aula neste dia"}</span>
+      ${c.da_turma ? '<span class="tag concluida">Já dá aula nesta turma</span>' : ""}
+      ${tagIntervalo}
+      ${btnAtrib}<button class="btn btn-ghost sm" data-bloq="${esc(c.email)}" title="Não sugerir mais este professor">Bloquear</button></div></div>`;
+  };
+  const ordem = [...GRUPOS, ...Object.keys(por).filter(g => !GRUPOS.includes(g))].filter(g => por[g]);
+  const outras = emailsProf.filter(e => e !== s.prof_ausente && !bloqueado(e, s.data)).sort((a, b) => nome(a).localeCompare(nome(b), "pt"));
+  const temAcima = (data || []).some(c => c.acima_limite);
+  $("dCorpo").innerHTML = `<p class="hint">${rotuloDia(s.data)} · ${esc(s.ini)}–${esc(s.fim)} · ausente: ${esc(nome(s.prof_ausente))}${s.status === "atribuida" ? ` · hoje: <b>${esc(nome(s.substituto_email))}</b>` : ""}</p>
+    <p class="hint">Ordem: quem preserva os 3 intervalos → mesma área → outras áreas → PCA → CGPG. Em cada grupo, quem tem menos aulas vem primeiro.</p>` +
+    (temAcima ? `<div class="alerta bad"><b>Atenção:</b> professores marcados em vermelho já atingiram 32 aulas na semana. A atribuição automática nunca ultrapassa 32 aulas; na atribuição manual, confirme com cautela.</div>` : "") +
+    (ordem.map(g => `<h4 class="gh">${esc(g)}</h4><div style="display:grid;gap:8px">${por[g].map(cartao).join("")}</div>`).join("") || '<div class="alerta">Ninguém está livre neste horário. Você pode escolher alguém fora da regra abaixo ou cancelar a aula.</div>') +
+    `<details style="margin-top:12px"><summary class="hint" style="cursor:pointer">Escolher outra pessoa (fora da regra)</summary><div class="acoes" style="margin-top:8px"><select class="in sel2" id="dOutra"><option value="">Selecione…</option>${outras.map(e => `<option value="${esc(e)}">${esc(nome(e))}</option>`).join("")}</select><button class="btn btn-ghost sm" id="dOutraBtn">Atribuir fora da regra</button></div></details>`;
+}
+async function atribuir(email, forcar) {
+  dmsg("Atribuindo…", true);
+  const { data, error } = await sb.rpc("atribuir_substituto", { p_sub: subAtual.id, p_email: email, p_avisar: $("dAvisar").checked, p_forcar: !!forcar });
+  if (error) {
+    if (/LIMITE_32_AULAS/.test(error.message) && !forcar) {
+      const t = error.message.replace(/^[\s\S]*?LIMITE_32_AULAS:\s*/, "");
+      dmsg("⚠ ATENÇÃO: " + t, false);
+      if (confirm("⚠ AVISO: ULTRAPASSA 32 AULAS NA SEMANA!\n\n" + t + "\n\nDeseja atribuir manualmente mesmo assim?")) return atribuir(email, true);
+      return;
+    }
+    if (/PROFESSOR_BLOQUEADO/.test(error.message)) return dmsg(error.message.replace(/^[\s\S]*PROFESSOR_BLOQUEADO:\s*/, ""));
+    return dmsg(traduzir(error.message));
+  }
+  if (data && data.aviso_id) sb.functions.invoke("enviar-push", { body: { aviso_id: data.aviso_id } });
+  $("dlg").close(); msg(`Atribuída a ${nome(email)}${data && data.grupo ? " (" + data.grupo + ")" : ""}${data && data.carga_semana ? " · " + data.carga_semana + " aulas na semana" : ""}.`, true); await recarregar();
+}
+$("dCorpo").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.bloq) bloquear(b.dataset.bloq);
+  else if (b.dataset.atrib) {
+    const em = b.dataset.atrib, exc = b.dataset.excede;
+    if (exc) {
+      dmsg(`⚠ ATENÇÃO: ${nome(em)} ficará com ${exc} aulas na semana (acima do limite de 32).`, false);
+      if (!confirm(`⚠ AVISO: ULTRAPASSA 32 AULAS NA SEMANA!\n\n${nome(em)} irá para ${exc} aulas nesta semana (o limite é 32).\n\nDeseja confirmar a atribuição manual?`)) return;
+      atribuir(em, true);
+    } else {
+      atribuir(em, false);
+    }
+  }
+  else if (b.id === "dOutraBtn") {
+    const v = $("dOutra").value;
+    if (!v) return dmsg("Escolha uma pessoa.");
+    if (!confirm(`Atribuir a ${nome(v)} fora da regra de prioridade?`)) return;
+    atribuir(v, false);
+  }
+});
+$("dFechar").onclick = $("dOk").onclick = () => $("dlg").close();
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
+
+/* ---------- Ausências ---------- */
+document.querySelectorAll('input[name="aper"]').forEach(r => r.onchange = () => { const p = marcado("aper") === "parte"; $("aHorasBox").hidden = $("aHorasBox2").hidden = !p; });
+$("aSalvar").onclick = async () => {
+  const email = marcado("aprof"), ini = $("aIni").value, fim = $("aFim").value, parte = marcado("aper") === "parte", hi = $("aHi").value, hf = $("aHf").value;
+  if (!email || !ini || !fim) return msg("Escolha o professor e as datas.");
+  if (fim < ini) return msg("O último dia não pode ser antes do primeiro.");
+  if (parte && (!hi || !hf || hf <= hi)) return msg("Informe o horário inicial e o final (o final precisa ser depois do inicial).");
+  $("aSalvar").disabled = true; msg("Registrando…", true);
+  const { data: id, error } = await sb.rpc("registrar_ausencia", { p_email: email, p_inicio: ini, p_fim: fim, p_motivo: $("aMotivo").value.trim() || null, p_hora_ini: parte ? hi : null, p_hora_fim: parte ? hf : null });
+  $("aSalvar").disabled = false; if (error) { console.error(error); return msg(traduzir(error.message)); }
+  const { count } = await sb.from("substituicoes").select("id", { count: "exact", head: true }).eq("ausencia_id", id);
+  $("aMotivo").value = "";
+  if (!count) { msg(`Ausência de ${nome(email)} registrada, mas ele(a) não tem aulas nesse período no horário oficial (ou são dias sem aula).`); await recarregar(); return; }
+  msg(`Ausência registrada: ${count} aula(s) a cobrir.`, true); await recarregar();
+  const av1 = $("aAvisar").checked;
+  if (confirm(`Atribuir automaticamente os substitutos das ${count} aula(s) agora?\n\n${av1 ? "Os substitutos serão avisados (um aviso por pessoa)." : "Modo silencioso: nenhum aviso será enviado aos professores."}`)) await automatico(id);
+};
+function renderAus() {
+  $("listaAus").innerHTML = ausencias.map(a => { const c = contagem[a.id] || { pendente: 0, atribuida: 0, cancelada: 0 }, total = c.pendente + c.atribuida + c.cancelada;
+    return `<div class="card"><div class="card-h"><b>${esc(nome(a.professor_email))}</b><span class="tag ${c.pendente ? "warn" : "concluida"}">${total ? (c.pendente ? c.pendente + " sem substituto" : "Tudo coberto") : "Sem aulas a cobrir"}</span></div>
+      <p class="hint">${fmt(a.data_inicio)}${a.data_fim !== a.data_inicio ? " a " + fmt(a.data_fim) : ""}${a.hora_ini ? " · das " + esc(a.hora_ini) + " às " + esc(a.hora_fim) : " · dia inteiro"}${a.motivo ? " · " + esc(a.motivo) : ""}</p>
+      <p class="hint">${total} aula(s): ${c.atribuida} atribuída(s), ${c.pendente} pendente(s), ${c.cancelada} cancelada(s)</p>
+      <div class="acoes"><button class="btn btn-ghost sm" data-ver="${a.id}">Ver as aulas</button>${c.pendente ? `<button class="btn btn-primary sm" data-auto="${a.id}">Atribuir automaticamente</button>` : ""}<button class="btn btn-danger sm" data-rmaus="${a.id}" style="margin-left:auto">Remover ausência</button></div></div>`; }).join("") || '<p class="vazio">Nenhuma ausência registrada recentemente.</p>';
+}
+$("listaAus").onclick = async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.ver) { soAusencia = +b.dataset.ver; $("fDe").value = "2000-01-01"; $("fAte").value = "2100-12-31"; document.querySelector('input[name="fst"][value="todas"]').checked = true; await carregarSubs(); renderSubs(); aba("subs"); }
+  else if (b.dataset.auto) { const av2 = $("aAvisar").checked; if (confirm(`Atribuir automaticamente todas as aulas sem substituto desta ausência?\n\n${av2 ? "Os substitutos serão avisados (um aviso por pessoa)." : "Modo silencioso: nenhum aviso será enviado aos professores."}`)) await automatico(+b.dataset.auto); }
+  else if (b.dataset.rmaus) {
+    const id = +b.dataset.rmaus, a = ausencias.find(x => x.id === id);
+    const desc = a ? `${nome(a.professor_email)} (${fmt(a.data_inicio)}${a.data_fim !== a.data_inicio ? " a " + fmt(a.data_fim) : ""})` : "esta ausência";
+    if (!confirm(`Remover a ausência de ${desc}?\n\nTodas as substituições vinculadas serão canceladas e os avisos enviados aos substitutos serão excluídos.`)) return;
+    b.disabled = true; msg("Removendo ausência…", true);
+    const { error } = await sb.rpc("remover_ausencia", { p_ausencia: id });
+    b.disabled = false;
+    if (error) { console.error(error); return msg(traduzir(error.message)); }
+    if (soAusencia === id) soAusencia = null;
+    msg("Ausência removida, substituições canceladas e avisos excluídos.", true);
+    await recarregar();
+  }
+};
+async function automatico(id) {
+  msg("Atribuindo…", true);
+  const { data, error } = await sb.rpc("atribuir_automatico", { p_ausencia: id, p_avisar: false });
+  if (error) { console.error(error); return msg(traduzir(error.message)); }
+  if ($("aAvisar").checked) {
+    // um único aviso por substituto, listando todas as aulas dele
+    const { data: feitas } = await sb.from("substituicoes").select("*").eq("ausencia_id", id).eq("status", "atribuida").order("data").order("ini");
+    const por = {}; (feitas || []).filter(s => !s.aviso_id).forEach(s => (por[s.substituto_email] ||= []).push(s));
+    for (const em of Object.keys(por)) {
+      const linhas = por[em].map(s => `• ${rotuloDia(s.data)}, ${s.ini}–${s.fim} · ${s.turma} · ${s.disciplina} (ausente: ${nome(s.prof_ausente)})`).join("\n");
+      const { data: aviso } = await sb.rpc("enviar_aviso", { p_titulo: "Substituições designadas", p_texto: `Você foi designado(a) para substituir:\n\n${linhas}`, p_papeis: [], p_grupos: [], p_emails: [em] });
+      if (aviso) {
+        await sb.from("substituicoes").update({ aviso_id: aviso }).in("id", por[em].map(s => s.id));
+        sb.functions.invoke("enviar-push", { body: { aviso_id: aviso } });
+      }
+    }
+  }
+  msg(`${data.atribuidas} aula(s) atribuída(s)` + (data.sem_candidato ? `; ${data.sem_candidato} sem candidato livre abaixo de 32 aulas (escolha manualmente ou cancele)` : "") + ".", !data.sem_candidato);
+  await recarregar();
+}
+
+/* ---------- Relatório ---------- */
+let relDados = [];
+const COLS = [["Mesma área", "Mesma área"], ["Outras áreas", "Outras áreas"], ["PCA", g => /^PCA/.test(g)], ["CGPG", "CGPG"], ["Manual", g => /manual/i.test(g)]];
+const casa = (g, c) => typeof c === "function" ? c(g || "") : (g || "") === c;
+async function carregarRel() {
+  const de = $("rDe").value, ate = $("rAte").value; if (!de || !ate || de > ate) { msg("Confira as datas do relatório."); return false; }
+  const { data, error } = await sb.from("substituicoes").select("*").eq("status", "atribuida").gte("data", de).lte("data", ate).order("data").order("ini").limit(5000);
+  if (error) { console.error(error); msg("Não foi possível carregar o relatório."); return false; } relDados = data || []; msg(relDados.length ? "" : "Nenhuma substituição atribuída nesse período."); return relDados.length > 0;
+}
+function resumoRel() { const g = {}; relDados.forEach(s => (g[s.substituto_email] ||= []).push(s)); return Object.entries(g).sort((a, b) => b[1].length - a[1].length || nome(a[0]).localeCompare(nome(b[0]), "pt")); }
+function tabelaRel(r) { return `<table class="tab"><tr><th>Substituto(a)</th><th>Aulas</th>${COLS.map(c => `<th>${c[0]}</th>`).join("")}</tr>` +
+  r.map(([e, l]) => `<tr><td>${esc(nome(e))}</td><td><b>${l.length}</b></td>${COLS.map(c => `<td>${l.filter(s => casa(s.grupo, c[1])).length || ""}</td>`).join("")}</tr>`).join("") + `<tr style="font-weight:700"><td>Total</td><td>${relDados.length}</td>${COLS.map(c => `<td>${relDados.filter(s => casa(s.grupo, c[1])).length || ""}</td>`).join("")}</tr></table>`; }
+const tabelaDet = () => `<table class="tab"><tr><th>Data</th><th>Horário</th><th>Turma · disciplina</th><th>Ausente</th><th>Substituto(a)</th><th>Critério</th></tr>` +
+  relDados.map(s => `<tr><td>${rotuloDia(s.data)}</td><td>${esc(s.ini)}–${esc(s.fim)}</td><td>${esc(s.turma)} · ${esc(s.disciplina)}</td><td>${esc(nome(s.prof_ausente))}</td><td>${esc(nome(s.substituto_email))}</td><td>${esc(s.grupo || "")}</td></tr>`).join("") + "</table>";
+$("rVer").onclick = async () => { if (await carregarRel()) $("relRes").innerHTML = `<h3 class="tit">Por substituto(a)</h3><div style="overflow-x:auto">${tabelaRel(resumoRel())}</div><h3 class="tit">Aula por aula</h3><div style="overflow-x:auto">${tabelaDet()}</div>`; else $("relRes").innerHTML = ""; };
+$("rPdf").onclick = async () => { if (!(await carregarRel())) return; $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>Substituições · ${fmt($("rDe").value)} a ${fmt($("rAte").value)}</h2><h3>Por substituto(a)</h3>${tabelaRel(resumoRel())}<h3>Aula por aula</h3>${tabelaDet()}<p style="font-size:9pt;margin-top:10px">Emitido por ${esc(perfil.nome)} em ${fmt(hoje())}.</p>`; window.print(); };
+$("rCsv").onclick = async () => { if (!(await carregarRel())) return;
+  const c = v => { let s = String(v ?? ""); if (/^[\s\u0000-\u001f]*[=+@-]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; }, lin = [["Data", "Início", "Fim", "Turma", "Disciplina", "Professor ausente", "Substituto", "Critério"]];
+  relDados.forEach(s => lin.push([fmt(s.data), s.ini, s.fim, s.turma, s.disciplina, nome(s.prof_ausente), nome(s.substituto_email), s.grupo || ""]));
+  const blob = new Blob(["\ufeff" + lin.map(l => l.map(c).join(";")).join("\r\n")], { type: "text/csv;charset=utf-8" }), a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = `substituicoes_${$("rDe").value}_a_${$("rAte").value}.csv`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
+
+/* ---------- Cadastros ---------- */
+function renderCad() {
+  const pcas = {}; funcoes.filter(f => f.funcao === "PCA").forEach(f => pcas[f.area_id] = f.email); const cgpg = funcoes.find(f => f.funcao === "CGPG");
+  const porArea = {}; Object.entries(profAreas).forEach(([e, ids]) => ids.forEach(i => (porArea[i] ||= []).push(e)));
+  const semArea = emailsProf.filter(e => !(profAreas[e] || []).length && !funcoes.some(f => f.email === e));
+  $("cadRes").innerHTML = `<div style="overflow-x:auto"><table class="tab"><tr><th>Área</th><th>PCA</th><th style="text-align:left">Professores</th></tr>` +
+    Object.entries(areas).map(([id, n]) => `<tr><td>${esc(n)}</td><td>${esc(pcas[id] ? nome(pcas[id]) : "— não cadastrado —")}</td><td style="text-align:left">${(porArea[id] || []).sort((a, b) => nome(a).localeCompare(nome(b), "pt")).map(e => esc(primeiro(e))).join(", ") || "—"}</td></tr>`).join("") +
+    `<tr><td><b>CGPG</b></td><td colspan="2" style="text-align:left">${esc(cgpg ? nome(cgpg.email) : "— não cadastrado —")}</td></tr></table></div>` +
+    (semArea.length ? `<div class="alerta">Professores sem área cadastrada (entram só em “outras áreas”): ${semArea.map(e => esc(nome(e))).join(", ")}.</div>` : "") +
+    `<p class="hint">Para alterar áreas, PCA e CGPG, use o Table Editor do Supabase (tabelas <b>prof_areas</b> e <b>funcoes</b>).</p>
+    <h3 class="tit">Dias sem aula (feriados e recessos)</h3><p class="hint">Estes dias não geram aulas a cobrir quando uma ausência é registrada.</p>
+    <div class="acoes"><input class="in" type="date" id="dsData" style="width:auto"><input class="in" id="dsMotivo" placeholder="Motivo (opcional)" style="width:220px"><button class="btn btn-ghost sm" id="dsAdd">Adicionar</button></div>
+    <div class="chips">${diasSem.map(d => `<button class="btn btn-ghost sm" data-rmds="${d.data}" title="Remover">${fmt(d.data)}${d.motivo ? " · " + esc(d.motivo) : ""} ✕</button>`).join("") || '<span class="hint">Nenhum dia cadastrado.</span>'}</div>`;
+}
+$("cadRes").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "dsAdd") { const v = $("dsData").value; if (!v) return msg("Escolha a data."); const { error } = await sb.from("dias_sem_aula").insert({ data: v, motivo: $("dsMotivo").value.trim() || null }); if (error) return msg(traduzir(error.message)); await carregarBase(); renderCad(); msg("Dia sem aula cadastrado.", true); }
+  else if (b.dataset.rmds) { const { error } = await sb.from("dias_sem_aula").delete().eq("data", b.dataset.rmds); if (error) return msg(traduzir(error.message)); await carregarBase(); renderCad(); }
+});
+/* ---------- Regras: ordem, exigência de turma e bloqueios ---------- */
+const DESC = { "Mesma área": "Professores da área da disciplina da aula", "Outras áreas": "Professores de outras áreas (ou sem área cadastrada)", "PCA da área": "Coordenador(a) da área da aula", "PCA de outra área": "Coordenadores das outras áreas", "CGPG": "Coordenação de Gestão Pedagógica Geral" };
+const MODOS = [["indiferente", "Tanto faz se dá aula na turma"], ["preferir", "Preferir quem já dá aula na turma"], ["exigir", "Só quem já dá aula na turma"]];
+const CRITERIOS = [["carga", "Menos aulas (grade + substituições da semana)"], ["subs_semana", "Menos substituições na semana"], ["aulas_dia", "Menos aulas no dia"], ["nome", "Ordem alfabética"]];
+const bloqueado = (email, data) => bloqueados.some(b => b.email === email && (!b.data_inicio || data >= b.data_inicio) && (!b.data_fim || data <= b.data_fim));
+function renderReg() {
+  $("regAviso").innerHTML = regrasOk ? "" : '<div class="alerta">Para usar estas regras, rode o <b>regras.sql</b> no Supabase. Enquanto isso, as sugestões seguem a ordem padrão e nada aqui é salvo.</div>';
+  grupos.sort((a, b) => a.ordem - b.ordem);
+  $("regGrupos").innerHTML = grupos.map((g, i) => `<div class="cand"><span class="tag cancelada">${i + 1}º</span><div class="tx"><b>${esc(g.grupo)}</b><span>${esc(DESC[g.grupo] || "")}</span></div>
+    <label class="chip"><input type="checkbox" data-gat="${esc(g.grupo)}"${g.ativo ? " checked" : ""}>Usar</label>
+    <select class="in sel2" data-gm="${esc(g.grupo)}" aria-label="Turma do professor">${MODOS.map(([v, t]) => `<option value="${v}"${g.turma_modo === v ? " selected" : ""}>${t}</option>`).join("")}</select>
+    <button class="btn btn-ghost sm" data-up="${i}" ${i === 0 ? "disabled" : ""} aria-label="Subir">↑</button><button class="btn btn-ghost sm" data-down="${i}" ${i === grupos.length - 1 ? "disabled" : ""} aria-label="Descer">↓</button></div>`).join("");
+  $("regCrit").innerHTML = CRITERIOS.map(([v, t]) => `<label class="chip"><input type="radio" name="rcrit" value="${v}"${criterio === v ? " checked" : ""}>${t}</label>`).join("");
+  $("blProf").innerHTML = '<option value="">Escolha o professor…</option>' + emailsProf.slice().sort((a, b) => nome(a).localeCompare(nome(b), "pt")).map(e => `<option value="${esc(e)}">${esc(nome(e))}</option>`).join("");
+  $("blLista").innerHTML = bloqueados.map(b => `<div class="card"><div class="card-h"><b>${esc(nome(b.email))}</b><button class="btn btn-ghost sm" data-desbloq="${esc(b.email)}">Desbloquear</button></div>
+    <p class="hint">${b.data_inicio || b.data_fim ? "De " + (b.data_inicio ? fmt(b.data_inicio) : "…") + " até " + (b.data_fim ? fmt(b.data_fim) : "…") : "Sem prazo"}${b.motivo ? " · " + esc(b.motivo) : ""}</p></div>`).join("") || '<p class="hint">Nenhum professor bloqueado.</p>';
+}
+$("s-reg").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return; const d = b.dataset;
+  if (d.up != null || d.down != null) { const i = +(d.up ?? d.down), j = d.up != null ? i - 1 : i + 1; if (j < 0 || j >= grupos.length) return; [grupos[i], grupos[j]] = [grupos[j], grupos[i]]; grupos.forEach((g, k) => g.ordem = k + 1); renderReg(); }
+  else if (b.id === "regSalvar") {
+    if (!regrasOk) return msg("Rode o regras.sql no Supabase antes de salvar.");
+    const crit = marcado("rcrit") || "carga";
+    const r1 = await sb.from("substituicao_grupos").upsert(grupos.map((g, k) => ({ grupo: g.grupo, ordem: k + 1, ativo: g.ativo, turma_modo: g.turma_modo })), { onConflict: "grupo" });
+    const r2 = await sb.from("substituicao_opcoes").upsert({ id: 1, criterio: crit }, { onConflict: "id" });
+    if (r1.error || r2.error) { console.error(r1.error || r2.error); return msg("Não foi possível salvar as regras."); }
+    criterio = crit; msg("Regras salvas. Valem para as próximas sugestões.", true);
+  }
+  else if (b.id === "blAdd") {
+    if (!regrasOk) return msg("Rode o regras.sql no Supabase antes de bloquear.");
+    const email = $("blProf").value, de = $("blDe").value || null, ate = $("blAte").value || null;
+    if (!email) return msg("Escolha o professor a bloquear."); if (de && ate && ate < de) return msg("A data final não pode ser antes da inicial.");
+    const { error } = await sb.from("substitutos_bloqueados").upsert({ email, motivo: $("blMotivo").value.trim() || null, data_inicio: de, data_fim: ate, criado_por: perfil.email }, { onConflict: "email" });
+    if (error) { console.error(error); return msg("Não foi possível bloquear."); }
+    $("blMotivo").value = ""; $("blDe").value = ""; $("blAte").value = ""; await carregarBase(); renderReg(); msg(`${nome(email)} bloqueado(a).`, true);
+  }
+  else if (d.desbloq) { const { error } = await sb.from("substitutos_bloqueados").delete().eq("email", d.desbloq); if (error) return msg("Não foi possível desbloquear."); await carregarBase(); renderReg(); msg(`${nome(d.desbloq)} desbloqueado(a).`, true); }
+});
+$("s-reg").addEventListener("change", e => {
+  const el = e.target, d = el.dataset, g = d.gat ? grupos.find(x => x.grupo === d.gat) : d.gm ? grupos.find(x => x.grupo === d.gm) : null; if (!g) return;
+  if (d.gat) g.ativo = el.checked; else g.turma_modo = el.value;
+});
+async function bloquear(email) {   // atalho dentro da janela de escolha
+  if (!regrasOk) return dmsg("Rode o regras.sql no Supabase para poder bloquear professores.");
+  const motivo = prompt(`Bloquear ${nome(email)} como substituto(a), sem prazo?\n\nMotivo (opcional). Para desfazer, use a aba Regras.`, ""); if (motivo === null) return;
+  const { error } = await sb.from("substitutos_bloqueados").upsert({ email, motivo: motivo.trim() || null, data_inicio: null, data_fim: null, criado_por: perfil.email }, { onConflict: "email" });
+  if (error) { console.error(error); return dmsg("Não foi possível bloquear."); }
+  await carregarBase(); abrirEscolha(subAtual);
+}
+
+iniciar();
+</script>
+</body>
+</html>

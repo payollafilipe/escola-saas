@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Faltas JMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.abas{display:flex;gap:8px;flex-wrap:wrap}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+.f-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px}
+.tag.resp{background:var(--light);color:var(--blue);border:1px solid var(--bb)}
+.tag.recusada{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.btn.sm{padding:7px 14px;font-size:.84rem}
+@media print{#ficha th{border:1px solid #000;padding:4px 8px;background:#eee;text-align:left}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>FALTAS<small>Aviso aos responsáveis</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden><h2 style="justify-content:center">Acesso restrito</h2><p>Entre com seu e-mail institucional.</p><button class="btn btn-primary" id="entrar">Entrar com Google</button></section>
+  <section class="panel center" id="telaNegado" hidden><h2 style="justify-content:center">E-mail não autorizado</h2><p><b id="emailNegado"></b> não está na lista de usuários desta escola.</p><button class="btn btn-ghost" id="sair2">Sair</button></section>
+
+  <div id="app" hidden style="display:contents">
+    <div class="abas" id="abas"><button class="btn btn-ghost" data-aba="lancar">Lançar faltas</button><button class="btn btn-ghost" data-aba="acomp">Acompanhar</button><button class="btn btn-ghost" data-aba="rel" id="abaRel" hidden>Relatório (PDF)</button><button class="btn btn-ghost" data-aba="alertas" id="abaAl" hidden>Alertas</button></div>
+
+    <section class="panel" id="s-lancar">
+      <div class="head"><div><h2>Lançar faltas</h2><p class="sub">Escolha a turma e toque em quem não veio</p></div></div>
+      <div class="form">
+        <label class="f full" style="max-width:240px">Data<input class="in" type="date" id="fDia"></label>
+        <div class="grp full" role="radiogroup" aria-label="Série e turma">Série e turma<div class="chips" id="lTurma"></div></div>
+        <div class="grp full">Quem faltou?<div class="chips grade" id="lAlunos"><p class="vazio">Escolha a turma primeiro</p></div></div>
+        <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="lancar">Lançar e preparar mensagens</button><p class="msg" id="msgL" role="alert"></p></div>
+      </div>
+    </section>
+
+    <section class="panel" id="s-acomp" hidden>
+      <div class="head"><div><h2>Acompanhar</h2><p class="sub" id="subA"></p></div><input class="in" type="date" id="aDia" style="width:auto" aria-label="Data"></div>
+      <ul class="list" id="lista"></ul><p class="msg" id="msgA" role="alert" style="margin-top:10px"></p>
+    </section>
+
+    <section class="panel" id="s-rel" hidden>
+      <div class="head"><div><h2>Relatório de faltas</h2><p class="sub">Todos os alunos que faltaram, por turma, para imprimir</p></div></div>
+      <div class="form">
+        <label class="f">De<input class="in" type="date" id="rDe"></label><label class="f">Até<input class="in" type="date" id="rAte"></label>
+        <div class="grp full" role="radiogroup" aria-label="Turma">Turma<div class="chips" id="rTurma"></div></div>
+        <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="gerar">Gerar PDF / imprimir</button><p class="msg" id="msgR" role="alert"></p></div>
+      </div>
+    </section>
+
+    <section class="panel" id="s-alertas" hidden>
+      <div class="head"><div><h2>Alertas de justificativa</h2><p class="sub">Quem recebe um aviso (e notificação) quando um responsável justifica uma falta</p></div></div>
+      <div class="form">
+        <div class="grp full">Grupos (marcar um grupo marca todos os seus membros)<div class="chips" id="alGrupos"><p class="vazio">Nenhum grupo criado</p></div></div>
+        <div class="grp full">Pessoas<div class="chips grade" id="alPessoas"></div></div>
+        <p class="hint full" id="alNota" style="margin:0;font-size:.84rem;color:var(--muted)"></p>
+        <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><button class="btn btn-primary" id="alSalvar">Salvar lista</button><p class="msg" id="msgAl" role="alert"></p></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<dialog id="dlg">
+  <div class="d-head"><h3 id="dTitulo">Falta</h3><button class="x" id="dFechar" aria-label="Fechar janela">&times;</button></div>
+  <div class="d-body" id="dCorpo"></div>
+  <div class="d-foot"><p class="msg" id="msgD" role="alert" style="margin-right:auto"></p><button class="btn btn-ghost" id="dRecusar">Recusar</button><button class="btn btn-primary" id="dAceitar">Aceitar justificativa</button></div>
+</dialog>
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = d => d ? d.split("-").reverse().join("/") : "—";
+const hoje = () => new Date().toLocaleDateString("sv");
+const um = x => [].concat(x || [])[0];
+const turmaDe = a => a.serie + " " + a.turma;
+const ST = { aguardando: ["enviada", "Sem resposta"], respondida: ["resp", "Respondida"], aceita: ["concluida", "Aceita"], recusada: ["recusada", "Recusada"] };
+let perfil, dir = false, alunos = [], faltas = [], atual = null;
+
+function tela(n) { ["Carregando","Login","Negado"].forEach(x => $("tela"+x).hidden = x !== n); $("sessao").hidden = !(n === "App" || n === "Negado"); $("app").hidden = n !== "App"; }
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout; $("sair2").onclick = logout;
+const aviso = (id, t, ok) => { $(id).textContent = t; $(id).className = "msg" + (ok ? " ok" : ""); };
+const marcado = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+const chipR = (n, v, t) => `<label class="chip"><input type="radio" name="${n}" value="${esc(v)}">${esc(t)}</label>`;
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+  const email = session.user.email.toLowerCase();
+  const { data: p } = await sb.from("perfis").select("*").eq("email", email).maybeSingle();
+  if (!p || !p.ativo || !["professor","direcao"].includes(p.papel)) { $("emailNegado").textContent = email; $("olaNome").textContent = email; $("avatar").textContent = email[0].toUpperCase(); return tela("Negado"); }
+  perfil = p; dir = p.papel === "direcao";
+  $("olaNome").textContent = "Olá, " + p.nome.split(" ")[0] + "!"; $("avatar").textContent = p.nome[0].toUpperCase();
+  const a = await sb.from("alunos").select("id,nome,serie,turma").order("nome").limit(5000);
+  alunos = a.data || [];
+  const turmas = [...new Set(alunos.map(turmaDe))].sort((x, y) => x.localeCompare(y, "pt", { numeric: true }));
+  $("lTurma").innerHTML = turmas.map(t => chipR("turma", t, t)).join("");
+  $("rTurma").innerHTML = chipR("rturma", "", "Todas") + turmas.map(t => chipR("rturma", t, t)).join("");
+  $("rTurma").querySelector("input").checked = true;
+  $("fDia").value = $("aDia").value = $("rDe").value = $("rAte").value = hoje(); $("fDia").max = hoje();
+  $("abaRel").hidden = !dir; $("abaAl").hidden = !dir;
+  tela("App"); aba("lancar");
+}
+function aba(n) {
+  ["lancar","acomp","rel","alertas"].forEach(x => $("s-"+x).hidden = x !== n);
+  document.querySelectorAll("#abas .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n));
+  if (n === "acomp") carregar();
+  if (n === "alertas") carregarAlertas();
+}
+document.querySelectorAll("#abas .btn").forEach(b => b.onclick = () => aba(b.dataset.aba));
+
+/* ---- Lançar ---- */
+$("lTurma").onchange = () => {
+  const t = marcado("turma");
+  $("lAlunos").innerHTML = alunos.filter(x => turmaDe(x) === t).map(x => `<label class="chip"><input type="checkbox" name="aus" value="${x.id}">${esc(x.nome)}</label>`).join("") || '<p class="vazio">Escolha a turma primeiro</p>';
+};
+$("lancar").onclick = async () => {
+  const ids = [...document.querySelectorAll('input[name="aus"]:checked')].map(c => +c.value), dia = $("fDia").value;
+  if (!dia || !ids.length) return aviso("msgL", "Escolha a data e marque ao menos um aluno.");
+  $("lancar").disabled = true;
+  const { error } = await sb.rpc("lancar_faltas", { p_dia: dia, p_alunos: ids });
+  $("lancar").disabled = false;
+  if (error) return aviso("msgL", "Não foi possível lançar. Tente novamente.");
+  aviso("msgL", ""); document.querySelectorAll('input[name="aus"]').forEach(c => c.checked = false);
+  $("aDia").value = dia; aba("acomp");
+};
+
+/* ---- Acompanhar e WhatsApp ---- */
+async function carregar() {
+  const { data } = await sb.from("faltas").select("id,dia,situacao,token,enviada_em,analise_obs,alunos(nome,serie,turma,contatos(responsavel,whatsapp))").eq("dia", $("aDia").value);
+  faltas = (data || []).sort((a, b) => turmaDe(a.alunos).localeCompare(turmaDe(b.alunos), "pt", { numeric: true }) || a.alunos.nome.localeCompare(b.alunos.nome));
+  desenhar();
+}
+$("aDia").onchange = carregar;
+function desenhar() {
+  $("subA").textContent = faltas.length + (faltas.length === 1 ? " falta" : " faltas") + " em " + fmt($("aDia").value);
+  $("lista").innerHTML = faltas.map(f => {
+    const c = um(f.alunos.contatos), [cls, txt] = ST[f.situacao];
+    return `<li class="f-row"><div class="q-t"><b>${esc(f.alunos.nome)}</b><span>${esc(turmaDe(f.alunos))} · ${f.enviada_em ? "mensagem enviada" : "mensagem não enviada"}</span></div>
+      <span class="tag ${cls}">${txt}</span>
+      <button class="btn btn-primary sm" data-wa="${f.id}" ${c && c.whatsapp ? "" : "disabled"}>${c && c.whatsapp ? (f.enviada_em ? "Reenviar" : "WhatsApp") : "Sem WhatsApp"}</button>
+      ${dir ? `<button class="btn btn-ghost sm" data-ver="${f.id}">Ver</button>` : ""}</li>`;
+  }).join("") || '<li class="vazio">Nenhuma falta lançada nesta data.</li>';
+}
+$("lista").onclick = e => {
+  const w = e.target.closest("[data-wa]"), v = e.target.closest("[data-ver]");
+  if (w) enviarWhats(+w.dataset.wa); else if (v) ver(+v.dataset.ver);
+};
+async function enviarWhats(id) {
+  const f = faltas.find(x => x.id === id), c = um(f.alunos.contatos); if (!c || !c.whatsapp) return;
+  let n = c.whatsapp.replace(/\D/g, ""); if (n.length <= 11) n = "55" + n;
+  const link = location.origin + "/justificar/?t=" + f.token, quando = f.dia === hoje() ? "hoje" : "em " + fmt(f.dia);
+  const msg = `Olá${c.responsavel ? ", " + c.responsavel.split(" ")[0] : ""}! Aqui é da ${ESCOLA}. ${f.alunos.nome.split(" ")[0]} não compareceu à aula ${quando}. Para justificar a falta (por texto ou foto do atestado), use este link pessoal: ${link}`;
+  window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+  const agora = new Date().toISOString();
+  const { error } = await sb.from("faltas").update({ enviada_em: agora }).eq("id", id);
+  if (error) return aviso("msgA", "A mensagem abriu, mas não foi possível marcar como enviada.");
+  f.enviada_em = agora; desenhar();
+}
+
+/* ---- Direção: ver e analisar ---- */
+async function ver(id) {
+  atual = faltas.find(x => x.id === id); aviso("msgD", "");
+  const { data: j } = await sb.from("justificativas").select("*").eq("falta_id", id).maybeSingle();
+  let link = ""; if (j && j.atestado_path) { const { data: u } = await sb.storage.from("atestados").createSignedUrl(j.atestado_path, 300); if (u) link = u.signedUrl; }
+  $("dTitulo").textContent = atual.alunos.nome;
+  $("dCorpo").innerHTML = `<dl><div><dt>Turma</dt><dd>${esc(turmaDe(atual.alunos))}</dd></div><div><dt>Data da falta</dt><dd>${fmt(atual.dia)}</dd></div></dl>
+    <div><h4>Justificativa do responsável</h4><div class="bloco">${j ? esc(j.motivo || "(sem texto)") : "Ainda sem resposta."}</div>${link ? `<p><a class="btn btn-ghost" href="${esc(link)}" target="_blank" rel="noopener">Abrir atestado</a></p>` : ""}
+    ${j ? `<p><button class="btn btn-primary" id="dPdf">Salvar documento (PDF)</button></p>` : ""}</div>
+    <label class="f">Observação da direção<input class="in" id="dObs" value="${esc(atual.analise_obs)}" maxlength="300"></label>`;
+  if ($("dPdf")) $("dPdf").onclick = () => gerarPdf(atual, j);
+  $("dlg").showModal();
+}
+async function analisar(sit) {
+  const { error } = await sb.from("faltas").update({ situacao: sit, analise_obs: $("dObs").value.trim() }).eq("id", atual.id);
+  if (error) return aviso("msgD", "Não foi possível salvar.");
+  $("dlg").close(); carregar();
+}
+$("dAceitar").onclick = () => analisar("aceita"); $("dRecusar").onclick = () => analisar("recusada");
+$("dFechar").onclick = () => $("dlg").close();
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
+
+/* ---- Relatório em PDF ---- */
+const sitTxt = f => { const at = um(f.justificativas)?.atestado_path;
+  return { aguardando: "Sem resposta", respondida: at ? "Atestado anexado (a analisar)" : "Justificada por texto (a analisar)", aceita: "Justificada (aceita)", recusada: "Não justificada (recusada)" }[f.situacao]; };
+$("gerar").onclick = async () => {
+  const de = $("rDe").value, ate = $("rAte").value, t = marcado("rturma");
+  if (!de || !ate || de > ate) return aviso("msgR", "Confira as datas.");
+  const { data } = await sb.from("faltas").select("dia,situacao,alunos(nome,serie,turma),justificativas(atestado_path)").gte("dia", de).lte("dia", ate);
+  const lista = (data || []).filter(f => !t || turmaDe(f.alunos) === t);
+  if (!lista.length) return aviso("msgR", "Nenhuma falta nesse período.");
+  aviso("msgR", "");
+  const grupos = {}; lista.forEach(f => (grupos[turmaDe(f.alunos)] ||= []).push(f));
+  const html = Object.keys(grupos).sort((a, b) => a.localeCompare(b, "pt", { numeric: true })).map(g =>
+    `<h3>${esc(g)} · ${grupos[g].length} falta(s)</h3><table><tr><th>Aluno</th><th>Data</th><th>Situação</th></tr>` +
+    grupos[g].sort((a, b) => a.alunos.nome.localeCompare(b.alunos.nome) || a.dia.localeCompare(b.dia)).map(f => `<tr><td>${esc(f.alunos.nome)}</td><td>${fmt(f.dia)}</td><td>${sitTxt(f)}</td></tr>`).join("") + "</table>").join("");
+  $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>Relatório de faltas · ${de === ate ? fmt(de) : fmt(de) + " a " + fmt(ate)}${t ? " · " + esc(t) : ""}</h2>${html}<p style="margin-top:16px">Total: ${lista.length} falta(s). Emitido por ${esc(perfil.nome)} em ${fmt(hoje())}.</p>`;
+  window.print();
+};
+/* ---- Alertas: quem é avisado quando o responsável justifica ---- */
+let membros = {};
+async function carregarAlertas() {
+  const [p, n, g, m] = await Promise.all([
+    sb.from("perfis").select("email,nome,papel").eq("ativo", true).order("nome"), sb.from("notificar_faltas").select("email"),
+    sb.from("grupos").select("id,nome").order("nome"), sb.from("grupo_membros").select("grupo_id,email")]);
+  const marc = new Set((n.data || []).map(x => x.email)); membros = {};
+  (m.data || []).forEach(x => (membros[x.grupo_id] ||= []).push(x.email));
+  $("alPessoas").innerHTML = (p.data || []).filter(x => ["professor","direcao"].includes(x.papel)).map(x => `<label class="chip"><input type="checkbox" name="al" value="${esc(x.email)}" ${marc.has(x.email) ? "checked" : ""}>${esc(x.nome)}</label>`).join("");
+  if ((g.data || []).length) $("alGrupos").innerHTML = g.data.map(x => `<label class="chip"><input type="checkbox" name="algrp" value="${x.id}">${esc(x.nome)}</label>`).join("");
+  $("alNota").textContent = marc.size ? "" : "Nenhuma pessoa escolhida: por enquanto os alertas vão para a direção.";
+}
+$("alGrupos").onchange = e => {
+  const c = e.target; if (c.name !== "algrp") return;
+  (membros[c.value] || []).forEach(em => document.querySelectorAll('input[name="al"]').forEach(i => { if (i.value === em) i.checked = c.checked; }));
+};
+$("alSalvar").onclick = async () => {
+  const em = [...document.querySelectorAll('input[name="al"]:checked')].map(c => c.value);
+  const { error } = await sb.rpc("definir_notificar_faltas", { p_emails: em });
+  aviso("msgAl", error ? "Não foi possível salvar." : "Lista salva.", !error);
+  if (!error) carregarAlertas();
+};
+
+/* ---- Documento único (PDF): mensagem do responsável + anexo ---- */
+const slug = t => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const paraJpeg = (buf, ext) => new Promise((res, rej) => {
+  const img = new Image(), u = URL.createObjectURL(new Blob([buf], { type: "image/" + (ext === "jpg" ? "jpeg" : ext) }));
+  img.onload = () => {
+    const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+    const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0); URL.revokeObjectURL(u);
+    c.toBlob(async b => b ? res(new Uint8Array(await b.arrayBuffer())) : rej(new Error("img")), "image/jpeg", .9);
+  };
+  img.onerror = () => rej(new Error("img")); img.src = u;
+});
+async function salvarPdf(bytes, nome) {
+  if (window.showSaveFilePicker) {
+    try {
+      const h = await showSaveFilePicker({ suggestedName: nome, types: [{ description: "PDF", accept: { "application/pdf": [".pdf"] } }] });
+      const w = await h.createWritable(); await w.write(bytes); await w.close(); return true;
+    } catch (e) { if (e.name === "AbortError") return false; }
+  }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); a.download = nome; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000); return true;
+}
+async function gerarPdf(f, j) {
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+  aviso("msgD", "Gerando PDF…", true); $("dPdf").disabled = true;
+  try {
+    const doc = await PDFDocument.create(), fonte = await doc.embedFont(StandardFonts.Helvetica), neg = await doc.embedFont(StandardFonts.HelveticaBold);
+    const L = 50, W = 595.28, H = 841.89, MAXW = W - 2 * L;
+    const limpa = t => [...String(t ?? "")].map(c => { if (c === "\n") return c; try { fonte.widthOfTextAtSize(c, 10); return c; } catch (_) { return "?"; } }).join("");
+    let pag = doc.addPage([W, H]), y = H - 60;
+    const linha = (t, tam = 11, fn = fonte) => { if (y < 60) { pag = doc.addPage([W, H]); y = H - 60; } pag.drawText(t, { x: L, y, size: tam, font: fn, color: rgb(0, 0, 0) }); y -= tam + 5; };
+    const paragrafo = t => { for (const bloco of limpa(t).split("\n")) { let at = ""; for (const w of bloco.split(" ")) { const te = at ? at + " " + w : w; if (fonte.widthOfTextAtSize(te, 11) > MAXW && at) { linha(at); at = w; } else at = te; } linha(at); } };
+    linha(limpa(ESCOLA), 15, neg); linha("Justificativa de falta", 12, neg); y -= 8;
+    [["Aluno", f.alunos.nome], ["Turma", turmaDe(f.alunos)], ["Data da falta", fmt(f.dia)],
+     ["Respondida em", j.respondida_em ? new Date(j.respondida_em).toLocaleString("pt-BR") : "—"], ["Situação", ST[f.situacao][1]]].forEach(([k, v]) => linha(limpa(k + ": " + v)));
+    if (f.analise_obs) linha(limpa("Observação da direção: " + f.analise_obs));
+    y -= 10; linha("Mensagem do responsável", 12, neg); paragrafo(j.motivo || "(sem texto)");
+    if (j.atestado_path) {
+      const { data: u } = await sb.storage.from("atestados").createSignedUrl(j.atestado_path, 120);
+      const buf = await (await fetch(u.signedUrl)).arrayBuffer(), ext = j.atestado_path.split(".").pop().toLowerCase();
+      if (ext === "pdf") {
+        try { const src = await PDFDocument.load(buf, { ignoreEncryption: true }); (await doc.copyPages(src, src.getPageIndices())).forEach(p => doc.addPage(p)); }
+        catch (_) { y -= 10; paragrafo("O PDF anexado não pôde ser incorporado. Abra o original pelo botão “Abrir atestado”."); }
+      } else {
+        const img = await doc.embedJpg(await paraJpeg(buf, ext)), k = Math.min(MAXW / img.width, (H - 2 * L - 30) / img.height, 2);
+        const p = doc.addPage([W, H]); p.drawText("Anexo: atestado", { x: L, y: H - 45, size: 11, font: neg });
+        p.drawImage(img, { x: L, y: H - 60 - img.height * k, width: img.width * k, height: img.height * k });
+      }
+    }
+    const nome = `${f.dia}_${slug(turmaDe(f.alunos))}_${slug(f.alunos.nome)}.pdf`;
+    const ok = await salvarPdf(await doc.save(), nome);
+    aviso("msgD", ok ? "PDF salvo: " + nome : "", true);
+  } catch (_) { aviso("msgD", "Não foi possível gerar o PDF. Tente de novo."); }
+  $("dPdf").disabled = false;
+}
+
+iniciar();
+</script>
+</body>
+</html>

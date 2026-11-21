@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pedido de Materiais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:100px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on);font-weight:600}
+.chip:has(input:checked)::before{content:"✓"}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Filtros */
+.filter-bar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;background:var(--light);padding:12px;border-radius:14px;border:1px solid var(--bb);margin-bottom:16px}
+.filter-bar label{font-size:.78rem;font-weight:600;color:var(--muted);display:grid;gap:3px}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:68px;text-align:center;padding:7px 8px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 .9rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .65rem var(--text);opacity:.85;text-transform:uppercase}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.pendente{background:var(--warnbg);color:var(--warn)}
+.tag.em_separacao{background:#e8f0fe;color:#1a73e8}
+.tag.atendido{background:var(--okbg);color:var(--ok)}
+.tag.parcial{background:#fef7e0;color:#b06000}
+.tag.indisponivel{background:#fce8e6;color:var(--danger)}
+.vazio{color:var(--muted);margin:0}
+/* Dialog */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão em lote (Guia de Separação) */
+#ficha{display:none}
+@media print{
+  @page{size:A4 portrait;margin:12mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:10pt/1.3 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 15pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 11pt "Public Sans",Arial,sans-serif;margin:2px 0 12px;text-align:center;color:#444}
+  #ficha .meta-print{display:flex;justify-content:space-between;margin-bottom:12px;font-size:9pt;border-bottom:1px solid #000;padding-bottom:4px}
+  #ficha table{width:100%;border-collapse:collapse;margin-top:8px}
+  #ficha th,#ficha td{border:1px solid #000;padding:6px 8px;text-align:left;vertical-align:top}
+  #ficha th{background:#eee;font-weight:700;font-size:9pt}
+  #ficha td.box{text-align:center;width:30px;font-size:12pt}
+  #ficha .txt-itens{white-space:pre-wrap;font-weight:600}
+  #ficha .assin{display:flex;justify-content:space-between;margin-top:30px}
+  #ficha .assin div{width:45%;border-top:1px solid #000;text-align:center;font-size:9pt;padding-top:4px}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">MAT</span><div>Pedido de Materiais</div></div>
+   <div class="session" id="sessao" hidden>
+  <span class="avatar" id="avatar" aria-hidden="true"></span>
+  <span id="olaNome"></span>
+  <button class="btn btn-ghost" id="sair">Sair</button>
+</div>
+
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden>
+    <h2 style="justify-content:center">Acesso ao Almoxarifado</h2>
+    <p>Entre com seu e-mail institucional para solicitar materiais ou gerenciar requisições.</p>
+    <button class="btn btn-primary" id="entrar">Entrar com Google</button>
+  </section>
+  <section class="panel center" id="telaNegado" hidden>
+    <h2 style="justify-content:center">E-mail não autorizado</h2>
+    <p><b id="emailNegado"></b> não está na lista de usuários cadastrados. Solicite a liberação à administração.</p>
+    <button class="btn btn-ghost" id="sair2">Sair</button>
+  </section>
+
+  <section class="panel" id="novoPedido" hidden>
+    <div class="head"><div><h2>Novo pedido de material</h2><p class="sub">Selecione a turma e a data em que precisará do material</p></div></div>
+    <div class="form">
+      <label class="f">Professor(a) Solicitante<input class="in" id="fProf" readonly></label>
+      <label class="f">Data de Utilização (Quando vai usar?)<input class="in" type="date" id="fDataUso" required></label>
+      
+      <div class="grp full" role="radiogroup" aria-label="Série e turma">
+        Turma / Sala / Setor
+        <div class="chips" id="fTurmas"></div>
+        <input class="in" id="fSetorOutro" placeholder="Outro setor ou sala (caso não seja uma turma)" autocomplete="off" style="margin-top:4px">
+      </div>
+
+      <div class="grp full" role="radiogroup" aria-label="Categoria do Material">
+        Categoria do Material
+        <div class="chips" id="fCategorias"></div>
+      </div>
+
+      <label class="f full">Itens Solicitados e Quantidades
+        <textarea class="in" id="fItens" placeholder="Ex:&#10;- 2 Caixas de pincel para quadro branco (Azul)&#10;- 5 Resmas de papel A4&#10;- 1 Fita crepe larga" required></textarea>
+      </label>
+
+      <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" id="enviar">Enviar Pedido</button>
+        <p class="msg" id="msgForm" role="alert"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="painelLista" hidden>
+    <div class="head">
+      <div><h2 id="tituloLista">Pedidos de Materiais</h2><p class="sub" id="subLista"></p></div>
+    </div>
+
+    <!-- Barra de Filtros por Data de Utilização e Status -->
+    <div class="filter-bar">
+      <label>Data Utilização (Início)<input class="in" type="date" id="fDataInicio"></label>
+      <label>Data Utilização (Fim)<input class="in" type="date" id="fDataFim"></label>
+      <label id="lblFiltroStatus">Status
+        <select class="in" id="filtroStatus" style="width:auto">
+          <option value="">Todos</option>
+          <option value="pendente" selected>Aguardando atendimento</option>
+          <option value="em_separacao">Em separação</option>
+          <option value="atendido">Atendidos</option>
+          <option value="parcial">Atendidos parcialmente</option>
+          <option value="indisponivel">Indisponíveis</option>
+        </select>
+      </label>
+      <button class="btn btn-ghost" id="btnLimparFiltros" style="margin-left:auto">Limpar Filtros</button>
+      <button class="btn btn-primary" id="btnImprimirGuia">🖨️ Imprimir Guia de Separação</button>
+    </div>
+
+    <ul class="list" id="lista"></ul>
+  </section>
+</main>
+
+<dialog id="dlg">
+  <div class="d-head"><h3 id="dTitulo">Pedido de Material</h3><button class="x" id="dFechar" aria-label="Fechar janela">&times;</button></div>
+  <div class="d-body" id="dCorpo"></div>
+  <div class="d-foot"><p class="msg" id="msgDlg" role="alert" style="margin-right:auto"></p><button class="btn btn-primary" id="dSalvar" hidden>Atualizar Status</button></div>
+</dialog>
+
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+/* ===== CONFIGURE AQUI ===== */
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";   // pública por desenho; a proteção está no Supabase
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+/* ========================== */
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = d => d ? d.split("-").reverse().join("/") : "—";
+const hoje = () => new Date().toLocaleDateString("sv");
+const MES = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+const STATUS_MAP = {
+  pendente: { label: "Aguardando", class: "pendente" },
+  em_separacao: { label: "Em Separação", class: "em_separacao" },
+  atendido: { label: "Atendido", class: "atendido" },
+  parcial: { label: "Atendido Parcial", class: "parcial" },
+  indisponivel: { label: "Indisponível", class: "indisponivel" }
+};
+
+let perfil, alunos = [], pedidos = [], pedidosFiltrados = [], atual = null;
+
+function tela(nome) {
+  ["Carregando","Login","Negado"].forEach(n => $("tela"+n).hidden = n !== nome);
+  const logado = nome === "App";
+  $("sessao").hidden = !(logado || nome === "Negado"); 
+  ["novoPedido","painelLista"].forEach(id => $(id).hidden = !logado);
+}
+
+const login = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+const logout = async () => { await sb.auth.signOut(); location.reload(); };
+$("entrar").onclick = login; $("sair").onclick = logout; $("sair2").onclick = logout;
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+  const email = session.user.email.toLowerCase();
+  
+  const { data: p } = await sb.from("perfis").select("*").eq("email", email).maybeSingle();
+  if (!p || !p.ativo) { 
+    $("emailNegado").textContent = email; 
+    $("olaNome").textContent = email; 
+    $("avatar").textContent = email[0].toUpperCase(); 
+    return tela("Negado"); 
+  }
+
+  perfil = p;
+  $("olaNome").textContent = "Olá, " + p.nome.split(" ")[0] + "!"; 
+  $("avatar").textContent = p.nome[0].toUpperCase();
+  
+  // Buscar turmas da tabela de alunos e categorias de material
+  const [aRes, cRes] = await Promise.all([
+    sb.from("alunos").select("serie, turma").limit(5000),
+    sb.from("categorias_material").select("nome").order("nome")
+  ]);
+
+  alunos = aRes.data || [];
+  const categorias = (cRes.data || []).map(x => x.nome);
+
+  // Gerar botões de turmas a partir da tabela de alunos
+  const turmas = [...new Set(alunos.map(x => (x.serie + " " + x.turma).trim()))]
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b, "pt", { numeric: true }));
+
+  $("fTurmas").innerHTML = turmas.map(t => 
+    `<label class="chip"><input type="radio" name="turma" value="${esc(t)}">${esc(t)}</label>`
+  ).join("");
+
+  $("fCategorias").innerHTML = categorias.map((c, i) => 
+    `<label class="chip"><input type="radio" name="categoria" value="${esc(c)}" ${i===0?'checked':''}>${esc(c)}</label>`
+  ).join("");
+
+  // Nome do professor carregado do login
+  $("fProf").value = p.nome;
+  $("fDataUso").value = hoje();
+  $("fDataUso").min = hoje();
+
+  const isAlmox = p.papel === "almoxarifado" || p.papel === "direcao";
+  $("tituloLista").textContent = isAlmox ? "Pedidos Recebidos" : "Meus Pedidos";
+
+  tela("App");
+  carregar();
+}
+
+// Alternar entre botão de turma e campo de outro setor
+$("fTurmas").onchange = () => { $("fSetorOutro").value = ""; };
+$("fSetorOutro").oninput = () => document.querySelectorAll('input[name="turma"]').forEach(r => r.checked = false);
+
+function aviso(el, txt, ok) { el.textContent = txt; el.className = "msg" + (ok ? " ok" : ""); }
+
+$("enviar").onclick = async () => {
+  const turmaMarcada = document.querySelector('input[name="turma"]:checked')?.value || "";
+  const setorFinal = $("fSetorOutro").value.trim() || turmaMarcada;
+  const cat = document.querySelector('input[name="categoria"]:checked')?.value || "";
+
+  const r = {
+    solicitante_nome: perfil.nome,
+    solicitante_email: perfil.email,
+    setor_turma: setorFinal,
+    data_utilizacao: $("fDataUso").value,
+    categoria: cat,
+    itens_solicitados: $("fItens").value.trim()
+  };
+
+  if (!r.setor_turma || !r.data_utilizacao || !r.categoria || !r.itens_solicitados) {
+    return aviso($("msgForm"), "Selecione a turma/setor, data de uso, categoria e os itens.");
+  }
+
+  $("enviar").disabled = true;
+  const { error } = await sb.from("pedidos").insert(r);
+  $("enviar").disabled = false;
+
+  if (error) return aviso($("msgForm"), "Não foi possível enviar o pedido. Tente novamente.");
+
+  aviso($("msgForm"), "Pedido enviado ao almoxarifado!", true);
+  $("fItens").value = ""; $("fSetorOutro").value = "";
+  document.querySelectorAll('input[name="turma"]').forEach(r => r.checked = false);
+  carregar();
+};
+
+async function carregar() {
+  const isAlmox = perfil.papel === "almoxarifado" || perfil.papel === "direcao";
+  let query = sb.from("pedidos").select("*").order("data_utilizacao", { ascending: true }).limit(500);
+  
+  if (!isAlmox) {
+    query = query.eq("solicitante_email", perfil.email);
+  }
+
+  const { data, error } = await query;
+  if (error) return;
+  pedidos = data; 
+  aplicarFiltros();
+}
+
+function aplicarFiltros() {
+  const st = $("filtroStatus").value;
+  const dtInicio = $("fDataInicio").value;
+  const dtFim = $("fDataFim").value;
+
+  pedidosFiltrados = pedidos.filter(p => {
+    if (st && p.status !== st) return false;
+    if (dtInicio && p.data_utilizacao < dtInicio) return false;
+    if (dtFim && p.data_utilizacao > dtFim) return false;
+    return true;
+  });
+
+  desenharLista();
+}
+
+function desenharLista() {
+  $("subLista").textContent = pedidosFiltrados.length + (pedidosFiltrados.length === 1 ? " pedido encontrado" : " pedidos encontrados");
+  $("lista").innerHTML = pedidosFiltrados.length ? pedidosFiltrados.map(p => {
+    const dObj = new Date(p.data_utilizacao + "T00:00:00");
+    const dia = String(dObj.getDate()).padStart(2, '0');
+    const mes = MES[dObj.getMonth()];
+    const st = STATUS_MAP[p.status] || { label: p.status, class: "" };
+
+    return `<li><button class="q" data-id="${p.id}">
+      <span class="q-d">${dia}<small>${mes}</small></span>
+      <span class="q-t"><b>${esc(p.setor_turma)} · ${esc(p.categoria)}</b>
+      <span>Solicitante: ${esc(p.solicitante_nome)} | Uso: <b>${fmt(p.data_utilizacao)}</b></span></span>
+      <span class="tag ${st.class}">${st.label}</span>
+    </button></li>`;
+  }).join("") : '<li class="vazio">Nenhum pedido encontrado no período/filtro selecionado.</li>';
+}
+
+$("filtroStatus").onchange = aplicarFiltros;
+$("fDataInicio").onchange = aplicarFiltros;
+$("fDataFim").onchange = aplicarFiltros;
+
+$("btnLimparFiltros").onclick = () => {
+  $("filtroStatus").value = "";
+  $("fDataInicio").value = "";
+  $("fDataFim").value = "";
+  aplicarFiltros();
+};
+
+$("lista").onclick = e => { const b = e.target.closest(".q"); if (b) abrir(+b.dataset.id); };
+
+function abrir(id) {
+  atual = pedidos.find(p => p.id === id); 
+  const p = atual;
+  const isAlmox = perfil.papel === "almoxarifado" || perfil.papel === "direcao";
+  
+  $("dTitulo").textContent = "Pedido #" + p.id + " · " + p.setor_turma; 
+  aviso($("msgDlg"), "");
+
+  const stSelect = isAlmox ? `
+    <label class="f">Status da Solicitação
+      <select class="in" id="eStatus">
+        <option value="pendente" ${p.status==='pendente'?'selected':''}>Aguardando Atendimento</option>
+        <option value="em_separacao" ${p.status==='em_separacao'?'selected':''}>Em Separação</option>
+        <option value="atendido" ${p.status==='atendido'?'selected':''}>Atendido Totalmente</option>
+        <option value="parcial" ${p.status==='parcial'?'selected':''}>Atendido Parcialmente</option>
+        <option value="indisponivel" ${p.status==='indisponivel'?'selected':''}>Material Indisponível / Recusado</option>
+      </select>
+    </label>
+    <label class="f">Anotações do Almoxarifado / Observações da Entrega
+      <textarea class="in" id="eNotas" placeholder="Informe observações de entrega, faltas ou prazos">${esc(p.atendimento_notas)}</textarea>
+    </label>
+  ` : `
+    <div>
+      <h4>Status do Atendimento</h4>
+      <div class="bloco"><b>Status:</b> ${STATUS_MAP[p.status]?.label || p.status}\n<b>Observação do Almoxarifado:</b> ${esc(p.atendimento_notas || "Nenhuma observação registrada.")}\nData de atendimento: ${fmt(p.data_atendimento)}</div>
+    </div>
+  `;
+
+  $("dCorpo").innerHTML = `
+    <dl>
+      <div><dt>Professor(a) Solicitante</dt><dd>${esc(p.solicitante_nome)}</dd></div>
+      <div><dt>Turma / Setor</dt><dd>${esc(p.setor_turma)}</dd></div>
+      <div><dt>Data Prevista de Uso</dt><dd><b>${fmt(p.data_utilizacao)}</b></dd></div>
+      <div><dt>Categoria</dt><dd>${esc(p.categoria)}</dd></div>
+    </dl>
+    <div><h4>Itens Solicitados</h4><div class="bloco">${esc(p.itens_solicitados)}</div></div>
+    ${stSelect}
+  `;
+
+  $("dSalvar").hidden = !isAlmox; 
+  $("dlg").showModal();
+}
+
+$("dFechar").onclick = () => $("dlg").close();
+$("dlg").addEventListener("click", e => { if (e.target === $("dlg")) $("dlg").close(); });
+
+$("dSalvar").onclick = async () => {
+  const st = $("eStatus").value;
+  const notas = $("eNotas").value.trim();
+  
+  $("dSalvar").disabled = true;
+  const { data: r, error } = await sb.from("pedidos")
+    .update({ 
+      status: st, 
+      atendimento_notas: notas, 
+      data_atendimento: hoje(),
+      responsavel_atendimento: perfil.nome 
+    })
+    .eq("id", atual.id)
+    .select()
+    .single();
+
+  $("dSalvar").disabled = false;
+  if (error) return aviso($("msgDlg"), "Erro ao atualizar pedido.");
+  const avisou = r.aviso_id && r.aviso_id !== atual.aviso_id;
+  if (avisou) sb.functions.invoke("enviar-push", { body: { aviso_id: r.aviso_id } });
+  pedidos = pedidos.map(p => p.id === r.id ? r : p); 
+  atual = r; 
+  aplicarFiltros(); 
+  aviso($("msgDlg"), avisou ? "Status atualizado! O solicitante foi avisado." : "Status atualizado!", true)
+};
+
+/* IMPRESSÃO EM LOTE / PDF DA GUIA DE SEPARAÇÃO */
+$("btnImprimirGuia").onclick = () => {
+  if (!pedidosFiltrados.length) {
+    alert("Não há pedidos exibidos no momento para gerar a guia.");
+    return;
+  }
+
+  const dInicio = $("fDataInicio").value ? fmt($("fDataInicio").value) : "Início";
+  const dFim = $("fDataFim").value ? fmt($("fDataFim").value) : "Fim";
+  const periodoTxt = ($("fDataInicio").value || $("fDataFim").value) ? `${dInicio} até ${dFim}` : "Todos os pedidos listados";
+
+  const linhas = pedidosFiltrados.map(p => `
+    <tr>
+      <td class="box">☐</td>
+      <td><b>${fmt(p.data_utilizacao)}</b></td>
+      <td><b>${esc(p.setor_turma)}</b><br><small>${esc(p.solicitante_nome)}</small></td>
+      <td>${esc(p.categoria)}</td>
+      <td class="txt-itens">${esc(p.itens_solicitados)}</td>
+      <td><small>${STATUS_MAP[p.status]?.label || p.status}</small></td>
+    </tr>
+  `).join("");
+
+  $("ficha").innerHTML = `
+    <h1>${esc(ESCOLA)}</h1>
+    <h2>GUIA DE SEPARAÇÃO DE MATERIAIS</h2>
+    <div class="meta-print">
+      <span><b>Período/Filtro de Uso:</b> ${periodoTxt}</span>
+      <span><b>Gerado em:</b> ${fmt(hoje())} por ${esc(perfil.nome)}</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:25px">OK</th>
+          <th style="width:75px">Data Uso</th>
+          <th style="width:140px">Turma / Solicitante</th>
+          <th style="width:110px">Categoria</th>
+          <th>Itens Solicitados</th>
+          <th style="width:85px">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${linhas}
+      </tbody>
+    </table>
+     `;
+
+  window.print();
+};
+
+iniciar();
+</script>
+</body>
+</html>

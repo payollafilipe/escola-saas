@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saídas Antecipadas · JMA</title>
+<link rel="preconnect" href="https://atmdgtbczhkpwiybfkak.supabase.co" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap"></noscript>
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px 40px;display:grid;gap:22px}
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+/* Formulário */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.95rem;font-weight:400;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+.in:focus{outline:2px solid var(--blue);outline-offset:0;border-color:var(--blue)}
+.in[readonly]{opacity:.8}textarea.in{min-height:120px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:flex;align-items:center;gap:6px;padding:9px 16px;border:1px solid var(--bb);border-radius:999px;background:var(--card);font-size:.9rem;font-weight:500;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--blue);background:var(--light)}
+.chip:has(input:checked){background:var(--blue);border-color:var(--blue);color:var(--on)}
+.chip:has(input:focus-visible){outline:3px solid var(--blue);outline-offset:2px}
+.chip input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.chip{padding-left:12px}
+.chip::before{content:"✓";flex:none;display:grid;place-items:center;width:18px;height:18px;border:2px solid var(--bb);border-radius:6px;font-size:12px;font-weight:700;line-height:1;color:transparent}
+.chip:has(input[type="radio"])::before{border-radius:50%}
+.chip:has(input:checked)::before{background:var(--on);border-color:var(--on);color:var(--blue)}
+.chips.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.chips.grade .chip{border-radius:12px;min-width:0;overflow-wrap:anywhere}
+.chips.grade .vazio{grid-column:1/-1}
+.grp{display:grid;gap:8px;font-size:.84rem;font-weight:600;color:var(--muted)}.grp .vazio{font-weight:400}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+/* Lista */
+.list{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.q{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px;cursor:pointer}
+.q:hover{border-color:var(--blue)}
+.q-d{min-width:64px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.q-d small{display:block;font:600 .66rem var(--text);opacity:.85}
+.q-t{flex:1;min-width:180px}.q-t b{display:block}.q-t span{font-size:.84rem;color:var(--muted)}
+.tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:999px}
+.tag.enviada{background:var(--warnbg);color:var(--warn)}.tag.concluida{background:var(--okbg);color:var(--ok)}
+.vazio{color:var(--muted);margin:0}
+/* Janela */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(720px,calc(100% - 28px));max-height:92vh;background:var(--card);color:var(--ink);overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--bg)}
+.d-head h3{margin:0;font-family:var(--display);font-size:1.2rem}
+.x{border:0;background:transparent;color:var(--muted);font-size:28px;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer}.x:hover{background:var(--line);color:var(--ink)}
+.d-body{padding:20px;overflow:auto;display:grid;gap:16px}
+.d-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;background:var(--bg)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}dt{font-size:.78rem;font-weight:600;color:var(--muted)}dd{margin:0;font-weight:500}
+.bloco{background:var(--light);border:1px solid var(--bb);border-radius:14px;padding:14px;white-space:pre-wrap}
+h4{margin:0 0 8px;font-family:var(--display);font-size:1rem}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+/* Impressão */
+#ficha{display:none}
+@media print{
+  @page{size:A4;margin:16mm}
+  body{background:#fff;color:#000}body::before,.wrap,dialog{display:none!important}
+  #ficha{display:block;font:12pt/1.45 "Public Sans",Arial,sans-serif;color:#000}
+  #ficha h1{font:700 16pt "Bricolage Grotesque",Arial,sans-serif;margin:0;text-align:center}
+  #ficha h2{font:600 12pt "Public Sans",Arial,sans-serif;margin:2px 0 14px;text-align:center}
+  #ficha h3{font-size:11pt;margin:16px 0 6px;border-bottom:1px solid #000;padding-bottom:2px}
+  #ficha table{width:100%;border-collapse:collapse}#ficha td{border:1px solid #000;padding:5px 8px;vertical-align:top}
+  #ficha td.k{width:24%;font-weight:700;background:#eee}
+  #ficha .txt{border:1px solid #000;padding:8px;min-height:60px;white-space:pre-wrap}
+  #ficha .assin{display:flex;flex-wrap:wrap;gap:40px 20px;margin-top:56px}#ficha .assin div{flex:1 1 28%;border-top:1px solid #000;text-align:center;font-size:10pt;padding-top:3px}
+  #ficha ul{list-style:none;margin:0;padding:0;columns:2}
+}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.topbar{padding:10px 14px;margin:0 -14px}.form,dl{grid-template-columns:1fr}.panel{padding:18px;border-radius:16px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.voltar{display:grid;place-items:center;width:38px;height:38px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none;box-shadow:var(--shadow);transition:color .15s,border-color .15s}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1100px}
+.abas{display:flex;gap:8px;flex-wrap:wrap}.abas .btn[aria-pressed="true"]{background:var(--blue);color:var(--on);border-color:var(--blue)}
+.btn.sm{padding:7px 14px;font-size:.84rem}.hint{margin:0;font-size:.84rem;color:var(--muted)}.acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tit{margin:14px 0 6px;font:700 1rem var(--display)}
+.aula{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;background:var(--light);border:1px solid var(--bb);border-radius:16px}
+.aula.cancelada{opacity:.6}.aula .hr{min-width:68px;text-align:center;padding:7px 10px;border-radius:12px;color:#fff;background:linear-gradient(160deg,var(--b700),var(--b800));font:800 1rem var(--display);line-height:1.1}
+.aula .hr small{display:block;font:600 .66rem var(--text);opacity:.85}.aula .tx{flex:1;min-width:210px}.aula .tx b{display:block}.aula .tx span{font-size:.84rem;color:var(--muted);display:block}
+.tag.cancelada{background:var(--line);color:var(--muted)}.tag.warn{background:var(--warnbg);color:var(--warn)}.tag.bad{background:color-mix(in srgb,var(--danger) 14%,transparent);color:var(--danger)}
+.info-box{padding:12px 14px;border-radius:14px;background:var(--light);border:1px solid var(--bb);font-size:.88rem;color:var(--ink)}
+.tab{width:100%;border-collapse:collapse;font-size:.88rem}.tab th,.tab td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.tab th{color:var(--muted);font-weight:600}
+.link-discreto{background:none;border:0;padding:0;font:inherit;font-size:.82rem;font-weight:600;color:var(--blue);cursor:pointer;text-decoration:underline;justify-self:start}
+.link-discreto:hover{color:var(--b500)}
+@media print{#ficha .tab td,#ficha .tab th{font-size:9.5pt;vertical-align:top}#ficha th{border:1px solid #000;padding:4px 6px;background:#eee}#ficha td{padding:4px 6px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand"><a class="voltar" href="/" aria-label="Voltar à intranet" title="Voltar à intranet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></a><span class="brand-mark" aria-hidden="true">JMA</span><div>SAÍDAS ANTECIPADAS<small>Agendamento e controle de portaria</small></div></div>
+    <div class="session" id="sessao" hidden><span class="avatar" id="avatar" aria-hidden="true"></span><span id="olaNome"></span><button class="btn btn-ghost" id="sair">Sair</button></div>
+  </header>
+
+  <section class="panel center" id="telaCarregando"><p id="txtCarregando">Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden><h2 style="justify-content:center">Saída antecipada</h2><p>Entre com sua conta Google para agendar ou acompanhar a retirada antecipada do(a) estudante.</p><button class="btn btn-primary" id="entrar">Entrar com Google</button></section>
+  <section class="panel center" id="telaErro" hidden><h2 style="justify-content:center">Demorou mais que o esperado</h2><p id="erroGeral" role="alert">Não foi possível conectar ao servidor agora.</p><button class="btn btn-primary" id="tentarNovamente">Tentar novamente</button></section>
+
+  <!-- VISÃO DA EQUIPE (DIREÇÃO / SECRETARIA / PORTARIA) -->
+  <div id="appEquipe" hidden style="display:contents">
+    <div class="abas" id="abasEq">
+      <button class="btn btn-ghost" data-aba="painel">Saídas agendadas</button>
+      <button class="btn btn-ghost" data-aba="novo">Registrar saída</button>
+      <button class="btn btn-ghost" data-aba="rel">Relatório</button>
+    </div>
+    <p class="msg" id="msgEq" role="alert"></p>
+
+    <section class="panel" id="eq-painel">
+      <div class="head"><div><h2>Controle de saídas antecipadas</h2><p class="sub" id="eqSubTxt">Carregando agendamentos…</p></div><button class="btn btn-ghost sm" id="eqAtualizar">Atualizar</button></div>
+      <div class="form">
+        <label class="f">De<input class="in" type="date" id="eqDe"></label>
+        <label class="f">Até<input class="in" type="date" id="eqAte"></label>
+        <div class="grp full" role="radiogroup" aria-label="Situação">Mostrar<div class="chips">
+          <label class="chip"><input type="radio" name="eqSt" value="agendada" checked>Aguardando saída</label>
+          <label class="chip"><input type="radio" name="eqSt" value="liberada">Já liberadas</label>
+          <label class="chip"><input type="radio" name="eqSt" value="cancelada">Canceladas</label>
+          <label class="chip"><input type="radio" name="eqSt" value="todas">Todas</label>
+        </div></div>
+        <label class="f full">Filtrar por turma<select class="in" id="eqTurma"><option value="">Todas as turmas</option></select></label>
+      </div>
+      <div id="eqLista" style="margin-top:10px"><p class="vazio">Carregando…</p></div>
+    </section>
+
+    <section class="panel" id="eq-novo" hidden>
+      <div class="head"><div><h2>Registrar saída antecipada</h2><p class="sub">Para solicitações feitas por telefone ou presencialmente na secretaria/portaria</p></div></div>
+      <div class="form">
+        <div class="grp full" role="radiogroup" aria-label="Série e turma">Série e turma<div class="chips" id="enTurmaChips"></div></div>
+        <div class="grp full" id="enAlunoListaBox">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <span>Estudante <small id="enPreviewAbrev" style="font-weight:500;color:var(--blue)">(para os pais aparece abreviado)</small></span>
+            <input class="in" id="enFiltroAluno" placeholder="Filtrar aluno na turma…" autocomplete="off" style="max-width:260px;padding:6px 10px;font-size:.86rem" hidden>
+          </div>
+          <div class="chips grade" id="enAlunoChips" role="radiogroup" aria-label="Estudante"><p class="vazio">Escolha a turma primeiro</p></div>
+          <button type="button" class="link-discreto" id="enToggleManual">Estudante não está na lista? Digitar manualmente</button>
+        </div>
+        <div class="full form" id="enAlunoManualBox" hidden>
+          <label class="f">Nome completo do(a) estudante<input class="in" id="enAlunoManual" maxlength="120" placeholder="Ex.: Lucas Oliveira Santos" autocomplete="off"></label>
+          <label class="f">Turma<select class="in" id="enTurmaManual"></select></label>
+          <div class="full"><button type="button" class="link-discreto" id="enVoltarLista">← Voltar para a lista de estudantes</button></div>
+        </div>
+
+        <label class="f">Data da saída<input class="in" type="date" id="enData"></label>
+        <label class="f">Horário previsto<input class="in" type="time" id="enHora"></label>
+        <label class="f">Nome do(a) responsável<input class="in" id="enResp" maxlength="120" placeholder="Quem autorizou a saída" autocomplete="off"></label>
+        <label class="f">Telefone / WhatsApp<input class="in" type="tel" id="enFone" maxlength="30" placeholder="(16) 99999-9999"></label>
+        <div class="grp full" role="radiogroup" aria-label="Quem vai buscar">Quem vai retirar o(a) estudante?<div class="chips">
+          <label class="chip"><input type="radio" name="enQuem" value="Próprio responsável" checked>Próprio responsável</label>
+          <label class="chip"><input type="radio" name="enQuem" value="Outra pessoa autorizada">Outra pessoa autorizada</label>
+        </div></div>
+        <label class="f" id="enBuscNomeBox" hidden>Nome de quem vai retirar<input class="in" id="enBuscNome" maxlength="120" placeholder="Nome completo"></label>
+        <label class="f">Documento (RG ou CPF) de quem retira<input class="in" id="enBuscDoc" maxlength="40" placeholder="Ex.: 12.345.678-9"></label>
+        <div class="grp full" role="radiogroup" aria-label="Motivo">Motivo<div class="chips">
+          <label class="chip"><input type="radio" name="enMot" value="Consulta médica / exame" checked>Consulta médica / exame</label>
+          <label class="chip"><input type="radio" name="enMot" value="Compromisso familiar">Compromisso familiar</label>
+          <label class="chip"><input type="radio" name="enMot" value="Outro">Outro</label>
+        </div></div>
+        <label class="f full">Observação (opcional)<input class="in" id="enObs" maxlength="250" placeholder="Ex.: pai ligou na secretaria às 08h15"></label>
+        <div class="full acoes">
+          <button class="btn btn-primary" id="enSalvar">Salvar agendamento</button>
+          <label class="chip"><input type="checkbox" id="enJaLiberar">Já confirmar saída agora (aluno saindo neste momento)</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="eq-rel" hidden>
+      <div class="head"><div><h2>Relatório de saídas antecipadas</h2><p class="sub">Histórico oficial de retiradas antecipadas por período e turma</p></div></div>
+      <div class="form">
+        <label class="f">De<input class="in" type="date" id="rDe"></label>
+        <label class="f">Até<input class="in" type="date" id="rAte"></label>
+        <label class="f full">Turma<select class="in" id="rTurma"><option value="">Todas as turmas</option></select></label>
+        <div class="full acoes">
+          <button class="btn btn-ghost" id="rVer">Ver na tela</button>
+          <button class="btn btn-primary" id="rPdf">Gerar PDF / imprimir</button>
+          <button class="btn btn-ghost" id="rCsv">Baixar planilha (CSV)</button>
+        </div>
+      </div>
+      <div id="relRes" style="display:grid;gap:12px;margin-top:16px"></div>
+    </section>
+  </div>
+
+  <!-- VISÃO DO PROFESSOR (SOMENTE LEITURA DO DIA) -->
+  <div id="appProf" hidden style="display:contents">
+    <section class="panel">
+      <div class="head"><div><h2>Saídas antecipadas de hoje</h2><p class="sub">Estudantes com saída autorizada pela família ou direção</p></div><button class="btn btn-ghost sm" id="profAtualizar">Atualizar</button></div>
+      <div id="profLista"><p class="vazio">Carregando…</p></div>
+    </section>
+  </div>
+
+  <!-- VISÃO DO PAI / RESPONSÁVEL -->
+  <div id="appPais" hidden style="display:contents">
+    <div class="abas" id="abasPais">
+      <button class="btn btn-ghost" data-aba="agendar">Agendar saída antecipada</button>
+      <button class="btn btn-ghost" data-aba="minhas">Meus agendamentos</button>
+    </div>
+    <p class="msg" id="msgPais" role="alert"></p>
+
+    <section class="panel" id="pais-agendar">
+      <div class="head"><div><h2>Avisar saída antecipada</h2><p class="sub">Selecione a turma, o(a) estudante e o horário em que você buscará</p></div></div>
+      <div class="info-box" style="margin-bottom:16px"><b>Importante:</b> Na portaria da escola será obrigatória a apresentação de <b>documento oficial com foto</b> da pessoa indicada para a retirada.</div>
+      <div class="form">
+        <div class="grp full" role="radiogroup" aria-label="Série e turma">Série e turma<div class="chips" id="pTurmaChips"><p class="vazio">Carregando turmas…</p></div></div>
+        <div class="grp full" id="pAlunoListaBox">
+          <span>Estudante</span>
+          <div class="chips grade" id="pAlunoChips" role="radiogroup" aria-label="Estudante"><p class="vazio">Escolha a turma primeiro</p></div>
+          <button type="button" class="link-discreto" id="pToggleManual">Não encontrou o nome na lista? Digitar manualmente</button>
+        </div>
+        <div class="full form" id="pAlunoManualBox" hidden>
+          <label class="f">Nome completo do(a) estudante<input class="in" id="pAlunoManual" maxlength="120" placeholder="Nome completo do seu filho(a)" autocomplete="off"></label>
+          <label class="f">Turma<select class="in" id="pTurmaManual"></select></label>
+          <div class="full"><button type="button" class="link-discreto" id="pVoltarLista">← Voltar para a lista de estudantes</button></div>
+        </div>
+
+        <label class="f">Data da saída<input class="in" type="date" id="pData"></label>
+        <label class="f">Horário previsto para buscar<input class="in" type="time" id="pHora"></label>
+        <label class="f">Seu nome completo (Responsável)<input class="in" id="pResp" maxlength="120"></label>
+        <label class="f">Seu WhatsApp / Telefone<input class="in" type="tel" id="pFone" maxlength="30" placeholder="(16) 99999-9999"></label>
+        <div class="grp full" role="radiogroup" aria-label="Quem vai buscar">Quem vai buscar o(a) estudante?<div class="chips">
+          <label class="chip"><input type="radio" name="pQuem" value="Próprio responsável" checked>Eu mesmo(a) (responsável)</label>
+          <label class="chip"><input type="radio" name="pQuem" value="Outra pessoa autorizada">Outra pessoa autorizada</label>
+        </div></div>
+        <label class="f" id="pBuscNomeBox" hidden>Nome completo de quem vai buscar<input class="in" id="pBuscNome" maxlength="120" placeholder="Nome completo da pessoa autorizada"></label>
+        <label class="f">Documento (RG ou CPF) de quem vai buscar<input class="in" id="pBuscDoc" maxlength="40" placeholder="Ex.: 12.345.678-9"></label>
+        <div class="grp full" role="radiogroup" aria-label="Motivo">Motivo da saída antecipada<div class="chips">
+          <label class="chip"><input type="radio" name="pMot" value="Consulta médica / exame" checked>Consulta médica / exame</label>
+          <label class="chip"><input type="radio" name="pMot" value="Compromisso familiar">Compromisso familiar</label>
+          <label class="chip"><input type="radio" name="pMot" value="Outro">Outro</label>
+        </div></div>
+        <label class="f full">Observação adicional (opcional)<input class="in" id="pObs" maxlength="250" placeholder="Algum detalhe importante para a secretaria/portaria"></label>
+        <div class="full acoes"><button class="btn btn-primary" id="pEnviar">Agendar saída antecipada</button></div>
+      </div>
+    </section>
+
+    <section class="panel" id="pais-minhas" hidden>
+      <div class="head"><div><h2>Meus agendamentos</h2><p class="sub">Acompanhe o status das saídas solicitadas por esta conta</p></div><button class="btn btn-ghost sm" id="paisAtualizar">Atualizar</button></div>
+      <div id="paisLista"><p class="vazio">Carregando…</p></div>
+    </section>
+  </div>
+</main>
+
+<!-- MODAL CONFIRMAR SAÍDA NA PORTARIA -->
+<dialog id="dlgPortaria">
+  <div class="d-head"><h3>Confirmar saída na portaria</h3><button class="x" id="dpFechar" aria-label="Fechar janela">&times;</button></div>
+  <div class="d-body">
+    <p class="hint" id="dpResumo"></p>
+    <div class="form">
+      <label class="f">Pessoa que está retirando<input class="in" id="dpNome" maxlength="120"></label>
+      <label class="f">Documento conferido (RG/CPF)<input class="in" id="dpDoc" maxlength="40" placeholder="Conferir documento com foto"></label>
+      <label class="f full">Observação da portaria/secretaria (opcional)<input class="in" id="dpObs" maxlength="250"></label>
+    </div>
+  </div>
+  <div class="d-foot">
+    <p class="msg" id="dpMsg" role="alert" style="margin-right:auto"></p>
+    <button class="btn btn-ghost" id="dpCancelar">Voltar</button>
+    <button class="btn btn-primary" id="dpConfirmar">Confirmar saída agora</button>
+  </div>
+</dialog>
+
+<div id="ficha" aria-hidden="true"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+let ESCOLA = window.ESCOLA || "Escola Estadual JMA";
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: { lock: (_name, _acquireTimeout, fn) => fn() }
+});
+window.sb = sb;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => String(s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const hoje = () => new Date().toLocaleDateString("sv");
+const addDias = (iso, n) => { const d = new Date(iso + "T12:00:00"); d.setDate(d.getDate() + n); return d.toLocaleDateString("sv"); };
+const fmt = d => d ? String(d).split("-").reverse().join("/") : "—";
+const fmtHora = ts => ts ? new Date(ts).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "";
+const NOMES_DIA = ["seg", "ter", "qua", "qui", "sex", "sáb", "dom"];
+const rotuloDia = iso => `${NOMES_DIA[(new Date(iso + "T12:00:00").getDay() + 6) % 7]} ${fmt(iso).slice(0, 5)}`;
+const marcado = n => document.querySelector(`input[name="${n}"]:checked`)?.value || "";
+const comTimeout = (p, ms = 15000) => Promise.race([
+  p,
+  new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))
+]);
+
+// Padroniza o nome da turma exatamente no formato "6º ano A" (sem duplicidades)
+function normalizarTurma(t) {
+  let s = String(t ?? "").trim().replace(/\s+/g, " ");
+  if (!s) return "";
+  s = s.replace(/\bano\b/gi, "ano").replace(/\bs[eé]rie\b/gi, "série");
+  s = s.replace(/\s+([a-zA-Z0-9]+)$/, (_, letra) => " " + letra.toUpperCase());
+  return s;
+}
+
+// Abrevia sobrenomes para proteção de dados (LGPD): "Lucas Oliveira dos Santos" -> "Lucas O. S."
+function abreviarNome(nome) {
+  const partes = String(nome ?? "").trim().split(/\s+/).filter(Boolean);
+  if (!partes.length) return "";
+  const preps = new Set(["da", "de", "do", "das", "dos", "e"]);
+  const primeiro = partes[0][0].toUpperCase() + partes[0].slice(1).toLowerCase();
+  const iniciais = [];
+  for (let i = 1; i < partes.length; i++) {
+    const p = partes[i].toLowerCase();
+    if (!preps.has(p) && p.length > 0) {
+      iniciais.push(partes[i][0].toUpperCase() + ".");
+    }
+  }
+  return iniciais.length ? `${primeiro} ${iniciais.join(" ")}` : primeiro;
+}
+
+let userEmail = "", userNome = "", papel = null, alunos = [], turmas = [], listaEq = [], listaPais = [], itemPortaria = null;
+let enModoManual = false, pModoManual = false;
+
+function lerCache(k, maxMin = 120) {
+  try {
+    const raw = sessionStorage.getItem(k);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (Date.now() - obj.ts > maxMin * 60000) return null;
+    return obj.val;
+  } catch { return null; }
+}
+function salvarCache(k, val) {
+  try { sessionStorage.setItem(k, JSON.stringify({ ts: Date.now(), val })); } catch {}
+}
+
+function tela(n) {
+  ["Carregando", "Login", "Erro"].forEach(x => $("tela" + x).hidden = x !== n);
+  $("sessao").hidden = !(n === "Equipe" || n === "Prof" || n === "Pais");
+  $("appEquipe").hidden = n !== "Equipe";
+  $("appProf").hidden = n !== "Prof";
+  $("appPais").hidden = n !== "Pais";
+}
+const msgEq = (t, ok) => { $("msgEq").textContent = t; $("msgEq").className = "msg" + (ok ? " ok" : ""); if (t) scrollTo({ top: 0, behavior: "smooth" }); };
+const msgPais = (t, ok) => { $("msgPais").textContent = t; $("msgPais").className = "msg" + (ok ? " ok" : ""); if (t) scrollTo({ top: 0, behavior: "smooth" }); };
+const dpMsg = (t, ok) => { $("dpMsg").textContent = t; $("dpMsg").className = "msg" + (ok ? " ok" : ""); };
+
+const logout = async () => {
+  try { sessionStorage.clear(); } catch {}
+  await sb.auth.signOut();
+  location.reload();
+};
+$("entrar").onclick = () => sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+$("sair").onclick = logout;
+$("tentarNovamente").onclick = () => { tela("Carregando"); iniciar(); };
+
+function traduzir(m) {
+  m = String(m || "");
+  if (/sem permissao/.test(m)) return "Você não tem permissão para esta ação.";
+  if (/data_passada/.test(m)) return "Não é possível agendar para uma data que já passou.";
+  if (/ja_finalizada/.test(m)) return "Esta saída já foi liberada ou cancelada.";
+  if (/inexistente/.test(m)) return "Registro não encontrado. Atualize a página.";
+  return "Não foi possível concluir. Tente novamente.";
+}
+
+function aplicarAlunosETurmas(listaAlunos) {
+  const ehEquipe = ["direcao", "secretaria", "portaria"].includes(papel);
+  alunos = (listaAlunos || []).map(x => {
+    const tNorm = normalizarTurma(x.turma);
+    const nBruto = String(x.nome_exibicao ?? "").trim();
+    return {
+      ...x,
+      turma: tNorm,
+      nome_exibicao: ehEquipe ? nBruto : abreviarNome(nBruto)
+    };
+  }).filter(x => x.turma && x.nome_exibicao)
+    .sort((a, b) => a.nome_exibicao.localeCompare(b.nome_exibicao, "pt"));
+
+  // Monta turmas exclusivamente a partir dos alunos cadastrados (evita duplicar com turmas da atribuição)
+  const setTurmas = new Set(alunos.map(x => x.turma));
+  turmas = [...setTurmas].sort((a, b) => a.localeCompare(b, "pt", { numeric: true }));
+  if (!turmas.length) turmas = ["6º ano A", "6º ano B", "6º ano C", "7º ano A", "7º ano B", "8º ano A", "8º ano B", "9º ano A", "9º ano B"];
+
+  const opts = turmas.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join("");
+  const eqVal = $("eqTurma").value, rVal = $("rTurma").value;
+  $("eqTurma").innerHTML = '<option value="">Todas as turmas</option>' + opts;
+  $("rTurma").innerHTML = '<option value="">Todas as turmas</option>' + opts;
+  if (eqVal) $("eqTurma").value = eqVal;
+  if (rVal) $("rTurma").value = rVal;
+  $("enTurmaManual").innerHTML = '<option value="">Selecione a turma…</option>' + opts;
+  $("pTurmaManual").innerHTML = '<option value="">Selecione a turma…</option>' + opts;
+
+  const enSel = marcado("enTurma"), pSel = marcado("pTurma");
+  $("enTurmaChips").innerHTML = turmas.map(t => `<label class="chip"><input type="radio" name="enTurma" value="${esc(t)}" ${t === enSel ? "checked" : ""}>${esc(t)}</label>`).join("");
+  $("pTurmaChips").innerHTML = turmas.map(t => `<label class="chip"><input type="radio" name="pTurma" value="${esc(t)}" ${t === pSel ? "checked" : ""}>${esc(t)}</label>`).join("");
+}
+
+function abrirTelaPorPapel(metaNome) {
+  $("olaNome").textContent = "Olá, " + userNome.split(" ")[0] + "!";
+  $("avatar").textContent = userNome[0].toUpperCase();
+
+  if (["direcao", "secretaria", "portaria"].includes(papel)) {
+    if (!$("eqDe").value) $("eqDe").value = hoje();
+    if (!$("eqAte").value) $("eqAte").value = addDias(hoje(), 7);
+    if (!$("enData").value) $("enData").value = hoje();
+    if (!$("rDe").value) $("rDe").value = hoje().slice(0, 8) + "01";
+    if (!$("rAte").value) $("rAte").value = hoje();
+    tela("Equipe"); abaEq("painel");
+    carregarEquipe();
+  } else if (papel === "professor") {
+    tela("Prof");
+    carregarProf();
+  } else {
+    if (!$("pData").value) $("pData").value = hoje();
+    if (!$("pResp").value) $("pResp").value = userNome || metaNome;
+    tela("Pais"); abaPais("agendar");
+    carregarPais();
+  }
+}
+
+async function iniciar() {
+  try {
+    const { data, error: ae } = await comTimeout(sb.auth.getSession(), 10000);
+    if (ae) throw ae;
+    const session = data?.session;
+    if (!session) return tela("Login");
+  if (window.validarLicencaEscola) { const _licP = await window.validarLicencaEscola(sb); if (!_licP) return; if (typeof ESCOLA !== "undefined" && window.ESCOLA) ESCOLA = window.ESCOLA; }
+
+    userEmail = (session.user.email || "").toLowerCase();
+    const metaNome = session.user.user_metadata?.full_name || session.user.user_metadata?.name || "";
+
+    const perfilCache = lerCache("jma_perfil_" + userEmail, 180);
+    const alunosCache = lerCache("jma_saidas_alunos_v2_" + userEmail, 60);
+    let telaAberta = false;
+
+    if (perfilCache) {
+      papel = perfilCache.papel;
+      userNome = perfilCache.nome || metaNome || userEmail.split("@")[0];
+      if (alunosCache) aplicarAlunosETurmas(alunosCache);
+      abrirTelaPorPapel(metaNome);
+      telaAberta = true;
+    }
+
+    const [perfRes, alRes] = await comTimeout(Promise.all([
+      sb.from("perfis").select("papel,nome,ativo").eq("email", userEmail).maybeSingle(),
+      sb.rpc("listar_alunos_saidas")
+    ]), 15000);
+
+    if (perfRes.error) throw perfRes.error;
+    const p = perfRes.data;
+    const novoPapel = (p && p.ativo) ? p.papel : "responsavel";
+    const novoNome = (p && p.nome) ? p.nome : (metaNome || userEmail.split("@")[0]);
+
+    papel = novoPapel;
+    userNome = novoNome;
+    salvarCache("jma_perfil_" + userEmail, { papel, nome: userNome });
+
+    if (alRes.data) {
+      salvarCache("jma_saidas_alunos_v2_" + userEmail, alRes.data);
+      aplicarAlunosETurmas(alRes.data);
+    }
+
+    if (!telaAberta || perfilCache?.papel !== papel) {
+      abrirTelaPorPapel(metaNome);
+    }
+  } catch (e) {
+    console.error("Falha ao iniciar:", e);
+    $("erroGeral").textContent = e?.message === "timeout"
+      ? "A conexão demorou mais de 15 segundos (o servidor pode estar iniciando). Clique abaixo para tentar novamente."
+      : "Falha ao conectar ao banco. Confira sua internet e tente novamente.";
+    tela("Erro");
+  }
+}
+
+/* ==================== VISÃO DA EQUIPE ==================== */
+function abaEq(n) {
+  ["painel", "novo", "rel"].forEach(x => $("eq-" + x).hidden = x !== n);
+  document.querySelectorAll("#abasEq .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n));
+}
+document.querySelectorAll("#abasEq .btn").forEach(b => b.onclick = () => abaEq(b.dataset.aba));
+$("eqAtualizar").onclick = () => { msgEq(""); carregarEquipe(); };
+["eqDe", "eqAte", "eqTurma"].forEach(id => $(id).onchange = () => carregarEquipe());
+document.querySelectorAll('input[name="eqSt"]').forEach(r => r.onchange = () => carregarEquipe());
+
+const TAG_SAIDA = {
+  agendada: ["warn", "Aguardando saída"],
+  liberada: ["concluida", "Liberada"],
+  cancelada: ["cancelada", "Cancelada"]
+};
+
+async function carregarEquipe() {
+  const de = $("eqDe").value, ate = $("eqAte").value, st = marcado("eqSt") || "agendada", turma = $("eqTurma").value;
+  let q = sb.from("saidas_antecipadas").select("*").gte("data", de).lte("data", ate).order("data", { ascending: true }).order("hora_saida", { ascending: true }).limit(1000);
+  if (st !== "todas") q = q.eq("status", st);
+  if (turma) q = q.ilike("turma", turma);
+  const { data, error } = await q;
+  if (error) { console.error(error); return msgEq("Não foi possível carregar as saídas."); }
+  listaEq = data || [];
+  renderEquipe();
+}
+
+function renderEquipe() {
+  const ag = listaEq.filter(x => x.status === "agendada").length;
+  $("eqSubTxt").textContent = listaEq.length ? `${listaEq.length} registro(s) no período · ${ag} aguardando saída` : "Nenhuma saída neste filtro";
+  const porDia = {};
+  listaEq.forEach(s => (porDia[s.data] ||= []).push(s));
+  $("eqLista").innerHTML = Object.keys(porDia).sort().map(d =>
+    `<h3 class="tit">${rotuloDia(d)}</h3><ul class="list">${porDia[d].map(linhaEquipe).join("")}</ul>`
+  ).join("") || '<p class="vazio">Nenhuma saída antecipada encontrada para este filtro.</p>';
+}
+
+function linhaEquipe(s) {
+  const [cls, txt] = TAG_SAIDA[s.status];
+  const quemTxt = s.quem_busca === "Outra pessoa autorizada" && s.buscador_nome
+    ? `${esc(s.buscador_nome)} (autorizado(a) por ${esc(s.responsavel_nome)})`
+    : `${esc(s.responsavel_nome)} (próprio responsável)`;
+  const docTxt = s.buscador_doc ? ` · Doc: ${esc(s.buscador_doc)}` : "";
+  const foneTxt = s.responsavel_telefone ? ` · Tel: ${esc(s.responsavel_telefone)}` : "";
+  const libTxt = s.status === "liberada" ? ` · Saiu às <b>${fmtHora(s.liberada_em)}</b>` : "";
+  const canTxt = s.status === "cancelada" && s.motivo_cancelamento ? ` · Motivo cancelamento: ${esc(s.motivo_cancelamento)}` : "";
+
+  const botoes = s.status === "agendada"
+    ? `<button class="btn btn-primary sm" data-lib="${s.id}">Confirmar saída</button><button class="btn btn-ghost sm" data-imp="${s.id}">Comprovante</button><button class="btn btn-ghost sm" data-can="${s.id}">Cancelar</button>`
+    : s.status === "liberada"
+    ? `<button class="btn btn-ghost sm" data-imp="${s.id}">Comprovante</button>`
+    : "";
+
+  return `<li class="aula ${s.status}">
+    <span class="hr">${esc(s.hora_saida)}<small>${fmt(s.data).slice(0, 5)}</small></span>
+    <div class="tx">
+      <b>${esc(s.aluno_nome)} · ${esc(normalizarTurma(s.turma))}</b>
+      <span>Retirada: ${quemTxt}${docTxt}${foneTxt}</span>
+      <span>Motivo: ${esc(s.motivo)}${s.obs ? " (" + esc(s.obs) + ")" : ""}${libTxt}${canTxt}</span>
+    </div>
+    <span class="tag ${cls}">${txt}</span>
+    <div class="acoes">${botoes}</div>
+  </li>`;
+}
+
+$("eqLista").onclick = async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset;
+  if (d.lib) {
+    const s = listaEq.find(x => x.id === +d.lib); if (!s) return;
+    itemPortaria = s; dpMsg("");
+    $("dpResumo").innerHTML = `Estudante: <b>${esc(s.aluno_nome)}</b> (${esc(normalizarTurma(s.turma))}) · Horário agendado: <b>${esc(s.hora_saida)}</b>`;
+    $("dpNome").value = s.buscador_nome || s.responsavel_nome || "";
+    $("dpDoc").value = s.buscador_doc || "";
+    $("dpObs").value = s.obs || "";
+    $("dlgPortaria").showModal();
+  } else if (d.can) {
+    const mot = prompt("Motivo do cancelamento (opcional):", "");
+    if (mot === null) return;
+    const { error } = await sb.rpc("cancelar_saida_antecipada", { p_id: +d.can, p_motivo: mot.trim() || null });
+    if (error) return msgEq(traduzir(error.message));
+    msgEq("Agendamento cancelado.", true); carregarEquipe();
+  } else if (d.imp) {
+    const s = listaEq.find(x => x.id === +d.imp); if (!s) return;
+    imprimirComprovante(s);
+  }
+};
+
+$("dpConfirmar").onclick = async () => {
+  if (!itemPortaria) return;
+  $("dpConfirmar").disabled = true; dpMsg("Confirmando…", true);
+  const { error } = await sb.rpc("confirmar_saida_portaria", {
+    p_id: itemPortaria.id,
+    p_buscador_nome: $("dpNome").value.trim() || null,
+    p_buscador_doc: $("dpDoc").value.trim() || null,
+    p_obs: $("dpObs").value.trim() || null
+  });
+  $("dpConfirmar").disabled = false;
+  if (error) return dpMsg(traduzir(error.message));
+  $("dlgPortaria").close();
+  msgEq(`Saída de ${itemPortaria.aluno_nome} confirmada!`, true);
+  carregarEquipe();
+};
+$("dpFechar").onclick = $("dpCancelar").onclick = () => $("dlgPortaria").close();
+$("dlgPortaria").addEventListener("click", e => { if (e.target === $("dlgPortaria")) $("dlgPortaria").close(); });
+
+function imprimirComprovante(s) {
+  const quem = s.buscador_nome || s.responsavel_nome;
+  $("ficha").innerHTML = `
+    <h1>${esc(ESCOLA)}</h1>
+    <h2>Autorização / Registro de Saída Antecipada</h2>
+    <table>
+      <tr><td class="k">Estudante</td><td><b>${esc(s.aluno_nome)}</b></td></tr>
+      <tr><td class="k">Turma</td><td>${esc(normalizarTurma(s.turma))}</td></tr>
+      <tr><td class="k">Data / Hora prevista</td><td>${fmt(s.data)} às ${esc(s.hora_saida)}</td></tr>
+      <tr><td class="k">Responsável</td><td>${esc(s.responsavel_nome)}${s.responsavel_telefone ? " · Tel: " + esc(s.responsavel_telefone) : ""}</td></tr>
+      <tr><td class="k">Retirado(a) por</td><td>${esc(quem)}${s.buscador_doc ? " · Doc: " + esc(s.buscador_doc) : ""}</td></tr>
+      <tr><td class="k">Motivo</td><td>${esc(s.motivo)}${s.obs ? " — " + esc(s.obs) : ""}</td></tr>
+      <tr><td class="k">Situação</td><td>${s.status === "liberada" ? "Saída confirmada às " + fmtHora(s.liberada_em) : "Agendada (aguardando retirada)"}</td></tr>
+    </table>
+    <div class="assin">
+      <div>Assinatura do(a) Responsável / Retirante</div>
+      <div>Portaria / Secretaria (${esc(userNome)})</div>
+    </div>`;
+  window.print();
+}
+
+/* ---------- Seleção de aluno na Equipe ---------- */
+function renderChipsEq() {
+  const t = marcado("enTurma");
+  if (!t) {
+    $("enFiltroAluno").hidden = true;
+    $("enAlunoChips").innerHTML = '<p class="vazio">Escolha a turma primeiro</p>';
+    $("enPreviewAbrev").textContent = "(para os pais aparece abreviado)";
+    return;
+  }
+  $("enFiltroAluno").hidden = false;
+  const q = norm($("enFiltroAluno").value.trim());
+  const selAtual = marcado("enAluno");
+  const lista = alunos.filter(x => x.turma === t && (!q || norm(x.nome_exibicao).includes(q)));
+  $("enAlunoChips").innerHTML = lista.length
+    ? lista.map(x => `<label class="chip"><input type="radio" name="enAluno" value="${x.id}" ${String(x.id) === selAtual ? "checked" : ""}>${esc(x.nome_exibicao)}</label>`).join("")
+    : '<p class="vazio">Nenhum estudante encontrado nesta turma.</p>';
+  atualizarPreviewAbrev();
+}
+function atualizarPreviewAbrev() {
+  const id = +marcado("enAluno");
+  const al = id ? alunos.find(x => x.id === id) : null;
+  $("enPreviewAbrev").textContent = al
+    ? `(para os pais aparece como: ${abreviarNome(al.nome_exibicao)})`
+    : "(para os pais aparece abreviado)";
+}
+$("enAlunoChips").onchange = atualizarPreviewAbrev;
+$("enTurmaChips").onchange = () => {
+  $("enFiltroAluno").value = "";
+  if (enModoManual) {
+    enModoManual = false;
+    $("enAlunoListaBox").hidden = false;
+    $("enAlunoManualBox").hidden = true;
+  }
+  renderChipsEq();
+};
+$("enFiltroAluno").oninput = renderChipsEq;
+$("enToggleManual").onclick = () => {
+  enModoManual = true;
+  $("enAlunoListaBox").hidden = true;
+  $("enAlunoManualBox").hidden = false;
+  $("enTurmaManual").value = marcado("enTurma") || "";
+};
+$("enVoltarLista").onclick = () => {
+  enModoManual = false;
+  $("enAlunoListaBox").hidden = false;
+  $("enAlunoManualBox").hidden = true;
+};
+
+/* ---------- Registrar saída pela escola ---------- */
+document.querySelectorAll('input[name="enQuem"]').forEach(r => r.onchange = () => {
+  $("enBuscNomeBox").hidden = marcado("enQuem") !== "Outra pessoa autorizada";
+});
+$("enSalvar").onclick = async () => {
+  let alunoId = null, alunoNome = "", turma = "";
+  if (enModoManual) {
+    alunoNome = $("enAlunoManual").value.trim();
+    turma = normalizarTurma($("enTurmaManual").value);
+    if (!alunoNome || !turma) return msgEq("Preencha o nome completo do(a) estudante e a turma.");
+  } else {
+    turma = normalizarTurma(marcado("enTurma"));
+    alunoId = +marcado("enAluno");
+    if (!turma || !alunoId) return msgEq("Selecione a turma e o(a) estudante na lista.");
+    const al = alunos.find(x => x.id === alunoId);
+    alunoNome = al ? al.nome_exibicao : "";
+  }
+
+  const data = $("enData").value, hora = $("enHora").value;
+  const resp = $("enResp").value.trim(), fone = $("enFone").value.trim(), quem = marcado("enQuem");
+  const buscNome = quem === "Outra pessoa autorizada" ? $("enBuscNome").value.trim() : resp;
+  const buscDoc = $("enBuscDoc").value.trim(), mot = marcado("enMot"), obs = $("enObs").value.trim();
+
+  if (!data || !hora || !resp) return msgEq("Preencha data, horário e nome do responsável.");
+  if (quem === "Outra pessoa autorizada" && !buscNome) return msgEq("Informe o nome de quem vai retirar o(a) estudante.");
+
+  $("enSalvar").disabled = true; msgEq("Salvando…", true);
+  const { data: res, error } = await sb.rpc("agendar_saida_antecipada", {
+    p_aluno_id: alunoId || null,
+    p_aluno_nome: alunoNome, p_turma: turma, p_data: data, p_hora_saida: hora,
+    p_responsavel_nome: resp, p_responsavel_telefone: fone || null,
+    p_quem_busca: quem, p_buscador_nome: buscNome || resp, p_buscador_doc: buscDoc || null,
+    p_motivo: mot, p_obs: obs || null, p_origem: "escola"
+  });
+  if (error) { $("enSalvar").disabled = false; return msgEq(traduzir(error.message)); }
+
+  if ($("enJaLiberar").checked && res?.id) {
+    await sb.rpc("confirmar_saida_portaria", { p_id: res.id, p_buscador_nome: buscNome || resp, p_buscador_doc: buscDoc || null, p_obs: obs || null });
+  }
+  $("enSalvar").disabled = false;
+  $("enAlunoManual").value = ""; $("enBuscNome").value = ""; $("enBuscDoc").value = ""; $("enObs").value = ""; $("enJaLiberar").checked = false;
+  document.querySelectorAll('input[name="enAluno"]').forEach(r => r.checked = false);
+  atualizarPreviewAbrev();
+  msgEq("Saída antecipada registrada com sucesso.", true);
+  abaEq("painel"); carregarEquipe();
+};
+
+/* ---------- Relatório ---------- */
+let relDados = [];
+async function carregarRel() {
+  const de = $("rDe").value, ate = $("rAte").value, turma = $("rTurma").value;
+  if (!de || !ate || de > ate) { msgEq("Confira as datas do relatório."); return false; }
+  let q = sb.from("saidas_antecipadas").select("*").gte("data", de).lte("data", ate).order("data").order("hora_saida").limit(5000);
+  if (turma) q = q.ilike("turma", turma);
+  const { data, error } = await q;
+  if (error) { msgEq("Não foi possível carregar o relatório."); return false; }
+  relDados = data || [];
+  msgEq(relDados.length ? "" : "Nenhuma saída registrada nesse período.");
+  return relDados.length > 0;
+}
+const tabelaRel = () => `<table class="tab"><tr><th>Data</th><th>Hora</th><th>Estudante</th><th>Turma</th><th>Responsável / Retirante</th><th>Motivo</th><th>Situação</th></tr>` +
+  relDados.map(s => `<tr><td>${fmt(s.data)}</td><td>${esc(s.hora_saida)}</td><td><b>${esc(s.aluno_nome)}</b></td><td>${esc(normalizarTurma(s.turma))}</td><td>${esc(s.buscador_nome || s.responsavel_nome)}${s.buscador_doc ? " (" + esc(s.buscador_doc) + ")" : ""}</td><td>${esc(s.motivo)}</td><td>${s.status === "liberada" ? "Liberada às " + fmtHora(s.liberada_em) : s.status === "cancelada" ? "Cancelada" : "Agendada"}</td></tr>`).join("") + "</table>";
+
+$("rVer").onclick = async () => { if (await carregarRel()) $("relRes").innerHTML = `<div style="overflow-x:auto">${tabelaRel()}</div>`; else $("relRes").innerHTML = ""; };
+$("rPdf").onclick = async () => {
+  if (!(await carregarRel())) return;
+  $("ficha").innerHTML = `<h1>${esc(ESCOLA)}</h1><h2>Relatório de Saídas Antecipadas · ${fmt($("rDe").value)} a ${fmt($("rAte").value)}</h2>${tabelaRel()}<p style="font-size:9pt;margin-top:10px">Emitido por ${esc(userNome)} em ${fmt(hoje())}.</p>`;
+  window.print();
+};
+$("rCsv").onclick = async () => {
+  if (!(await carregarRel())) return;
+  const c = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lin = [["Data", "Hora prevista", "Estudante", "Turma", "Responsável", "Telefone", "Retirado por", "Documento", "Motivo", "Situação", "Hora liberação"]];
+  relDados.forEach(s => lin.push([fmt(s.data), s.hora_saida, s.aluno_nome, normalizarTurma(s.turma), s.responsavel_nome, s.responsavel_telefone || "", s.buscador_nome || "", s.buscador_doc || "", s.motivo, s.status, fmtHora(s.liberada_em)]));
+  const blob = new Blob(["\ufeff" + lin.map(l => l.map(c).join(";")).join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `saidas_antecipadas_${$("rDe").value}_a_${$("rAte").value}.csv`; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+};
+
+/* ==================== VISÃO DO PROFESSOR ==================== */
+$("profAtualizar").onclick = () => carregarProf();
+async function carregarProf() {
+  const { data, error } = await sb.from("saidas_antecipadas").select("*").eq("data", hoje()).neq("status", "cancelada").order("hora_saida");
+  if (error) { $("profLista").innerHTML = '<p class="vazio">Não foi possível carregar as saídas de hoje.</p>'; return; }
+  const lista = data || [];
+  $("profLista").innerHTML = lista.length ? `<ul class="list">${lista.map(s => {
+    const [cls, txt] = TAG_SAIDA[s.status];
+    return `<li class="aula"><span class="hr">${esc(s.hora_saida)}<small>Hoje</small></span><div class="tx"><b>${esc(s.aluno_nome)} · ${esc(normalizarTurma(s.turma))}</b><span>Motivo: ${esc(s.motivo)} · Retirada por: ${esc(s.buscador_nome || s.responsavel_nome)}</span></div><span class="tag ${cls}">${txt}</span></li>`;
+  }).join("")}</ul>` : '<p class="vazio">Nenhuma saída antecipada agendada para hoje.</p>';
+}
+
+/* ==================== VISÃO DO PAI / RESPONSÁVEL ==================== */
+function abaPais(n) {
+  ["agendar", "minhas"].forEach(x => $("pais-" + x).hidden = x !== n);
+  document.querySelectorAll("#abasPais .btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.aba === n));
+}
+document.querySelectorAll("#abasPais .btn").forEach(b => b.onclick = () => abaPais(b.dataset.aba));
+$("paisAtualizar").onclick = () => { msgPais(""); carregarPais(); };
+
+$("pTurmaChips").onchange = () => {
+  const t = marcado("pTurma");
+  if (pModoManual) {
+    pModoManual = false;
+    $("pAlunoListaBox").hidden = false;
+    $("pAlunoManualBox").hidden = true;
+  }
+  const lista = alunos.filter(x => x.turma === t);
+  $("pAlunoChips").innerHTML = lista.length
+    ? lista.map(x => `<label class="chip"><input type="radio" name="pAluno" value="${x.id}">${esc(abreviarNome(x.nome_exibicao))}</label>`).join("")
+    : '<p class="vazio">Nenhum estudante cadastrado nesta turma.</p>';
+};
+$("pToggleManual").onclick = () => {
+  pModoManual = true;
+  $("pAlunoListaBox").hidden = true;
+  $("pAlunoManualBox").hidden = false;
+  $("pTurmaManual").value = marcado("pTurma") || "";
+};
+$("pVoltarLista").onclick = () => {
+  pModoManual = false;
+  $("pAlunoListaBox").hidden = false;
+  $("pAlunoManualBox").hidden = true;
+};
+
+document.querySelectorAll('input[name="pQuem"]').forEach(r => r.onchange = () => {
+  $("pBuscNomeBox").hidden = marcado("pQuem") !== "Outra pessoa autorizada";
+});
+
+$("pEnviar").onclick = async () => {
+  let alunoId = null, alunoNome = "", turma = "";
+  if (pModoManual) {
+    alunoNome = $("pAlunoManual").value.trim();
+    turma = normalizarTurma($("pTurmaManual").value);
+    if (!alunoNome || !turma) return msgPais("Por favor, preencha o nome completo do(a) estudante e a turma.");
+  } else {
+    turma = normalizarTurma(marcado("pTurma"));
+    alunoId = +marcado("pAluno");
+    if (!turma || !alunoId) return msgPais("Por favor, selecione a série/turma e o(a) estudante na lista.");
+    const al = alunos.find(x => x.id === alunoId);
+    alunoNome = al ? abreviarNome(al.nome_exibicao) : "";
+  }
+
+  const data = $("pData").value, hora = $("pHora").value;
+  const resp = $("pResp").value.trim(), fone = $("pFone").value.trim(), quem = marcado("pQuem");
+  const buscNome = quem === "Outra pessoa autorizada" ? $("pBuscNome").value.trim() : resp;
+  const buscDoc = $("pBuscDoc").value.trim(), mot = marcado("pMot"), obs = $("pObs").value.trim();
+
+  if (!data || !hora || !resp) return msgPais("Por favor, preencha a data, o horário previsto e o seu nome.");
+  if (!fone) return msgPais("Informe um telefone/WhatsApp para contato caso a escola precise falar com você.");
+  if (quem === "Outra pessoa autorizada" && !buscNome) return msgPais("Informe o nome completo da pessoa autorizada a buscar o(a) estudante.");
+  if (!buscDoc) return msgPais("Informe o RG ou CPF de quem vai buscar para conferência na portaria.");
+
+  $("pEnviar").disabled = true; msgPais("Enviando agendamento…", true);
+  const { data: res, error } = await sb.rpc("agendar_saida_antecipada", {
+    p_aluno_id: alunoId || null,
+    p_aluno_nome: alunoNome, p_turma: turma, p_data: data, p_hora_saida: hora,
+    p_responsavel_nome: resp, p_responsavel_telefone: fone,
+    p_quem_busca: quem, p_buscador_nome: buscNome, p_buscador_doc: buscDoc,
+    p_motivo: mot, p_obs: obs || null, p_origem: "responsavel"
+  });
+  $("pEnviar").disabled = false;
+  if (error) { console.error(error); return msgPais(traduzir(error.message)); }
+
+  if (res && res.aviso_id) sb.functions.invoke("enviar-push", { body: { aviso_id: res.aviso_id } });
+  $("pAlunoManual").value = ""; $("pBuscNome").value = ""; $("pObs").value = "";
+  document.querySelectorAll('input[name="pAluno"]').forEach(r => r.checked = false);
+  msgPais("Saída antecipada agendada! A direção e a portaria já foram avisadas.", true);
+  await carregarPais();
+  abaPais("minhas");
+};
+
+async function carregarPais() {
+  const { data, error } = await sb.from("saidas_antecipadas").select("*").eq("responsavel_email", userEmail).order("data", { ascending: false }).order("hora_saida", { ascending: false }).limit(50);
+  if (error) { console.error(error); return; }
+  listaPais = data || [];
+  $("paisLista").innerHTML = listaPais.length ? `<ul class="list">${listaPais.map(s => {
+    const [cls, txt] = TAG_SAIDA[s.status];
+    const det = s.status === "liberada" ? ` · Saída confirmada pela portaria às <b>${fmtHora(s.liberada_em)}</b>` : "";
+    const bot = s.status === "agendada" ? `<button class="btn btn-ghost sm" data-pcan="${s.id}">Cancelar</button>` : "";
+    return `<li class="aula ${s.status}">
+      <span class="hr">${esc(s.hora_saida)}<small>${fmt(s.data).slice(0, 5)}</small></span>
+      <div class="tx">
+        <b>${esc(abreviarNome(s.aluno_nome))} · ${esc(normalizarTurma(s.turma))}</b>
+        <span>Retirada: ${esc(s.buscador_nome || s.responsavel_nome)} (Doc: ${esc(s.buscador_doc || "—")}) · Motivo: ${esc(s.motivo)}${det}</span>
+      </div>
+      <span class="tag ${cls}">${txt}</span>
+      <div class="acoes">${bot}</div>
+    </li>`;
+  }).join("")}</ul>` : '<p class="vazio">Você ainda não agendou nenhuma saída antecipada.</p>';
+}
+
+$("paisLista").onclick = async e => {
+  const b = e.target.closest("button"); if (!b || !b.dataset.pcan) return;
+  if (!confirm("Deseja cancelar este agendamento de saída antecipada?")) return;
+  const { error } = await sb.rpc("cancelar_saida_antecipada", { p_id: +b.dataset.pcan, p_motivo: "Cancelado pelo responsável" });
+  if (error) return msgPais(traduzir(error.message));
+  msgPais("Agendamento cancelado.", true);
+  carregarPais();
+};
+
+iniciar();
+</script>
+</body>
+</html>

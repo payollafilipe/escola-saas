@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gestão Escolar · Portal Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f5fb;--card:#fff;--line:#d9e4f1;--ink:#0c1b33;--muted:#566b85;--b900:#071e3d;--b800:#0b2f5c;--b700:#0b4a8f;--b500:#2f80d8;
+  --blue:#0b5cab;--on:#fff;--light:#edf4fc;--bb:#bfd5ed;--danger:#c5221f;--ok:#137333;--okbg:#e6f4ea;--warn:#b25205;--warnbg:#fff4e5;
+  --shadow:0 1px 2px rgba(15,30,54,.05),0 8px 24px rgba(11,47,92,.07);
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--text:"Public Sans","Segoe UI",system-ui,sans-serif;color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#07111d;--card:#0e1d32;--line:#21344f;--ink:#e6eefa;--muted:#93a6bf;--blue:#5aa2ec;--on:#06101c;
+  --light:#12253f;--bb:#26456f;--danger:#f28b82;--ok:#81c995;--okbg:#10301c;--warn:#ffb573;--warnbg:#4a2808;color-scheme:dark}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:var(--text);line-height:1.5;
+  background:radial-gradient(900px 500px at 85% -10%,rgba(47,128,216,.18),transparent 60%),radial-gradient(700px 400px at -10% 10%,rgba(34,184,230,.12),transparent 60%),var(--bg);background-attachment:fixed}
+[hidden]{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px 48px;display:grid;gap:22px}
+.topbar{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;margin:0 -20px;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:1.15rem}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:800;background:linear-gradient(135deg,var(--b800),var(--b500));box-shadow:0 6px 16px rgba(11,92,171,.35)}
+.brand small{display:block;font-family:var(--text);font-weight:500;font-size:.8rem;color:var(--muted)}
+.voltar{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--muted);text-decoration:none}
+.voltar:hover{color:var(--ink);border-color:var(--blue)}
+.voltar svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.session{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 5px 5px 16px;box-shadow:var(--shadow);font-size:.9rem}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--b500),var(--b700));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.btn{font:inherit;font-size:.88rem;font-weight:600;padding:8px 16px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn-primary{background:var(--blue);color:var(--on)}.btn-primary:hover{background:var(--b500)}
+.btn-ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn-ghost:hover{color:var(--ink);border-color:var(--bb)}
+.btn-danger{background:transparent;color:var(--danger);border-color:color-mix(in srgb,var(--danger) 35%,transparent)}.btn-danger:hover{background:color-mix(in srgb,var(--danger) 10%,transparent)}
+.btn.sm{padding:5px 12px;font-size:.8rem}
+.btn:disabled{opacity:.6;cursor:wait}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.panel h2{margin:0;font-family:var(--display);font-weight:700;font-size:1.22rem;display:flex;align-items:center;gap:10px}
+.panel h2::before{content:"";width:6px;height:1.1em;border-radius:3px;background:linear-gradient(var(--b500),var(--b700))}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sub{margin:2px 0 0 16px;font-size:.86rem;color:var(--muted)}
+.center{max-width:460px;margin:40px auto;text-align:center}.center p{color:var(--muted)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{font:inherit;font-size:.9rem;font-weight:600;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer}
+.tab.ativo{background:var(--blue);border-color:var(--blue);color:var(--on)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.full{grid-column:1/-1}
+label.f{display:grid;gap:5px;font-size:.84rem;font-weight:600;color:var(--muted)}
+.in{font:inherit;font-size:.94rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 12px;width:100%}
+textarea.in{min-height:90px;resize:vertical}
+.msg{font-size:.88rem;margin:0;color:var(--danger)}.msg.ok{color:var(--ok)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.kpi{background:var(--light);border:1px solid var(--bb);border-radius:16px;padding:14px 16px}
+.kpi b{font-family:var(--display);font-size:1.5rem;display:block}
+.kpi span{font-size:.82rem;color:var(--muted)}
+.tbl{width:100%;border-collapse:collapse;font-size:.88rem}
+.tbl th,.tbl td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.tbl th{font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);background:var(--bg)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.76rem;font-weight:700}
+.b-ok{background:var(--okbg);color:var(--ok)}.b-warn{background:var(--warnbg);color:var(--warn)}.b-off{background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+.card-mini{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.tag-item{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:var(--card);border:1px solid var(--bb);font-size:.84rem}
+.tag-item button{border:0;background:none;color:var(--danger);font-weight:700;cursor:pointer;padding:0 2px}
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;width:min(640px,calc(100% - 28px));max-height:90vh;background:var(--card);color:var(--ink);overflow:hidden}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(7,17,29,.6);backdrop-filter:blur(4px)}
+.d-head,.d-foot{padding:14px 20px;background:var(--bg);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.d-head{border-bottom:1px solid var(--line)}.d-foot{border-top:1px solid var(--line);justify-content:flex-end}
+.d-body{padding:20px;overflow:auto;display:grid;gap:14px}
+@media(max-width:640px){.wrap{padding:0 14px 32px}.panel{padding:18px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <a class="voltar" id="btnVoltar" href="/" title="Voltar à Intranet"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+      <span class="brand-mark">JMA</span>
+      <div><span id="titTop">GESTÃO ESCOLAR</span><small id="subTop">Cadastros, equipe e configurações</small></div>
+    </div>
+    <div class="session" id="sessao" hidden>
+      <span class="avatar" id="avatar">?</span><span id="olaNome"></span>
+      <button class="btn btn-ghost" id="btnSair">Sair</button>
+    </div>
+  </header>
+
+  <section class="panel center" id="telaCarregando"><p>Carregando…</p></section>
+  <section class="panel center" id="telaLogin" hidden></section>
+  <section class="panel center" id="telaNegado" hidden>
+    <h2 style="justify-content:center">Acesso restrito</h2>
+    <p>A conta <strong id="emailNegado"></strong> não tem permissão de gestão.</p>
+    <button class="btn btn-ghost" id="btnSair2">Usar outra conta</button>
+  </section>
+
+  <!-- ÁREA MASTER (SUPER ADMIN: CONTROLE DE ESCOLAS E LICENÇAS) -->
+  <div id="areaMaster" hidden style="display:grid;gap:22px">
+    <div class="kpis" id="kpisMaster"></div>
+
+    <section class="panel">
+      <div class="head"><div><h2>Nova Escola / Cliente</h2><p class="sub">Cria a escola isolada, define a validade da licença e habilita o acesso do diretor(a)</p></div></div>
+      <form class="form" id="formNovaEscola">
+        <label class="f">Nome da Escola *<input class="in" id="neNome" required placeholder="Ex.: Colégio Modelo"></label>
+        <label class="f">Sigla (3 letras) *<input class="in" id="neSigla" maxlength="6" required placeholder="Ex.: MOD"></label>
+        <label class="f">Plano<select class="in" id="nePlano"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="semestral">Semestral</option><option value="anual" selected>Anual</option></select></label>
+        <label class="f">Validade da Licença<input class="in" type="date" id="neValidade"></label>
+        <label class="f">Nome do(a) Gestor(a) *<input class="in" id="neGestor" required placeholder="Nome completo"></label>
+        <label class="f">E-mail de Login do Gestor *<input class="in" type="email" id="neEmail" required placeholder="direcao@escola.com.br"></label>
+        <label class="f">Telefone / WhatsApp<input class="in" id="neTel" placeholder="(11) 99999-9999"></label>
+        <label class="f">Observações<input class="in" id="neObs" placeholder="Valor, contrato, detalhes"></label>
+        <div class="full" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <button type="submit" class="btn btn-primary" id="btnCriarEsc">Cadastrar Escola e Liberar Acesso</button>
+          <p class="msg" id="msgMaster"></p>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="head">
+        <div><h2>Escolas Cadastradas & Assinaturas</h2><p class="sub">Ative, suspenda ou renove a validade da licença em tempo real</p></div>
+        <input class="in" id="buscaEsc" style="max-width:260px" placeholder="Filtrar escola ou gestor…">
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead><tr><th>Escola</th><th>Gestor / Contato</th><th>Plano</th><th>Validade</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="tbEscolas"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ÁREA DA ESCOLA (DIREÇÃO: DADOS, EQUIPE, ALUNOS E PARÂMETROS) -->
+  <div id="areaEscola" hidden style="display:grid;gap:22px">
+    <nav class="tabs" id="tabsEscola">
+      <button class="tab ativo" data-t="Equipe">Equipe & Usuários</button>
+      <button class="tab" data-t="Alunos">Alunos & Responsáveis</button>
+      <button class="tab" data-t="Parametros">Parâmetros & Links</button>
+      <button class="tab" data-t="DadosEsc">Dados da Escola</button>
+    </nav>
+
+    <!-- ABA EQUIPE -->
+    <section class="panel" id="secEquipe">
+      <div class="head"><div><h2>Cadastrar / Editar Usuário</h2><p class="sub">Após cadastrar o e-mail aqui, o usuário acessa via aba "Primeiro acesso" na tela de login</p></div></div>
+      <form class="form" id="formPerfil">
+        <label class="f">Nome Completo *<input class="in" id="pfNome" required></label>
+        <label class="f">E-mail *<input class="in" type="email" id="pfEmail" required></label>
+        <label class="f">Perfil de Acesso<select class="in" id="pfPapel"><option value="professor">Professor(a)</option><option value="direcao">Direção / Coordenação</option><option value="portaria">Portaria / Secretaria</option></select></label>
+        <label class="f">Telefone / WhatsApp<input class="in" id="pfTel" placeholder="(11) 99999-9999"></label>
+        <label class="f">Link Pasta Drive (opcional)<input class="in" id="pfDrive" placeholder="https://drive.google.com/..."></label>
+        <label class="f">Link Tutoria (opcional)<input class="in" id="pfTutoria" placeholder="https://..."></label>
+        <div class="full" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button type="submit" class="btn btn-primary" id="btnSalvarPf">Salvar Usuário</button>
+          <button type="button" class="btn btn-ghost" id="btnLimparPf">Limpar</button>
+          <p class="msg" id="msgPf"></p>
+        </div>
+      </form>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <div class="head"><h2>Equipe Cadastrada</h2><input class="in" id="buscaPf" style="max-width:260px" placeholder="Buscar por nome ou e-mail…"></div>
+      <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tbPerfis"></tbody></table></div>
+    </section>
+
+    <!-- ABA ALUNOS -->
+    <section class="panel" id="secAlunos" hidden>
+      <div class="head"><div><h2>Alunos & Contatos</h2><p class="sub">Cadastre alunos individualmente ou cole uma lista em lote</p></div></div>
+      <form class="form" id="formAluno">
+        <input type="hidden" id="alId">
+        <label class="f">Nome do Aluno *<input class="in" id="alNome" required></label>
+        <label class="f">Série / Ano *<input class="in" id="alSerie" required placeholder="Ex.: 9º Ano"></label>
+        <label class="f">Turma *<input class="in" id="alTurma" required placeholder="Ex.: 9º A"></label>
+        <label class="f">Nome do Responsável<input class="in" id="alResp" placeholder="Opcional"></label>
+        <label class="f">WhatsApp Responsável<input class="in" id="alWhats" placeholder="5511999999999"></label>
+        <div class="full" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button type="submit" class="btn btn-primary">Salvar Aluno</button>
+          <button type="button" class="btn btn-ghost" id="btnLimparAl">Limpar</button>
+          <button type="button" class="btn btn-ghost" id="btnAbrirLote">Importar em Lote</button>
+          <p class="msg" id="msgAl"></p>
+        </div>
+      </form>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <div class="head"><h2>Lista de Alunos (<span id="totAl">0</span>)</h2><input class="in" id="buscaAl" style="max-width:260px" placeholder="Buscar aluno ou turma…"></div>
+      <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Aluno</th><th>Série</th><th>Turma</th><th>Responsável / WhatsApp</th><th>Ações</th></tr></thead><tbody id="tbAlunos"></tbody></table></div>
+    </section>
+
+    <!-- ABA PARÂMETROS -->
+    <section class="panel" id="secParametros" hidden>
+      <div class="head"><div><h2>Parâmetros Pedagógicos & Atalhos</h2><p class="sub">Personalize as listas usadas nos módulos da sua escola</p></div></div>
+      <div class="grid2" id="gridParams"></div>
+    </section>
+
+    <!-- ABA DADOS DA ESCOLA -->
+    <section class="panel" id="secDadosEsc" hidden>
+      <div class="head"><div><h2>Identidade da Escola & Licença</h2><p class="sub" id="infoLicEsc"></p></div></div>
+      <form class="form" id="formDadosEsc">
+        <label class="f">Nome da Instituição *<input class="in" id="deNome" required></label>
+        <label class="f">Sigla (exibida no cabeçalho) *<input class="in" id="deSigla" maxlength="6" required></label>
+        <label class="f">CNPJ / Código INEP<input class="in" id="deCnpj"></label>
+        <label class="f">Diretor(a) Responsável<input class="in" id="deDiretor"></label>
+        <label class="f">Telefone<input class="in" id="deTel"></label>
+        <label class="f">E-mail Institucional<input class="in" type="email" id="deEmail"></label>
+        <label class="f">Cidade / UF<input class="in" id="deCidade"></label>
+        <label class="f">Limite Aulas/Semana (Horários)<input class="in" type="number" id="deLim" min="1" max="60"></label>
+        <div class="full" style="display:flex;gap:12px;align-items:center">
+          <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+          <p class="msg" id="msgDe"></p>
+        </div>
+      </form>
+    </section>
+  </div>
+</main>
+
+<!-- MODAL EDITAR LICENÇA (MASTER) -->
+<dialog id="dlgLic">
+  <div class="d-head"><h3>Gerenciar Licença da Escola</h3><button class="btn btn-ghost sm" data-fechar>✕</button></div>
+  <div class="d-body">
+    <input type="hidden" id="elId">
+    <label class="f">Nome da Escola<input class="in" id="elNome"></label>
+    <div class="form">
+      <label class="f">Sigla<input class="in" id="elSigla" maxlength="6"></label>
+      <label class="f">Plano<select class="in" id="elPlano"><option value="mensal">Mensal</option><option value="trimestral">Trimestral</option><option value="semestral">Semestral</option><option value="anual">Anual</option></select></label>
+      <label class="f">Status da Licença<select class="in" id="elAtiva"><option value="true">Ativa (Liberada)</option><option value="false">Suspensa / Bloqueada</option></select></label>
+      <label class="f">Data de Validade<input class="in" type="date" id="elValidade"></label>
+    </div>
+    <label class="f">Observações Internas<textarea class="in" id="elObs"></textarea></label>
+  </div>
+  <div class="d-foot">
+    <button class="btn btn-ghost" data-fechar>Cancelar</button>
+    <button class="btn btn-primary" id="btnSalvarLic">Salvar Licença</button>
+  </div>
+</dialog>
+
+<!-- MODAL IMPORTAR ALUNOS EM LOTE -->
+<dialog id="dlgLote">
+  <div class="d-head"><h3>Importar Alunos em Lote</h3><button class="btn btn-ghost sm" data-fechar>✕</button></div>
+  <div class="d-body">
+    <p style="margin:0;font-size:.88rem;color:var(--muted)">Cole uma linha por aluno no formato: <b>Nome; Série; Turma; Responsável; WhatsApp</b> (os dois últimos são opcionais).</p>
+    <textarea class="in" id="txtLote" style="min-height:180px" placeholder="Ana Clara Silva; 9º Ano; 9º A; Maria Silva; 5511999999999&#10;Bruno Oliveira; 9º Ano; 9º A"></textarea>
+    <p class="msg" id="msgLote"></p>
+  </div>
+  <div class="d-foot">
+    <button class="btn btn-ghost" data-fechar>Cancelar</button>
+    <button class="btn btn-primary" id="btnExecLote">Importar Agora</button>
+  </div>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/auth-escola.js"></script>
+<script>
+const SUPABASE_URL = "https://atmdgtbczhkpwiybfkak.supabase.co";
+const SUPABASE_KEY = "sb_publishable_K-SXUOa4fOPqH9IuQr0C3w_lWu-3Xga";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hoje = () => new Date().toLocaleDateString("sv");
+const fmt = d => d ? String(d).split("-").reverse().join("/") : "Sem vencimento";
+const tela = n => ["Carregando","Login","Negado"].forEach(x => $("tela"+x).hidden = x !== n);
+const msg = (id, t, ok) => { const e = $(id); e.textContent = t; e.className = "msg" + (ok ? " ok" : ""); };
+
+$("btnSair").onclick = $("btnSair2").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+document.querySelectorAll("dialog").forEach(d => d.addEventListener("click", e => { if (e.target === d || e.target.closest("[data-fechar]")) d.close(); }));
+
+let perfil = null, escolas = [], perfisEsc = [], alunosEsc = [];
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return tela("Login");
+
+  const p = await window.validarLicencaEscola(sb);
+  const email = (session.user.email || "").toLowerCase();
+  if (!p || !p.ativo || (!p.super_admin && p.papel !== "direcao")) {
+    $("emailNegado").textContent = email;
+    return tela("Negado");
+  }
+  perfil = p;
+  ["Carregando","Login","Negado"].forEach(x => $("tela"+x).hidden = true);
+  $("sessao").hidden = false;
+  $("olaNome").textContent = p.nome || email;
+  $("avatar").textContent = (p.nome || email)[0].toUpperCase();
+
+  if (p.super_admin) {
+    $("btnVoltar").hidden = true;
+    $("titTop").textContent = "CENTRAL DE LICENÇAS";
+    $("subTop").textContent = "Administração multi-escola e assinaturas";
+    document.querySelector(".brand-mark").textContent = "ADM";
+    $("areaMaster").hidden = false;
+    // Sugere validade +30 dias
+    const d30 = new Date(Date.now() + 30 * 864e5).toLocaleDateString("sv");
+    $("neValidade").value = d30;
+    await carregarMaster();
+  } else {
+    $("areaEscola").hidden = false;
+    await carregarEscola();
+  }
+}
+
+/* ==================== FLUXO SUPER ADMIN (MASTER) ==================== */
+async function carregarMaster() {
+  const { data } = await sb.from("escolas").select("*").order("criado_em", { ascending: false });
+  escolas = data || [];
+  const ativas = escolas.filter(e => e.licenca_ativa && (!e.licenca_validade || e.licenca_validade >= hoje())).length;
+  const vencidas = escolas.length - ativas;
+  $("kpisMaster").innerHTML = `
+    <div class="kpi"><b>${escolas.length}</b><span>Escolas cadastradas</span></div>
+    <div class="kpi"><b style="color:var(--ok)">${ativas}</b><span>Licenças ativas</span></div>
+    <div class="kpi"><b style="color:var(--danger)">${vencidas}</b><span>Suspensas / vencidas</span></div>`;
+  renderEscolas();
+}
+
+function renderEscolas() {
+  const q = $("buscaEsc").value.trim().toLowerCase();
+  const lista = escolas.filter(e => !q || (e.nome + " " + (e.diretor_nome||"") + " " + (e.email_contato||"")).toLowerCase().includes(q));
+  $("tbEscolas").innerHTML = lista.map(e => {
+    const venc = e.licenca_validade && e.licenca_validade < hoje();
+    const ok = e.licenca_ativa && !venc;
+    const st = !e.licenca_ativa ? '<span class="badge b-off">Suspensa</span>' : venc ? '<span class="badge b-warn">Vencida</span>' : '<span class="badge b-ok">Ativa</span>';
+    return `<tr>
+      <td><b>${esc(e.nome)}</b> <small style="color:var(--muted)">(${esc(e.sigla)})</small></td>
+      <td>${esc(e.diretor_nome || "—")}<br><small style="color:var(--muted)">${esc(e.email_contato || "")}</small></td>
+      <td>${esc(e.plano)}</td>
+      <td>${fmt(e.licenca_validade)}</td>
+      <td>${st}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-ghost sm" onclick="abrirLic('${e.id}')">Gerenciar</button>
+        <button class="btn btn-ghost sm" onclick="renovar30('${e.id}')">+30 dias</button>
+      </td>
+    </tr>`;
+  }).join("") || '<tr><td colspan="6" style="color:var(--muted)">Nenhuma escola encontrada.</td></tr>';
+}
+$("buscaEsc").oninput = renderEscolas;
+
+$("formNovaEscola").onsubmit = async e => {
+  e.preventDefault();
+  $("btnCriarEsc").disabled = true;
+  msg("msgMaster", "Cadastrando escola…", true);
+  const { error } = await sb.rpc("admin_cadastrar_escola", {
+    p_nome_escola: $("neNome").value,
+    p_sigla: $("neSigla").value,
+    p_plano: $("nePlano").value,
+    p_validade: $("neValidade").value || null,
+    p_gestor_nome: $("neGestor").value,
+    p_gestor_email: $("neEmail").value,
+    p_gestor_telefone: $("neTel").value || null,
+    p_obs: $("neObs").value || null
+  });
+  $("btnCriarEsc").disabled = false;
+  if (error) return msg("msgMaster", "Erro: " + error.message);
+  $("formNovaEscola").reset();
+  msg("msgMaster", "Escola cadastrada! O gestor já pode criar a senha na aba Primeiro Acesso.", true);
+  await carregarMaster();
+};
+
+window.abrirLic = id => {
+  const e = escolas.find(x => x.id === id); if (!e) return;
+  $("elId").value = e.id;
+  $("elNome").value = e.nome;
+  $("elSigla").value = e.sigla;
+  $("elPlano").value = e.plano || "mensal";
+  $("elAtiva").value = String(!!e.licenca_ativa);
+  $("elValidade").value = e.licenca_validade || "";
+  $("elObs").value = e.obs_admin || "";
+  $("dlgLic").showModal();
+};
+
+$("btnSalvarLic").onclick = async () => {
+  const id = $("elId").value;
+  await sb.from("escolas").update({
+    nome: $("elNome").value.trim(),
+    sigla: $("elSigla").value.trim().toUpperCase(),
+    plano: $("elPlano").value,
+    licenca_ativa: $("elAtiva").value === "true",
+    licenca_validade: $("elValidade").value || null,
+    obs_admin: $("elObs").value.trim() || null
+  }).eq("id", id);
+  $("dlgLic").close();
+  await carregarMaster();
+};
+
+window.renovar30 = async id => {
+  const e = escolas.find(x => x.id === id); if (!e) return;
+  const base = (e.licenca_validade && e.licenca_validade > hoje()) ? new Date(e.licenca_validade + "T00:00:00") : new Date();
+  const nova = new Date(base.getTime() + 30 * 864e5).toLocaleDateString("sv");
+  await sb.from("escolas").update({ licenca_ativa: true, licenca_validade: nova }).eq("id", id);
+  await carregarMaster();
+};
+
+/* ==================== FLUXO ESCOLA (DIREÇÃO) ==================== */
+$("tabsEscola").onclick = e => {
+  const b = e.target.closest(".tab"); if (!b) return;
+  document.querySelectorAll("#tabsEscola .tab").forEach(x => x.classList.toggle("ativo", x === b));
+  ["Equipe","Alunos","Parametros","DadosEsc"].forEach(s => $("sec"+s).hidden = s !== b.dataset.t);
+};
+
+async function carregarEscola() {
+  await Promise.all([carregarPerfis(), carregarAlunos(), carregarParametros(), carregarDadosEsc()]);
+}
+
+/* Equipe */
+async function carregarPerfis() {
+  const { data } = await sb.from("perfis").select("*").eq("escola_id", perfil.escola_id).eq("super_admin", false).order("nome");
+  perfisEsc = data || [];
+  renderPerfis();
+}
+function renderPerfis() {
+  const q = $("buscaPf").value.trim().toLowerCase();
+  const lista = perfisEsc.filter(p => !q || (p.nome + " " + p.email).toLowerCase().includes(q));
+  $("tbPerfis").innerHTML = lista.map(p => `<tr>
+    <td><b>${esc(p.nome)}</b></td>
+    <td>${esc(p.email)}</td>
+    <td>${esc(p.papel)}</td>
+    <td>${p.ativo ? '<span class="badge b-ok">Ativo</span>' : '<span class="badge b-off">Inativo</span>'}</td>
+    <td style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-ghost sm" onclick="editarPf('${esc(p.email)}')">Editar</button>
+      <button class="btn btn-ghost sm" onclick="togglePf('${esc(p.email)}',${!p.ativo})">${p.ativo ? "Desativar" : "Ativar"}</button>
+    </td>
+  </tr>`).join("") || '<tr><td colspan="5">Nenhum usuário cadastrado.</td></tr>';
+}
+$("buscaPf").oninput = renderPerfis;
+
+$("formPerfil").onsubmit = async e => {
+  e.preventDefault();
+  const email = $("pfEmail").value.trim().toLowerCase();
+  const { error } = await sb.from("perfis").upsert({
+    email,
+    escola_id: perfil.escola_id,
+    nome: $("pfNome").value.trim(),
+    papel: $("pfPapel").value,
+    telefone: $("pfTel").value.trim() || null,
+    pasta_drive: $("pfDrive").value.trim() || null,
+    tutoria_link: $("pfTutoria").value.trim() || null,
+    ativo: true
+  }, { onConflict: "email" });
+  if (error) return msg("msgPf", "Erro: " + error.message);
+  $("formPerfil").reset();
+  msg("msgPf", "Usuário salvo! Ele já pode definir a senha em 'Primeiro acesso'.", true);
+  await carregarPerfis();
+};
+$("btnLimparPf").onclick = () => { $("formPerfil").reset(); msg("msgPf", ""); };
+window.editarPf = email => {
+  const p = perfisEsc.find(x => x.email === email); if (!p) return;
+  $("pfNome").value = p.nome || ""; $("pfEmail").value = p.email; $("pfPapel").value = p.papel || "professor";
+  $("pfTel").value = p.telefone || ""; $("pfDrive").value = p.pasta_drive || ""; $("pfTutoria").value = p.tutoria_link || "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+window.togglePf = async (email, ativo) => {
+  await sb.from("perfis").update({ ativo }).eq("email", email);
+  await carregarPerfis();
+};
+
+/* Alunos */
+async function carregarAlunos() {
+  const { data } = await sb.from("alunos").select("id,nome,serie,turma,contatos(id,responsavel,whatsapp)").order("turma").order("nome").limit(5000);
+  alunosEsc = data || [];
+  $("totAl").textContent = alunosEsc.length;
+  renderAlunos();
+}
+function renderAlunos() {
+  const q = $("buscaAl").value.trim().toLowerCase();
+  const lista = alunosEsc.filter(a => !q || (a.nome + " " + a.turma + " " + a.serie).toLowerCase().includes(q)).slice(0, 200);
+  $("tbAlunos").innerHTML = lista.map(a => {
+    const c = (a.contatos && a.contatos[0]) || {};
+    return `<tr>
+      <td><b>${esc(a.nome)}</b></td>
+      <td>${esc(a.serie)}</td>
+      <td>${esc(a.turma)}</td>
+      <td>${esc(c.responsavel || "—")} ${c.whatsapp ? `<small style="color:var(--muted)">(${esc(c.whatsapp)})</small>` : ""}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-ghost sm" onclick="editarAl(${a.id})">Editar</button>
+        <button class="btn btn-danger sm" onclick="excluirAl(${a.id})">Excluir</button>
+      </td>
+    </tr>`;
+  }).join("") || '<tr><td colspan="5">Nenhum aluno encontrado.</td></tr>';
+}
+$("buscaAl").oninput = renderAlunos;
+
+$("formAluno").onsubmit = async e => {
+  e.preventDefault();
+  const id = $("alId").value;
+  const payload = { nome: $("alNome").value.trim(), serie: $("alSerie").value.trim(), turma: $("alTurma").value.trim(), escola_id: perfil.escola_id };
+  let alunoId = id ? +id : null;
+  if (alunoId) {
+    const { error } = await sb.from("alunos").update(payload).eq("id", alunoId);
+    if (error) return msg("msgAl", error.message);
+  } else {
+    const { data, error } = await sb.from("alunos").insert(payload).select("id").single();
+    if (error) return msg("msgAl", error.message);
+    alunoId = data.id;
+  }
+  const resp = $("alResp").value.trim(), whats = $("alWhats").value.replace(/\D/g, "");
+  if (resp || whats) {
+    await sb.from("contatos").delete().eq("aluno_id", alunoId);
+    await sb.from("contatos").insert({ aluno_id: alunoId, responsavel: resp || "Responsável", whatsapp: whats || null, escola_id: perfil.escola_id });
+  }
+  $("formAluno").reset(); $("alId").value = "";
+  msg("msgAl", "Aluno salvo com sucesso.", true);
+  await carregarAlunos();
+};
+$("btnLimparAl").onclick = () => { $("formAluno").reset(); $("alId").value = ""; msg("msgAl", ""); };
+window.editarAl = id => {
+  const a = alunosEsc.find(x => x.id === id); if (!a) return;
+  const c = (a.contatos && a.contatos[0]) || {};
+  $("alId").value = a.id; $("alNome").value = a.nome; $("alSerie").value = a.serie; $("alTurma").value = a.turma;
+  $("alResp").value = c.responsavel || ""; $("alWhats").value = c.whatsapp || "";
+};
+window.excluirAl = async id => {
+  if (!confirm("Excluir este aluno?")) return;
+  await sb.from("alunos").delete().eq("id", id);
+  await carregarAlunos();
+};
+
+$("btnAbrirLote").onclick = () => { $("txtLote").value = ""; msg("msgLote", ""); $("dlgLote").showModal(); };
+$("btnExecLote").onclick = async () => {
+  const linhas = $("txtLote").value.split(/?
+/).map(l => l.trim()).filter(Boolean);
+  if (!linhas.length) return msg("msgLote", "Cole ao menos uma linha.");
+  let ok = 0;
+  for (const l of linhas) {
+    const [nome, serie, turma, resp, whats] = l.split(";").map(x => (x || "").trim());
+    if (!nome || !serie || !turma) continue;
+    const { data } = await sb.from("alunos").insert({ nome, serie, turma, escola_id: perfil.escola_id }).select("id").single();
+    if (data && (resp || whats)) {
+      await sb.from("contatos").insert({ aluno_id: data.id, responsavel: resp || "Responsável", whatsapp: (whats || "").replace(/\D/g, "") || null, escola_id: perfil.escola_id });
+    }
+    ok++;
+  }
+  $("dlgLote").close();
+  msg("msgAl", `${ok} aluno(s) importado(s).`, true);
+  await carregarAlunos();
+};
+
+/* Parâmetros */
+const TABELAS_PARAM = [
+  { tab: "areas", tit: "Áreas de Conhecimento", ph: "Ex.: Linguagens" },
+  { tab: "motivos", tit: "Motivos de Ocorrência", ph: "Ex.: Indisciplina em sala" },
+  { tab: "opcoes_encaminhamento", tit: "Encaminhamentos de Ocorrência", ph: "Ex.: Conversa com responsável" },
+  { tab: "categorias_material", tit: "Categorias de Material (Pedidos)", ph: "Ex.: Papelaria" },
+  { tab: "grupos", tit: "Grupos de Comunicação (Faltas)", ph: "Ex.: Gestão" }
+];
+async function carregarParametros() {
+  const res = await Promise.all(TABELAS_PARAM.map(p => sb.from(p.tab).select("*").order("nome")));
+  $("gridParams").innerHTML = TABELAS_PARAM.map((p, i) => {
+    const itens = res[i].data || [];
+    return `<div class="card-mini">
+      <b>${p.tit}</b>
+      <div style="display:flex;gap:6px">
+        <input class="in" id="in_${p.tab}" placeholder="${p.ph}">
+        <button class="btn btn-primary sm" onclick="addParam('${p.tab}')">Adicionar</button>
+      </div>
+      <div class="chips">${itens.map(it => `<span class="tag-item">${esc(it.nome)}<button title="Remover" onclick="delParam('${p.tab}','${it.id}')">×</button></span>`).join("") || '<span style="font-size:.82rem;color:var(--muted)">Nenhum item</span>'}</div>
+    </div>`;
+  }).join("");
+}
+window.addParam = async tab => {
+  const inp = $("in_" + tab);
+  const nome = inp.value.trim(); if (!nome) return;
+  await sb.from(tab).insert({ nome, escola_id: perfil.escola_id });
+  await carregarParametros();
+};
+window.delParam = async (tab, id) => {
+  await sb.from(tab).delete().eq("id", id);
+  await carregarParametros();
+};
+
+/* Dados da Escola */
+async function carregarDadosEsc() {
+  const { data: e } = await sb.from("escolas").select("*").eq("id", perfil.escola_id).single();
+  if (!e) return;
+  $("deNome").value = e.nome || "";
+  $("deSigla").value = e.sigla || "";
+  $("deCnpj").value = e.cnpj_inep || "";
+  $("deDiretor").value = e.diretor_nome || "";
+  $("deTel").value = e.telefone || "";
+  $("deEmail").value = e.email_contato || "";
+  $("deCidade").value = e.cidade_uf || "";
+  $("deLim").value = e.limite_aulas_semana || 32;
+  $("infoLicEsc").textContent = `Plano: ${e.plano} · Validade da assinatura: ${fmt(e.licenca_validade)}`;
+}
+$("formDadosEsc").onsubmit = async e => {
+  e.preventDefault();
+  const { error } = await sb.from("escolas").update({
+    nome: $("deNome").value.trim(),
+    sigla: $("deSigla").value.trim().toUpperCase(),
+    cnpj_inep: $("deCnpj").value.trim() || null,
+    diretor_nome: $("deDiretor").value.trim() || null,
+    telefone: $("deTel").value.trim() || null,
+    email_contato: $("deEmail").value.trim() || null,
+    cidade_uf: $("deCidade").value.trim() || null,
+    limite_aulas_semana: +$("deLim").value || 32
+  }).eq("id", perfil.escola_id);
+  if (error) return msg("msgDe", error.message);
+  msg("msgDe", "Dados da escola atualizados! Recarregando identidade…", true);
+  setTimeout(() => location.reload(), 900);
+};
+
+iniciar();
+</script>
+</body>
+</html>

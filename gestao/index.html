@@ -512,8 +512,7 @@ window.excluirAl = async id => {
 
 $("btnAbrirLote").onclick = () => { $("txtLote").value = ""; msg("msgLote", ""); $("dlgLote").showModal(); };
 $("btnExecLote").onclick = async () => {
-  const linhas = $("txtLote").value.split(/?
-/).map(l => l.trim()).filter(Boolean);
+const linhas = $("txtLote").value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   if (!linhas.length) return msg("msgLote", "Cole ao menos uma linha.");
   let ok = 0;
   for (const l of linhas) {

@@ -29,7 +29,8 @@
         <button type="submit" class="btn btn-primary" id="aeBtn" style="justify-content:center">Entrar</button>
         <button type="button" class="btn btn-ghost" id="aeEsqueci" style="justify-content:center;font-size:.84rem">Esqueci minha senha</button>
         <p id="aeMsg" role="alert" style="margin:0;font-size:.86rem;color:var(--danger)"></p>
-      </form>`;
+      </form>
+      <span id="entrar" hidden></span><span id="btnEntrar" hidden></span>`;
 
     const $ = id => document.getElementById(id);
     const setModo = p => {
